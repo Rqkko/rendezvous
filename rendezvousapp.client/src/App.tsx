@@ -10,8 +10,10 @@ interface Forecast {
 
 function App() {
     const [forecasts, setForecasts] = useState<Forecast[]>();
+    const [user, setUser] = useState<string>();
 
     useEffect(() => {
+        getUser();
         populateWeatherData();
     }, []);
 
@@ -38,18 +40,33 @@ function App() {
             </tbody>
         </table>;
 
+    const c = user === undefined
+        ? <div>User is no where to be found</div>
+        : <div>
+            <div>{user}</div>
+            <div>User should be here ^^^</div>
+        </div>
+
     return (
         <div>
             <h1 id="tableLabel">Weather forecast</h1>
             <p>This component demonstrates fetching data from the server.</p>
             {contents}
+            {c}
         </div>
     );
 
     async function populateWeatherData() {
+        console.log("populateWeatherData is ran");
         const response = await fetch('weatherforecast');
         const data = await response.json();
         setForecasts(data);
+    }
+
+    async function getUser() {
+        const response = await fetch('user');
+        const data = await response.text();
+        setUser(data);
     }
 }
 
