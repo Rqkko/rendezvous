@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Security;
 
 namespace RendezvousApp.Server.Controllers
 {
@@ -8,34 +10,43 @@ namespace RendezvousApp.Server.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<UserController> _logger;
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
-        public UserController(ILogger<UserController> logger/*, IConfiguration configuration*/)
+        public UserController(IConfiguration configuration)
         {
-            _logger = logger;
-            //_configuration = configuration;
+            _configuration = configuration;
         }
 
-        [HttpGet(Name ="GetUser")]
+        [HttpGet("GetUser")]
         public ActionResult Get()
         {
-            return Ok("UserController is working");
+            return Ok("UserController is working (" + _configuration.GetConnectionString("DefaultConnection") + ")");
         }
 
-        //[HttpGet(Name = "GetUserController")]
-        //public IEnumerable<WeatherForecast>? Get()
-        //{
-        //    return null;
-        //    return enumerable.range(1, 5).select(index => new weatherforecast
-        //    {
-        //        date = dateonly.fromdatetime(datetime.now.adddays(index)),
-        //        temperaturec = random.shared.next(-20, 55),
-        //        summary = summaries[random.shared.next(summaries.length)]
-        //    })
-        //    .toarray();
-        //}
+        [HttpGet("GetFirstname")]
+        public ActionResult GetFirstname()
+        {
+            string? firstname = null;
+
+            MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            connection.Open();
+
+
+            MySqlCommand cmd = new MySqlCommand(
+                "SELECT firstname FROM users WHERE userId=0",
+                connection
+            );
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    firstname = reader.GetString(0);
+                }
+            }
+
+            connection.Close();
+            return Ok(firstname);
+        }
     }
 }
-
-//optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));

@@ -64,7 +64,7 @@ function App() {
     }
 
     async function getUser() {
-        const response = await fetch('user');
+        const response = await fetch('user/getfirstname');
         const data = await response.text();
         setUser(data);
     }
