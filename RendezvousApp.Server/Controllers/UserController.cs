@@ -11,16 +11,19 @@ namespace RendezvousApp.Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
 
-        public UserController(IConfiguration configuration)
+        public UserController(IConfiguration configuration, string connectionString)
         {
             _configuration = configuration;
+            _connectionString = connectionString;
         }
 
         [HttpGet("GetUser")]
         public ActionResult Get()
         {
-            return Ok("UserController is working (" + _configuration.GetConnectionString("DefaultConnection") + ")");
+            //return Ok("UserController is working (" + _configuration.GetConnectionString("DefaultConnection") + ")");
+            return Ok("UserController is working (" + _connectionString + ")");
         }
 
         [HttpGet("GetFirstname")]
@@ -28,7 +31,8 @@ namespace RendezvousApp.Server.Controllers
         {
             string? firstname = null;
 
-            MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            // MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            MySqlConnection connection = new MySqlConnection(_connectionString);
             connection.Open();
 
 
