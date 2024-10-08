@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './views/Home';
 import './App.css';
+import Button from '@mui/material/Button';
 
 interface Forecast {
     date: string;
@@ -12,10 +15,10 @@ function App() {
     const [forecasts, setForecasts] = useState<Forecast[]>();
     const [user, setUser] = useState<string>();
 
-    useEffect(() => {
-        getUser();
-        populateWeatherData();
-    }, []);
+    //useEffect(() => {
+    //    getUser();
+    //    populateWeatherData();
+    //}, []);
 
     const contents = forecasts === undefined
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
@@ -48,12 +51,19 @@ function App() {
         </div>
 
     return (
-        <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-            {c}
-        </div>
+        //<div>
+        //    <h1 id="tableLabel">App.tsx Page</h1>
+        //    {c}
+        //    <Button variant="contained"npm install react-router-dom>Hello world</Button>
+        //</div>
+        <Router>
+            <div>Ay Yo!</div>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                {/*<Route path="/about" element={<About />} />*/}
+                {/*<Route path="*" element={<NotFound />} /> */}{/* Fallback for 404 */}
+            </Routes>
+         </Router>
     );
 
     async function populateWeatherData() {
