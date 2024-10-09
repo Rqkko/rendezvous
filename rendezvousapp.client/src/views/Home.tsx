@@ -1,5 +1,6 @@
 import { Button, Container, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import OpaqueButton from "../components/OpaqueButton";
 
 function Home() {
     const navigate = useNavigate();
@@ -18,6 +19,8 @@ function Home() {
             >
                 Go to Login Page
             </Button>
+
+            <OpaqueButton handleClick={() => navigate("/login")} />
         </Container>
     );
 }
