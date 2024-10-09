@@ -17,9 +17,13 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat',
     h1: {
-      fontSize: '2rem',
+      fontSize: '2.5rem',
       fontWeight: 600,
     },
+    h2: {
+      fontSize: '2rem',
+      fontWeight: 510,
+    }
   },
 })
 

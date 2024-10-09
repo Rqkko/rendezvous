@@ -11,6 +11,7 @@ function Home() {
 
             <OpaqueButton 
                 handleClick={() => navigate("/login")} 
+                text="Go to Login Page"
             />
         </Container>
     );

@@ -4,19 +4,20 @@ import Button from "@mui/material/Button";
 interface OpaqueButtonProps {
     handleClick: () => void;
     style?: SxProps;
+    text: string;
 }
 
-function OpaqueButton({ handleClick, style }: OpaqueButtonProps) {
+function OpaqueButton({ handleClick, style, text }: OpaqueButtonProps) {
     return (
         <Button
         variant="contained"
-        color="primary"
+        color="secondary"
         sx={{ mt: 2, ...style }}
         onClick={() => {
             handleClick();
         }}
         >
-        Go to Login Page
+        {text}
         </Button>
     )
 }
