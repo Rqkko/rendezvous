@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Button from '@mui/material/Button';
 import './App.css';
 
 import Home from './views/Home';
@@ -22,10 +21,6 @@ function App() {
 
     return (
         <Router>
-            <div>Ay Yo!</div>
-            {c}
-            <div>163</div>
-            <Button class="button">Hello World</Button>
             <Routes>
                 <Route path="/" element={<Home/>} />
                 <Route path="/login" element={<Login/>} />
