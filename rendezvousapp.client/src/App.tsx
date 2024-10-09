@@ -1,47 +1,17 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './views/Home';
-import './App.css';
 import Button from '@mui/material/Button';
+import './App.css';
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-}
+import Home from './views/Home';
+import Login from './views/Login';
 
 function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
     const [user, setUser] = useState<string>();
 
-    //useEffect(() => {
-    //    getUser();
-    //    populateWeatherData();
-    //}, []);
-
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+    useEffect(() => {
+        getUser();
+    }, []);
 
     const c = user === undefined
         ? <div>User is no where to be found</div>
@@ -51,27 +21,17 @@ function App() {
         </div>
 
     return (
-        //<div>
-        //    <h1 id="tableLabel">App.tsx Page</h1>
-        //    {c}
-        //    <Button variant="contained"npm install react-router-dom>Hello world</Button>
-        //</div>
         <Router>
             <div>Ay Yo!</div>
+            {c}
+            <div>163</div>
+            <Button class="button">Hello World</Button>
             <Routes>
-                <Route path="/" element={<Home />} />
-                {/*<Route path="/about" element={<About />} />*/}
-                {/*<Route path="*" element={<NotFound />} /> */}{/* Fallback for 404 */}
+                <Route path="/" element={<Home/>} />
+                <Route path="/login" element={<Login/>} />
             </Routes>
          </Router>
     );
-
-    async function populateWeatherData() {
-        console.log("populateWeatherData is ran");
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
 
     async function getUser() {
         const response = await fetch('user/getfirstname');
