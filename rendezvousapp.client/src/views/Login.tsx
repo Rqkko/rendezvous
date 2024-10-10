@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, Divider } from "@mui/material";
 import logo from '../assets/logo.png';
 import DefaultTextField from "../components/DefaultTextfield";
 import OpaqueButton from "../components/OpaqueButton";
@@ -36,7 +36,6 @@ function Login() {
                         flexDirection: 'column',
                         alignItems: 'start',
                         width: '50vh',
-                        bgcolor: 'black'
                     }}
                 >
                     <Typography 
@@ -69,6 +68,9 @@ function Login() {
                         text="Login"
                         style={{ alignSelf: 'center', mt: 4 }}
                     />
+
+                    <Divider />
+                    <div>Divider here ^^</div>
                 </Container>
 
             </Container>
