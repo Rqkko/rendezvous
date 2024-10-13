@@ -70,9 +70,12 @@ namespace RendezvousApp.Server.Controllers
                 return Unauthorized(new { message = "Incorrect password" });
             }
 
-            // Keep user session
+            // User Session Data
+            HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("FirstName", user.Firstname);
             HttpContext.Session.SetString("LastName", user.Lastname);
+            HttpContext.Session.SetString("Phone", user.Phone);
+            HttpContext.Session.SetString("Email", user.Email);
 
             return Ok(user);
         }
@@ -80,7 +83,18 @@ namespace RendezvousApp.Server.Controllers
         [HttpGet("GetUser")]
         public ActionResult GetUser()
         {
-            return Ok(new { firstname = HttpContext.Session.GetString("FirstName"), lastname = HttpContext.Session.GetString("LastName") });
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return Unauthorized(new { message = "User not logged in" });
+            }
+            
+            return Ok(new { 
+                userId = HttpContext.Session.GetInt32("UserId"),
+                firstname = HttpContext.Session.GetString("FirstName"),
+                lastname = HttpContext.Session.GetString("LastName"),
+                phone = HttpContext.Session.GetString("Phone"),
+                email = HttpContext.Session.GetString("Email")
+            });
         }
     }
 }
