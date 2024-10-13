@@ -11,11 +11,34 @@ function Login() {
     const [contact, setContact] = useState("");
     const [password, setPassword] = useState("");
     
-    const handleContact = (event: React.ChangeEvent<HTMLInputElement>) => {
+    function handleContact(event: React.ChangeEvent<HTMLInputElement>) {
         setContact(event.target.value);
     };
-    const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    function handlePassword(event: React.ChangeEvent<HTMLInputElement>) {
         setPassword(event.target.value);
+    };
+    function handleLogin() {
+        if (contact === "" || password === "") {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        // Check for user in database
+        fetch(`/api/user/getuser/${contact}/${password}`)
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => {
+                    throw new Error(data.message);
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+            alert("Login Successful\nWelcome " + data.firstname);
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
     }
 
     return (
@@ -78,7 +101,7 @@ function Login() {
                     />
 
                     <OpaqueButton 
-                        handleClick={() => navigate("/")}
+                        handleClick={handleLogin}
                         text="Login"
                         style={{ alignSelf: 'center', mt: 4 }}
                     />

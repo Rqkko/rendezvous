@@ -60,14 +60,14 @@ namespace RendezvousApp.Server.Controllers
 
                 if (user == null)
                 {
-                    return NotFound("User not found");
+                    return NotFound(new { message = "User not found" });
                 }
             }
 
             // Check if password is correct
             if (user.Password != password)
             {
-                return Unauthorized("Incorrect password");
+                return Unauthorized(new { message = "Incorrect password" });
             }
 
             return Ok(user);
