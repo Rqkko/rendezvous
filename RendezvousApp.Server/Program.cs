@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using RendezvousApp.Server.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.ConnectionString.json", optional: true, reloadOnChange: true);
@@ -20,6 +23,27 @@ else
 
 // Register the connection string in the DI container
 builder.Services.AddSingleton(connectionString);
+
+// Configure ASP.NET Core Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    // // Password settings
+    // options.Password.RequireDigit = true;
+    // options.Password.RequiredLength = 8;
+    // options.Password.RequireNonAlphanumeric = false;
+    // options.Password.RequireUppercase = true;
+    // options.Password.RequireLowercase = true;
+
+    // // Lockout settings
+    // options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    // options.Lockout.MaxFailedAccessAttempts = 5;
+    // options.Lockout.AllowedForNewUsers = true;
+
+    // // User settings
+    // options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 // Add services to the container.
 builder.Services.AddControllers();
