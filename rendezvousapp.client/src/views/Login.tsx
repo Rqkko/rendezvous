@@ -35,6 +35,7 @@ function Login() {
         })
         .then((data) => {
             alert("Login Successful\nWelcome " + data.firstname);
+            navigate('/home');
         })
         .catch((error) => {
             alert(error.message);
