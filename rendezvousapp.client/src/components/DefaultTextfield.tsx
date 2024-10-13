@@ -5,9 +5,10 @@ interface DefaultTextFieldProps {
     style?: SxProps;
     value: string;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    type?: string;
 }
 
-function DefaultTextField({ placeholder, style, value, handleChange }: DefaultTextFieldProps) {
+function DefaultTextField({ placeholder, style, value, handleChange, type }: DefaultTextFieldProps) {
 
     return (
         <TextField
@@ -19,6 +20,7 @@ function DefaultTextField({ placeholder, style, value, handleChange }: DefaultTe
             variant = "filled"
             value={value}
             onChange={handleChange}
+            {...(type && { type: type })} // Apply type only if it exists
         />
     )
 }

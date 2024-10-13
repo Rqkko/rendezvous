@@ -104,6 +104,7 @@ function Login() {
                         style = {{ mt: 4, alignSelf: 'center' }}
                         value = {password}
                         handleChange={handlePassword}
+                        type="password"
                     />
 
                     <OpaqueButton 
