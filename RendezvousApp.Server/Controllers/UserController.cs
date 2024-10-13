@@ -20,8 +20,8 @@ namespace RendezvousApp.Server.Controllers
             _connectionString = connectionString;
         }
 
-        [HttpGet("Login/{contact}/{password}")] // contact is email/phoneNumber
-        public ActionResult Login(string contact, string password)
+        [HttpPost("Login")] // contact is email/phoneNumber
+        public ActionResult Login([FromBody] LoginCredential loginCredential)
         {
             User? user = null;
 
@@ -30,7 +30,7 @@ namespace RendezvousApp.Server.Controllers
                 connection.Open();
 
                 string query;
-                if (contact.Contains("@"))
+                if (loginCredential.Contact.Contains("@"))
                 {
                     query = "SELECT * FROM Users WHERE email = @contact";
                 }
@@ -40,7 +40,7 @@ namespace RendezvousApp.Server.Controllers
                 }
 
                 MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@contact", contact);
+                cmd.Parameters.AddWithValue("@contact", loginCredential.Contact);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -65,7 +65,7 @@ namespace RendezvousApp.Server.Controllers
             }
 
             // Check if password is correct
-            if (user.Password != password)
+            if (user.Password != loginCredential.Password)
             {
                 return Unauthorized(new { message = "Incorrect password" });
             }

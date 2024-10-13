@@ -24,7 +24,13 @@ function Login() {
         }
 
         // Check for user in database
-        fetch(`/api/user/login/${contact}/${password}`)
+        fetch(`/api/user/login/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ contact, password }),
+        })
         .then((response) => {
             if (!response.ok) {
                 return response.json().then((data) => {
@@ -33,8 +39,7 @@ function Login() {
             }
             return response.json();
         })
-        .then((data) => {
-            alert("Login Successful\nWelcome " + data.firstname);
+        .then(() => {
             navigate('/');
         })
         .catch((error) => {
