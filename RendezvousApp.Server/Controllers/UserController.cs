@@ -77,10 +77,10 @@ namespace RendezvousApp.Server.Controllers
             return Ok(user);
         }
 
-        [HttpGet("GetFirstname")]
-        public ActionResult GetFirstname()
+        [HttpGet("GetUser")]
+        public ActionResult GetUser()
         {
-            return Ok(new { message = HttpContext.Session.GetString("FirstName") });
+            return Ok(new { firstname = HttpContext.Session.GetString("FirstName"), lastname = HttpContext.Session.GetString("LastName") });
             string? firstname = null;
  
             // MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
