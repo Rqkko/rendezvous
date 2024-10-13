@@ -12,7 +12,7 @@ function OpaqueButton({ handleClick, style, text }: OpaqueButtonProps) {
         <Button
         variant="contained"
         color="secondary"
-        sx={{ mt: 2, ...style }}
+        sx={{ mt: 2, borderRadius: 10, ...style }}
         onClick={() => {
             handleClick();
         }}

@@ -1,9 +1,8 @@
-import { Box, Container, Typography, Divider } from "@mui/material";
+import { Box, Container, Typography, Divider, Button } from "@mui/material";
 import logo from '../assets/logo.png';
 import DefaultTextField from "../components/DefaultTextfield";
 import OpaqueButton from "../components/OpaqueButton";
 import { useNavigate } from "react-router-dom";
-import { Widgets } from "@mui/icons-material";
 
 function Login() {
     const navigate = useNavigate();
@@ -35,7 +34,7 @@ function Login() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'start',
-                        width: '50vh',
+                        minWidth: '32vw',
                     }}
                 >
                     <Typography 
@@ -69,8 +68,14 @@ function Login() {
                         style={{ alignSelf: 'center', mt: 4 }}
                     />
 
-                    <Divider />
-                    <div>Divider here ^^</div>
+                    <Divider sx={{ mt: 2, width: '100%', borderWidth: 1, borderColor: 'black' }} />
+                    <Typography color="black">
+                        Don't have an account? 
+                        <Button variant="text" sx={{ color: 'black', textTransform: 'none', textDecoration: 'underline' }}
+                        >
+                            Create One
+                        </Button>
+                    </Typography>
                 </Container>
 
             </Container>
