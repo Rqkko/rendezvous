@@ -8,16 +8,16 @@ import { useState } from "react";
 function Login() {
     const navigate = useNavigate();
 
-    const [contact, setContact] = useState("");
-    const [password, setPassword] = useState("");
+    const [contact, setContact] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     
-    function handleContact(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleContact(event: React.ChangeEvent<HTMLInputElement>): void {
         setContact(event.target.value);
     };
-    function handlePassword(event: React.ChangeEvent<HTMLInputElement>) {
+    function handlePassword(event: React.ChangeEvent<HTMLInputElement>): void {
         setPassword(event.target.value);
     };
-    function handleLogin() {
+    function handleLogin(): void {
         if (contact === "" || password === "") {
             alert("Please fill in all fields");
             return;

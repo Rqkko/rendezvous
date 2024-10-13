@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 function Home() {
     const navigate = useNavigate();
-    const [firstname, setFirstname] = useState("");
+    const [firstname, setFirstname] = useState<string>("");
 
-    async function getUser() {
+    async function getUser(): Promise<string> {
         return fetch('/api/user/getUser')
             .then((response) => (response.json()))
             .then((data) => (data.firstname));
