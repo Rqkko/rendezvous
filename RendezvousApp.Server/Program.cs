@@ -1,11 +1,22 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.ConnectionString.json", optional: true, reloadOnChange: true);
+
 // Access configuration
 var configuration = builder.Configuration;
 string environment = configuration["Environment"];
-string connectionString = environment == "Windows"
-    ? configuration.GetConnectionString("WindowsConnection")
-    : configuration.GetConnectionString("DefaultConnection");
+
+string connectionString;
+string? machineConnectionString = configuration.GetConnectionString("Connection");
+Console.WriteLine(machineConnectionString + "MACHINE");
+if (machineConnectionString != null) {
+    connectionString = machineConnectionString;
+    Console.WriteLine("Using machineConnectionString");
+}
+else
+{
+    connectionString = configuration.GetConnectionString("DefaultConnection");
+}
 
 // Register the connection string in the DI container
 builder.Services.AddSingleton(connectionString);
