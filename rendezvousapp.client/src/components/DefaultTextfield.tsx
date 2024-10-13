@@ -3,9 +3,12 @@ import { SxProps, TextField } from "@mui/material";
 interface DefaultTextFieldProps {
     placeholder?: string;
     style?: SxProps;
+    value: string;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function DefaultTextField({ placeholder, style }: DefaultTextFieldProps) {
+function DefaultTextField({ placeholder, style, value, handleChange }: DefaultTextFieldProps) {
+
     return (
         <TextField
             placeholder={placeholder}
@@ -14,6 +17,8 @@ function DefaultTextField({ placeholder, style }: DefaultTextFieldProps) {
                 ...style
             }}
             variant = "filled"
+            value={value}
+            onChange={handleChange}
         />
     )
 }

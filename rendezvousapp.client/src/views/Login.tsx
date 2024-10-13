@@ -3,9 +3,20 @@ import logo from '../assets/logo.png';
 import DefaultTextField from "../components/DefaultTextfield";
 import OpaqueButton from "../components/OpaqueButton";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Login() {
     const navigate = useNavigate();
+
+    const [contact, setContact] = useState("");
+    const [password, setPassword] = useState("");
+    
+    const handleContact = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setContact(event.target.value);
+    };
+    const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    }
 
     return (
         <Container
@@ -54,12 +65,16 @@ function Login() {
 
                     <DefaultTextField 
                         placeholder="Email / phone no."
-                        style = {{ mt: 6, alignSelf: 'center' }}    
+                        style = {{ mt: 6, alignSelf: 'center' }}
+                        value = {contact}
+                        handleChange={handleContact}
                     />
 
                     <DefaultTextField 
                         placeholder="Password"
                         style = {{ mt: 4, alignSelf: 'center' }}
+                        value = {password}
+                        handleChange={handlePassword}
                     />
 
                     <OpaqueButton 
