@@ -8,7 +8,7 @@ using RendezvousApp.Server.Entities;
 namespace RendezvousApp.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("Api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -38,7 +38,7 @@ namespace RendezvousApp.Server.Controllers
                 {
                     query = "SELECT * FROM Users WHERE phone = @contact";
                 }
-                
+
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@contact", contact);
 
