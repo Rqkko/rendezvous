@@ -19,11 +19,10 @@ namespace RendezvousApp.Server.Controllers
             _connectionString = connectionString;
         }
 
-        [HttpGet("GetUser")]
-        public ActionResult Get()
+        [HttpGet("GetUser/{contact}/{password}")] // contact is email/phoneNumber
+        public ActionResult GetUser(string contact, string password)
         {
-            //return Ok("UserController is working (" + _configuration.GetConnectionString("DefaultConnection") + ")");
-            return Ok("UserController is working (" + _connectionString + ")");
+            return Ok(contact + "_" + password);
         }
 
         [HttpGet("GetFirstname")]
