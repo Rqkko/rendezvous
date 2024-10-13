@@ -13,17 +13,15 @@ namespace RendezvousApp.Server.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
-        private readonly ApplicationDbContext _context;
 
-        public UserController(IConfiguration configuration, string connectionString, ApplicationDbContext context)
+        public UserController(IConfiguration configuration, string connectionString)
         {
             _configuration = configuration;
             _connectionString = connectionString;
-            _context = context;
         }
 
         [HttpGet("GetUser/{contact}/{password}")] // contact is email/phoneNumber
-        public async ActionResult GetUser(string contact, string password)
+        public ActionResult GetUser(string contact, string password)
         {
             User? user = null;
 
@@ -72,28 +70,12 @@ namespace RendezvousApp.Server.Controllers
                 return Unauthorized(new { message = "Incorrect password" });
             }
 
-            // Assign user information to ApplicationUser
-            var applicationUser = new ApplicationUser
-            {
-                UserId = user.UserId,
-                Firstname = user.Firstname,
-                Lastname = user.Lastname,
-                Phone = user.Phone,
-                Email = user.Email,
-            };
-
-            // Save ApplicationUser to ApplicationDbContext
-            _context.Users.Add(applicationUser);
-            await _context.SaveChangesAsync();
-
-            Console.WriteLine("User's Firstname: " + _context.Users.Find(0).Firstname);
-            return Ok(applicationUser);
+            return Ok(user);
         }
 
         [HttpGet("GetFirstname")]
         public ActionResult GetFirstname()
         {
-            return Ok(_context.Users.Find(0).Firstname);
             string? firstname = null;
  
             // MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
