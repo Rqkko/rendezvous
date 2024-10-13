@@ -20,8 +20,8 @@ namespace RendezvousApp.Server.Controllers
             _connectionString = connectionString;
         }
 
-        [HttpGet("GetUser/{contact}/{password}")] // contact is email/phoneNumber
-        public ActionResult GetUser(string contact, string password)
+        [HttpGet("Login/{contact}/{password}")] // contact is email/phoneNumber
+        public ActionResult Login(string contact, string password)
         {
             User? user = null;
 
@@ -70,12 +70,17 @@ namespace RendezvousApp.Server.Controllers
                 return Unauthorized(new { message = "Incorrect password" });
             }
 
+            // Keep user session
+            HttpContext.Session.SetString("FirstName", user.Firstname);
+            HttpContext.Session.SetString("LastName", user.Lastname);
+
             return Ok(user);
         }
 
         [HttpGet("GetFirstname")]
         public ActionResult GetFirstname()
         {
+            return Ok(new { message = HttpContext.Session.GetString("FirstName") });
             string? firstname = null;
  
             // MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));

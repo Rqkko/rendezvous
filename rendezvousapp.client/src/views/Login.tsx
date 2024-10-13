@@ -24,7 +24,7 @@ function Login() {
         }
 
         // Check for user in database
-        fetch(`/api/user/getuser/${contact}/${password}`)
+        fetch(`/api/user/login/${contact}/${password}`)
         .then((response) => {
             if (!response.ok) {
                 return response.json().then((data) => {
@@ -35,7 +35,7 @@ function Login() {
         })
         .then((data) => {
             alert("Login Successful\nWelcome " + data.firstname);
-            navigate('/home');
+            navigate('/');
         })
         .catch((error) => {
             alert(error.message);
