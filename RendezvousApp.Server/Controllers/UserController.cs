@@ -81,28 +81,6 @@ namespace RendezvousApp.Server.Controllers
         public ActionResult GetUser()
         {
             return Ok(new { firstname = HttpContext.Session.GetString("FirstName"), lastname = HttpContext.Session.GetString("LastName") });
-            string? firstname = null;
- 
-            // MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            MySqlConnection connection = new MySqlConnection(_connectionString);
-            connection.Open();
-
-
-            MySqlCommand cmd = new MySqlCommand(
-                "SELECT firstname FROM users WHERE userId=0",
-                connection
-            );
-
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    firstname = reader.GetString(0);
-                }
-            }
-
-            connection.Close();
-            return Ok(firstname);
         }
     }
 }
