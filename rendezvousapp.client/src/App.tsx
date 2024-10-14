@@ -1,38 +1,44 @@
-import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
+import { AppBar, Toolbar, IconButton, Typography, Button } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
+import './App.css';
 import Home from './views/Home';
 import Login from './views/Login';
 
-function App() {
-    // const [user, setUser] = useState<string>();
+function App(): JSX.Element {
 
-    // useEffect(() => {
-    //     getUser();
-    // }, []);
-
-    // const c = user === undefined
-    //     ? <div>User is no where to be found</div>
-    //     : <div>
-    //         <div>{user}</div>
-    //         <div>User should be here ^^^</div>
-    //     </div>
+    function handleLogin() {
+        window.location.pathname = '/login';
+    }
 
     return (
         <Router>
+            {window.location.pathname !== '/login' && (
+                <AppBar position="fixed" sx={{ minWidth: '100vw' }}>
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            News
+                        </Typography>
+                        <Button color="inherit" onClick={handleLogin}>Login</Button>
+                    </Toolbar>
+                </AppBar>
+            )}
             <Routes>
                 <Route path="/" element={<Home/>} />
                 <Route path="/login" element={<Login/>} />
             </Routes>
          </Router>
     );
-
-    // async function getUser() {
-    //     const response = await fetch('user/getfirstname');
-    //     const data = await response.text();
-    //     setUser(data);
-    // }
 }
 
 export default App;

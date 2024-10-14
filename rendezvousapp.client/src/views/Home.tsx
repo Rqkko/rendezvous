@@ -1,6 +1,7 @@
 // src/components/HomePage.tsx
 import React, { useState } from 'react';
 import { Container, TextField, Grid, Card, CardContent, Typography, Button } from '@mui/material';
+import Header from '../components/Header';
 
 // Location data structure
 interface Location {
@@ -9,7 +10,7 @@ interface Location {
     address: string;
 }
 
-function Home() {
+function Home(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('');
     
     // Sample location data
@@ -29,35 +30,36 @@ function Home() {
 
     return (
         <Container>
-        {/* Search Bar */}
-        <TextField
-            fullWidth
-            label="Search Locations"
-            variant="outlined"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            style={{ margin: '20px 0' }}
-        />
-        
-        {/* Locations List */}
-        <Grid container spacing={3}>
-            {filteredLocations.map((location) => (
-            <Grid item xs={12} sm={6} md={4} key={location.id}>
-                <Card>
-                <CardContent>
-                    <Typography variant="h6">{location.name}</Typography>
-                    <Typography variant="body2" color="textSecondary">
-                    {location.address}
-                    </Typography>
-                    {/* Add button for reservation, admin can have edit, delete */}
-                    <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
-                    Reserve
-                    </Button>
-                </CardContent>
-                </Card>
+
+            {/* Search Bar */}
+            <TextField
+                fullWidth
+                label="Search Locations"
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                style={{ margin: '20px 0' }}
+            />
+            
+            {/* Locations List */}
+            <Grid container spacing={3}>
+                {filteredLocations.map((location) => (
+                <Grid item xs={12} sm={6} md={4} key={location.id}>
+                    <Card>
+                    <CardContent>
+                        <Typography variant="h6">{location.name}</Typography>
+                        <Typography variant="body2" color="textSecondary">
+                        {location.address}
+                        </Typography>
+                        {/* Add button for reservation, admin can have edit, delete */}
+                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
+                        Reserve
+                        </Button>
+                    </CardContent>
+                    </Card>
+                </Grid>
+                ))}
             </Grid>
-            ))}
-        </Grid>
         </Container>
     );
 };
