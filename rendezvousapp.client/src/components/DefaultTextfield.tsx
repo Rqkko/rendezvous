@@ -8,7 +8,7 @@ interface DefaultTextFieldProps {
     type?: string;
 }
 
-function DefaultTextField({ placeholder, style, value, handleChange, type }: DefaultTextFieldProps) {
+function DefaultTextField({ placeholder, style, value, handleChange, type }: DefaultTextFieldProps): JSX.Element {
 
     return (
         <TextField
