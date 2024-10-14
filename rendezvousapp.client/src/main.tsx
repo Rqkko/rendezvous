@@ -11,7 +11,8 @@ const theme = createTheme({
       main: "#395536"
     },
     secondary: {
-      main: "#988265"
+      main: "#988265",
+      light: "#f3ede0"
     },
   },
   typography: {
@@ -35,10 +36,19 @@ const theme = createTheme({
   },
 })
 
-createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  rootElement.style.margin = '0';
+  rootElement.style.padding = '0';
+  rootElement.style.width = '100%';
+  rootElement.style.height = '100%';
+}
+
+createRoot(rootElement!).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+          <App />
+      </ThemeProvider>
   </StrictMode>,
-)
+);
