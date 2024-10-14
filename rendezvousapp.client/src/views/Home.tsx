@@ -1,27 +1,31 @@
-// src/components/HomePage.tsx
 import React, { useState } from 'react';
-import { Container, TextField, Grid, Card, CardContent, Typography, Button } from '@mui/material';
-import Header from '../components/Header';
+import { Container, TextField, Grid, Card, CardContent, Typography, Button, Box, Tab, Tabs, InputAdornment, Grid2 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-// Location data structure
 interface Location {
     id: number;
     name: string;
     address: string;
+    image: string;
 }
 
 function Home(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('');
+    const [tabValue, setTabValue] = useState(0);
     
-    // Sample location data
     const locations: Location[] = [
-        { id: 1, name: 'Banquet Hall A', address: '123 Main St' },
-        { id: 2, name: 'Garden View Center', address: '456 Park Ave' },
-        { id: 3, name: 'Oceanfront Venue', address: '789 Coast Rd' },
+        { id: 1, name: 'Anyamanee Cafe and Roastery', address: '163, Bang Sao Thong, Bang Sao Thong, Samut Prakan', image: 'path/to/anyamanee.jpg' },
+        { id: 2, name: 'Babyccino Ekkamai', address: '53 Ekkamai 12 Alley, Khlong Tan Nuea, Watthana, Bangkok', image: 'path/to/babyccino.jpg' },
+        { id: 3, name: 'CURVE CAF', address: 'Khlong Nueng, Khlong Luang District, Pathum Thani', image: 'path/to/curve.jpg' },
     ];
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
+    };
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
     };
 
     const filteredLocations = locations.filter(location =>
@@ -30,73 +34,53 @@ function Home(): JSX.Element {
 
     return (
         <Container>
-
-            {/* Search Bar */}
-            <TextField
-                fullWidth
-                label="Search Locations"
-                variant="outlined"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                style={{ margin: '20px 0' }}
-            />
+            <Box sx={{ backgroundImage: 'url(path/to/background-image.jpg)', backgroundSize: 'cover', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                <TextField
+                    fullWidth
+                    placeholder="Search"
+                    variant="outlined"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    sx={{ maxWidth: '600px', bgcolor: 'white', borderRadius: '20px' }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Box>
             
-            {/* Locations List */}
-            <Grid container spacing={3}>
-                {filteredLocations.map((location) => (
-                <Grid item xs={12} sm={6} md={4} key={location.id}>
-                    <Card>
-                    <CardContent>
-                        <Typography variant="h6">{location.name}</Typography>
-                        <Typography variant="body2" color="textSecondary">
-                        {location.address}
-                        </Typography>
-                        {/* Add button for reservation, admin can have edit, delete */}
-                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
-                        Reserve
-                        </Button>
-                    </CardContent>
-                    </Card>
-                </Grid>
-                ))}
-            </Grid>
+            <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+                <Tab label="Locations" />
+                <Tab label="My Reservations" />
+            </Tabs>
             
-            <Grid container spacing={3}>
+            <Grid2 container spacing={2}>
                 {filteredLocations.map((location) => (
-                <Grid item xs={12} sm={6} md={4} key={location.id}>
-                    <Card>
-                    <CardContent>
-                        <Typography variant="h6">{location.name}</Typography>
-                        <Typography variant="body2" color="textSecondary">
-                        {location.address}
-                        </Typography>
-                        {/* Add button for reservation, admin can have edit, delete */}
-                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
-                        Reserve
-                        </Button>
-                    </CardContent>
+                <Grid item xs={12} key={location.id}>
+                    <Card sx={{ display: 'flex', height: '150px' }}>
+                        <Box sx={{ width: '30%', backgroundImage: `url(${location.image})`, backgroundSize: 'cover' }} />
+                        <CardContent sx={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <Box>
+                                <Typography variant="h6" component="div">{location.name}</Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                                    {location.address}
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Button variant="outlined" size="small">description</Button>
+                                <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
+                                    See more
+                                </Typography>
+                            </Box>
+                        </CardContent>
                     </Card>
                 </Grid>
                 ))}
-            </Grid>
-            <Grid container spacing={3}>
-                {filteredLocations.map((location) => (
-                <Grid item xs={12} sm={6} md={4} key={location.id}>
-                    <Card>
-                    <CardContent>
-                        <Typography variant="h6">{location.name}</Typography>
-                        <Typography variant="body2" color="textSecondary">
-                        {location.address}
-                        </Typography>
-                        {/* Add button for reservation, admin can have edit, delete */}
-                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
-                        Reserve
-                        </Button>
-                    </CardContent>
-                    </Card>
-                </Grid>
-                ))}
-            </Grid>
+            </Grid2>
         </Container>
     );
 };
