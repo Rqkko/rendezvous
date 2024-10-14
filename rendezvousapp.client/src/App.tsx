@@ -17,7 +17,7 @@ function App(): JSX.Element {
     return (
         <Router>
             {window.location.pathname !== '/login' && (
-                <AppBar color="secondary.light" position="fixed" sx={{ minWidth: '100vw', mb: 4, ml:0, p:0, boxSizing: 'border-box' }}>
+                <AppBar color="info" position="fixed" sx={{ minWidth: '100vw', mb: 4, ml:0, p:0, boxSizing: 'border-box' }}>
                     <Toolbar>
                         <IconButton
                             size="large"

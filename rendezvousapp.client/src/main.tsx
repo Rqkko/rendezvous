@@ -4,7 +4,6 @@ import App from './App.tsx'
 import './index.css'
 import { createTheme, ThemeProvider } from '@mui/material'
 
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -12,8 +11,10 @@ const theme = createTheme({
     },
     secondary: {
       main: "#988265",
-      light: "#f3ede0"
     },
+    info: {
+      main: "#f3ede0",
+    }
   },
   typography: {
     fontFamily: 'Montserrat',
