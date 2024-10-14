@@ -60,6 +60,43 @@ function Home(): JSX.Element {
                 </Grid>
                 ))}
             </Grid>
+            
+            <Grid container spacing={3}>
+                {filteredLocations.map((location) => (
+                <Grid item xs={12} sm={6} md={4} key={location.id}>
+                    <Card>
+                    <CardContent>
+                        <Typography variant="h6">{location.name}</Typography>
+                        <Typography variant="body2" color="textSecondary">
+                        {location.address}
+                        </Typography>
+                        {/* Add button for reservation, admin can have edit, delete */}
+                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
+                        Reserve
+                        </Button>
+                    </CardContent>
+                    </Card>
+                </Grid>
+                ))}
+            </Grid>
+            <Grid container spacing={3}>
+                {filteredLocations.map((location) => (
+                <Grid item xs={12} sm={6} md={4} key={location.id}>
+                    <Card>
+                    <CardContent>
+                        <Typography variant="h6">{location.name}</Typography>
+                        <Typography variant="body2" color="textSecondary">
+                        {location.address}
+                        </Typography>
+                        {/* Add button for reservation, admin can have edit, delete */}
+                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
+                        Reserve
+                        </Button>
+                    </CardContent>
+                    </Card>
+                </Grid>
+                ))}
+            </Grid>
         </Container>
     );
 };
