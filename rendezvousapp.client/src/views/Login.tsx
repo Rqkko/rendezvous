@@ -49,60 +49,63 @@ function Login() {
 
     return (
         <Container
-            sx = {{ 
+            sx={{ 
                 overflow: 'hidden', 
                 height: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
             }}
         >
-            <Container
-                sx = {{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    height: '100%',
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '100%',
+                    maxWidth: '1200px',
                 }}
             >
                 <Box
                     component="img"
-                    alt = "Rendezvous Logo"
-                    src = {logo}
-                    sx = {{ width: '50vh', height: '50vh', mr: 2 }}
+                    alt="Rendezvous Logo"
+                    src={logo}
+                    sx={{ width: '50%', maxWidth: '400px', mr: 4 }}
                 />
 
-                <Container 
-                    sx = {{ 
+                <Box 
+                    sx={{ 
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'start',
-                        minWidth: '32vw',
+                        alignItems: 'flex-start',
+                        width: '50%',
                     }}
                 >
                     <Typography 
-                        variant="h1"
+                        variant="h2"
                         color="black"
                     >
                         WELCOME!
                     </Typography>
 
                     <Typography 
-                        variant="h2"
+                        variant="h4"
                         color="black"
-                        sx={{ pl: 2, mt:2 }}
+                        sx={{ mt: 2, mb: 4 }}
                     >
                         Please log in
                     </Typography>
 
                     <DefaultTextField 
                         placeholder="Email / phone no."
-                        style = {{ mt: 6, alignSelf: 'center' }}
-                        value = {contact}
+                        style={{ mt: 2, width: '100%' }}
+                        value={contact}
                         handleChange={handleContact}
                     />
 
                     <DefaultTextField 
                         placeholder="Password"
-                        style = {{ mt: 4, alignSelf: 'center' }}
-                        value = {password}
+                        style={{ mt: 2, width: '100%' }}
+                        value={password}
                         handleChange={handlePassword}
                         type="password"
                     />
@@ -110,20 +113,26 @@ function Login() {
                     <OpaqueButton 
                         handleClick={handleLogin}
                         text="Login"
-                        style={{ alignSelf: 'center', mt: 4 }}
+                        style={{ mt: 3, width: '50%', alignSelf: 'center' }}
                     />
 
-                    <Divider sx={{ mt: 2, width: '100%', borderWidth: 1, borderColor: 'black' }} />
-                    <Typography color="black">
+                    <Divider sx={{ mt: 3, width: '100%', borderWidth: 1, borderColor: 'black' }} />
+                    <Typography color="black" sx={{ mt: 2 }}>
                         Don't have an account? 
-                        <Button variant="text" sx={{ color: 'black', textTransform: 'none', textDecoration: 'underline' }}
+                        <Button 
+                            variant="text" 
+                            sx={{ 
+                                color: 'black', 
+                                textTransform: 'none', 
+                                textDecoration: 'underline',
+                                ml: 1
+                            }}
                         >
                             Create One
                         </Button>
                     </Typography>
-                </Container>
-
-            </Container>
+                </Box>
+            </Box>
         </Container>
     );
 }
