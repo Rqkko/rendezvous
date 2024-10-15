@@ -81,6 +81,55 @@ function Home(): JSX.Element {
                 </Grid2>
                 ))}
             </Grid2>
+
+            <Grid2 container spacing={2}>
+                {filteredLocations.map((location) => (
+                <Grid2 xs={12} key={location.id}>
+                    <Card sx={{ display: 'flex', height: '150px' }}>
+                        <Box sx={{ width: '30%', backgroundImage: `url(${location.image})`, backgroundSize: 'cover' }} />
+                        <CardContent sx={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <Box>
+                                <Typography variant="h6" component="div">{location.name}</Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                                    {location.address}
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Button variant="outlined" size="small">description</Button>
+                                <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
+                                    See more 
+                                </Typography>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid2>
+                ))}
+            </Grid2>
+            <Grid2 container spacing={2}>
+                {filteredLocations.map((location) => (
+                <Grid2 xs={12} key={location.id}>
+                    <Card sx={{ display: 'flex', height: '150px' }}>
+                        <Box sx={{ width: '30%', backgroundImage: `url(${location.image})`, backgroundSize: 'cover' }} />
+                        <CardContent sx={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <Box>
+                                <Typography variant="h6" component="div">{location.name}</Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                                    {location.address}
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Button variant="outlined" size="small">description</Button>
+                                <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
+                                    See more 
+                                </Typography>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid2>
+                ))}
+            </Grid2>
         </Container>
     );
 };
