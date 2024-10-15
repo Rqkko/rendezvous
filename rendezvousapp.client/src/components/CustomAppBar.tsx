@@ -1,16 +1,46 @@
-import React from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Button, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { AppBar, Toolbar, IconButton, Button, Box, Menu, MenuItem, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import logoSmall from '../assets/logo_small.png';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { getUser, User } from '../utils/apiUtils';
+
+import logoSmall from '../assets/logo_small.png';
+
+// For Nav
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
+    const [user, setUser] = useState<User | null>(null);
+
+    // ----- Try Nav Stuff -----
+    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorElUser(event.currentTarget);
+    };
+  
+    const handleCloseNavMenu = () => {
+      setAnchorElNav(null);
+    };
+  
+    const handleCloseUserMenu = () => {
+      setAnchorElUser(null);
+    };
+    // ----- End Nav Stuff -----
 
     function handleLogin() {
         window.location.pathname = '/login';
     }
+
+    useEffect(() => {
+        getUser().then((result) => setUser(result));
+    }, [location.pathname]);
 
     // No AppBar when on login page
     if (location.pathname === '/login') {
@@ -19,7 +49,11 @@ function CustomAppBar(): JSX.Element | null {
 
     return (
         <>
-            <AppBar color="info" position="sticky" sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box' }}>
+            <AppBar 
+                color="info"
+                position="sticky"
+                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box' }}
+            >
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -34,14 +68,67 @@ function CustomAppBar(): JSX.Element | null {
                             src={logoSmall}
                         />
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
-                    </Typography>
-                    <Button color="inherit" onClick={handleLogin}>Login</Button>
+
+                    {/* To occupy the remaining space */}
+                    <Box 
+                        sx={{ flexGrow: 1 }}
+                    >
+                        
+                    </Box>
+
+                    {user 
+                        ? (
+                            <IconButton
+                            color="inherit"
+                            aria-label="profile"
+                            sx={{ mr: 2 }}
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        )
+                        : (
+                            <Button 
+                                sx={{ mr: 2 }}
+                                onClick={handleLogin}
+                            >
+                                Login
+                            </Button>
+                        )
+                    }
+
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={handleOpenUserMenu}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Menu
+                        sx={{ mt: '45px' }}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                        >
+                        {settings.map((setting) => (
+                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                            </MenuItem>
+                        ))}
+                    </Menu>
                 </Toolbar>
             </AppBar>
-            {/*  */}
-            {/* <Box sx={{ width:'100vw',height:'97px' }}></Box> */}
         </>
     );
 }

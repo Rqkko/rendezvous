@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, TextField, Card, CardContent, Typography, Button, Box, Tab, Tabs, InputAdornment, Grid2 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useLocation } from 'react-router-dom';
+import { User, getUser } from '../utils/apiUtils';
 
 interface Location {
     id: number;
@@ -13,7 +15,8 @@ interface Location {
 function Home(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('');
     const [tabValue, setTabValue] = useState(0);
-    
+    const [user, setUser] = useState<User | null>(null);
+    const location = useLocation();
     const locations: Location[] = [
         { id: 1, name: 'Anyamanee Cafe and Roastery', address: '163, Bang Sao Thong, Bang Sao Thong, Samut Prakan', image: 'path/to/anyamanee.jpg' },
         { id: 2, name: 'Babyccino Ekkamai', address: '53 Ekkamai 12 Alley, Khlong Tan Nuea, Watthana, Bangkok', image: 'path/to/babyccino.jpg' },
@@ -32,9 +35,22 @@ function Home(): JSX.Element {
         location.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    useEffect(() => {
+        getUser().then((result) => setUser(result));
+    }, [location.pathname]);
+
     return (
         <Container>
-            <Box sx={{ backgroundImage: 'url(path/to/background-image.jpg)', backgroundSize: 'cover', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+            <Box 
+                sx={{ 
+                    backgroundImage: 'url(path/to/background-image.jpg)',
+                    backgroundSize: 'cover',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2
+                }}
+            >
                 <TextField
                     fullWidth
                     placeholder="Search"
