@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, TextField, Grid, Card, CardContent, Typography, Button, Box, Tab, Tabs, InputAdornment, Grid2 } from '@mui/material';
+import { Container, TextField, Card, CardContent, Typography, Button, Box, Tab, Tabs, InputAdornment, Grid2 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
@@ -59,7 +59,7 @@ function Home(): JSX.Element {
             
             <Grid2 container spacing={2}>
                 {filteredLocations.map((location) => (
-                <Grid item xs={12} key={location.id}>
+                <Grid2 xs={12} key={location.id}>
                     <Card sx={{ display: 'flex', height: '150px' }}>
                         <Box sx={{ width: '30%', backgroundImage: `url(${location.image})`, backgroundSize: 'cover' }} />
                         <CardContent sx={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -73,12 +73,12 @@ function Home(): JSX.Element {
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Button variant="outlined" size="small">description</Button>
                                 <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
-                                    See more
+                                    See more 
                                 </Typography>
                             </Box>
                         </CardContent>
                     </Card>
-                </Grid>
+                </Grid2>
                 ))}
             </Grid2>
         </Container>
