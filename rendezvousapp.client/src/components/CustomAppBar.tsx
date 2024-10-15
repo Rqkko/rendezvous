@@ -7,34 +7,22 @@ import { getUser, User } from '../utils/apiUtils';
 
 import logoSmall from '../assets/logo_small.png';
 
-// For Nav
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
 function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
     const [user, setUser] = useState<User | null>(null);
-
+    
     // ----- Try Nav Stuff -----
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-      setAnchorElNav(event.currentTarget);
-    };
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-      setAnchorElUser(event.currentTarget);
+        setAnchorElUser(event.currentTarget);
     };
-  
-    const handleCloseNavMenu = () => {
-      setAnchorElNav(null);
-    };
-  
     const handleCloseUserMenu = () => {
-      setAnchorElUser(null);
+        setAnchorElUser(null);
     };
     // ----- End Nav Stuff -----
 
-    function handleLogin() {
+    function handleLogin(): void {
         window.location.pathname = '/login';
     }
 
@@ -49,7 +37,7 @@ function CustomAppBar(): JSX.Element | null {
 
     return (
         <>
-            <AppBar 
+            <AppBar
                 color="info"
                 position="sticky"
                 sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box' }}
@@ -70,24 +58,20 @@ function CustomAppBar(): JSX.Element | null {
                     </IconButton>
 
                     {/* To occupy the remaining space */}
-                    <Box 
-                        sx={{ flexGrow: 1 }}
-                    >
-                        
-                    </Box>
+                    <Box sx={{ flexGrow: 1 }} />
 
                     {user 
                         ? (
                             <IconButton
-                            color="inherit"
-                            aria-label="profile"
-                            sx={{ mr: 2 }}
+                                color="inherit"
+                                aria-label="profile"
+                                sx={{ mr: 2 }}
                             >
                                 <AccountCircle />
                             </IconButton>
                         )
                         : (
-                            <Button 
+                            <Button
                                 sx={{ mr: 2 }}
                                 onClick={handleLogin}
                             >
@@ -97,7 +81,6 @@ function CustomAppBar(): JSX.Element | null {
                     }
 
                     <IconButton
-                        size="large"
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
@@ -106,7 +89,7 @@ function CustomAppBar(): JSX.Element | null {
                         <MenuIcon />
                     </IconButton>
                     <Menu
-                        sx={{ mt: '45px' }}
+                        sx={{ mt: '80px' }}
                         id="menu-appbar"
                         anchorEl={anchorElUser}
                         anchorOrigin={{
@@ -116,7 +99,7 @@ function CustomAppBar(): JSX.Element | null {
                         keepMounted
                         transformOrigin={{
                             vertical: 'top',
-                            horizontal: 'right',
+                            horizontal: 'center',
                         }}
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
