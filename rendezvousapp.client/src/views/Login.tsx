@@ -1,6 +1,6 @@
 import { Box, Container, Typography, Divider, Button } from "@mui/material";
 import logo from '../assets/logo.png';
-import DefaultTextField from "../components/DefaultTextfield";
+import DefaultTextField from "../components/CustomTextfield";
 import OpaqueButton from "../components/OpaqueButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
