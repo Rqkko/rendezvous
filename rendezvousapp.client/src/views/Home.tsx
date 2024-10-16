@@ -12,7 +12,8 @@ interface Location {
 }
 
 function Home(): JSX.Element {
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
     // const [tabValue, setTabValue] = useState(0);
     const [user, setUser] = useState<User | null>(null);
     const location = useLocation();
@@ -28,8 +29,12 @@ function Home(): JSX.Element {
         { name: "Wizard's Tower", address: "303, Mystic Hills, Magica", image: "https://via.placeholder.com/150" }
     ];
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
+    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        setSearchTerm(event.target.value);
+    };
+
+    function handleSearchChange(): void {
+        setSearchQuery(searchTerm);
     };
 
     // const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -74,8 +79,15 @@ function Home(): JSX.Element {
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="Search Locations"
                 inputProps={{ 'aria-label': 'search locations' }}
+                value={searchTerm}
+                onChange={handleInputChange}
                 />
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <IconButton 
+                    type="button"
+                    sx={{ p: '10px' }}
+                    aria-label="search"
+                    onClick={handleSearchChange}
+                >
                     <SearchIcon />
                 </IconButton>
             </Paper>
