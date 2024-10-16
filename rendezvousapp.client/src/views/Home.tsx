@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useLocation } from 'react-router-dom';
 import { User, getUser } from '../utils/apiUtils';
+import LocationCard from '../components/LocationCard';
 
 interface Location {
     id: number;
@@ -63,7 +64,15 @@ function Home(): JSX.Element {
                 <Tab label="Locations" />
                 <Tab label="My Reservations" />
             </Tabs> */}
-            
+
+            <LocationCard title="Anyamanee Cafe and Roastery" location="163, Bang Sao Thong, Bang Sao Thong, Samut Prakan" image="https://images.unsplash.com/photo-1493857671505-72967e2e2760?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+            <LocationCard title="Mystic Falls" location="123, Enchanted Forest, Fairyland" image="https://via.placeholder.com/150" />
+            <LocationCard title="Dragon's Den" location="456, Dragon Mountain, Mythica" image="https://via.placeholder.com/150" />
+            <LocationCard title="Atlantis" location="789, Underwater City, Ocean" image="https://via.placeholder.com/150" />
+            <LocationCard title="Sky Castle" location="101, Floating Island, Sky Realm" image="https://via.placeholder.com/150" />
+            <LocationCard title="Elven Grove" location="202, Ancient Woods, Elvenland" image="https://via.placeholder.com/150" />
+            <LocationCard title="Wizard's Tower" location="303, Mystic Hills, Magica" image="https://via.placeholder.com/150" />
+
             <Grid2 container spacing={2}>
                 {filteredLocations.map((location) => (
                 <Grid2 xs={12} key={location.id}>
