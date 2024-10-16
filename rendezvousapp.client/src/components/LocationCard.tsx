@@ -3,18 +3,19 @@ import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 interface LocationCardProps {
-    title: string;
-    location: string;
+    name: string;
+    address: string;
     image: string;
 }
 
-function LocationCard({ title, location, image }: LocationCardProps): JSX.Element {
+function LocationCard({ name, address, image }: LocationCardProps): JSX.Element {
     return (
         <Card sx={{ 
             display: 'flex', 
             borderRadius: '10px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            mb: 4
+            mb: 4,
+            minHeight: '250px'
         }}>
             <Box sx={{ 
                 width: '30%', 
@@ -31,7 +32,7 @@ function LocationCard({ title, location, image }: LocationCardProps): JSX.Elemen
             }}>
                 <Box>
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: '#2e5d4b' }}>
-                        {title}
+                        {name}
                     </Typography>
                     <Typography variant="body2" sx={{ 
                         display: 'flex', 
@@ -40,7 +41,7 @@ function LocationCard({ title, location, image }: LocationCardProps): JSX.Elemen
                         mt: 0.5
                     }}>
                         <LocationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#d32f2f' }} />
-                        {location}
+                        {address}
                     </Typography>
                 </Box>
                 <Box sx={{ 
