@@ -63,4 +63,17 @@ public class EventController : ControllerBase
             return Ok(locations);
         }
     }
+
+    // For Admin
+    [HttpGet("GetAllReservations")]
+    public ActionResult GetAllReservations()
+    {
+        return Ok();
+    }
+
+    [HttpGet("GetUserReservations")]
+    public ActionResult GetUserReservations()
+    {
+        return Ok();
+    }
 }
