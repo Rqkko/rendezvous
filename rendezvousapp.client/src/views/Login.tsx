@@ -1,9 +1,10 @@
 import { Box, Container, Typography, Divider, Button } from "@mui/material";
-import logo from '../assets/logo.png';
 import DefaultTextField from "../components/CustomTextfield";
 import OpaqueButton from "../components/OpaqueButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+import logo from '../assets/logo.png';
 
 function Login() {
     const navigate = useNavigate();
@@ -14,9 +15,11 @@ function Login() {
     function handleContact(event: React.ChangeEvent<HTMLInputElement>): void {
         setContact(event.target.value);
     };
+
     function handlePassword(event: React.ChangeEvent<HTMLInputElement>): void {
         setPassword(event.target.value);
     };
+    
     function handleLogin(): void {
         if (contact === "" || password === "") {
             alert("Please fill in all fields");

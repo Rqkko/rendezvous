@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, TextField, Typography, InputAdornment, Paper, IconButton, InputBase, Divider, Box } from '@mui/material';
+import { Container, Typography, Paper, IconButton, InputBase, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useLocation } from 'react-router-dom';
 import { User, getUser } from '../utils/apiUtils';
@@ -59,7 +59,16 @@ function Home(): JSX.Element {
 
             <Paper
                 component="form"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '600px', height: '70px', mx: 'auto', mb: 4, borderRadius: '20px' }}
+                sx={{ 
+                    p: '2px 4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '600px',
+                    height: '70px',
+                    mx: 'auto',
+                    mb: 4,
+                    borderRadius: '20px'
+                }}
             >
                 <InputBase
                 sx={{ ml: 1, flex: 1 }}
@@ -76,7 +85,19 @@ function Home(): JSX.Element {
                 <Tab label="My Reservations" />
             </Tabs> */}
 
-            <Paper sx={{ height: '60vh', width: '60vw', overflow: 'auto', bgcolor: 'transparent', p: 4, borderRadius: 6, borderStyle: 'none', boxShadow: 5, borderColor: 'black', mb: 2 }}>
+            <Paper sx={{ 
+                height: '60vh',
+                width: '60vw',
+                overflow: 'auto',
+                bgcolor: 'transparent',
+                p: 4,
+                borderRadius: 6,
+                borderStyle: 'none',
+                boxShadow: 5,
+                borderColor: 'black',
+                mb: 2
+                }}
+            >
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     {filteredLocations.map((location) => (
                         <LocationCard key={location.name} name={location.name} address={location.address} image={location.image} />
