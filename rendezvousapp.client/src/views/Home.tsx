@@ -41,37 +41,28 @@ function Home(): JSX.Element {
 
     return (
         <Container>
-            <Box 
-                sx={{ 
-                    backgroundImage: 'url(path/to/background-image.jpg)',
-                    backgroundSize: 'cover',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    mb: 2
+            <Typography variant="h2" sx={{ mb: 4}}>Locations</Typography>
+
+            <TextField
+                fullWidth
+                placeholder="Search"
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                sx={{ maxWidth: '600px', bgcolor: 'white', borderRadius: '20px', mb: 4 }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
                 }}
-            >
-                <TextField
-                    fullWidth
-                    placeholder="Search"
-                    variant="outlined"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    sx={{ maxWidth: '600px', bgcolor: 'white', borderRadius: '20px' }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </Box>
-            
-            <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+            />
+
+            {/* <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
                 <Tab label="Locations" />
                 <Tab label="My Reservations" />
-            </Tabs>
+            </Tabs> */}
             
             <Grid2 container spacing={2}>
                 {filteredLocations.map((location) => (
