@@ -96,4 +96,4 @@ public class UserController : ControllerBase
             email = HttpContext.Session.GetString("Email")
         });
     }
-    }
+}
