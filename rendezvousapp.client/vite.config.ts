@@ -47,6 +47,10 @@ export default defineConfig({
                 target,
                 secure: false
             },
+            '^/api/event':{
+                target,
+                secure: false
+            }
         },
         port: 5173,
         https: {
