@@ -5,21 +5,23 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 interface LocationCardProps {
     name: string;
     address: string;
-    image: string;
+    image: string | null;
 }
 
 function LocationCard({ name, address, image }: LocationCardProps): JSX.Element {
+    console.log(name, address, image);
     return (
         <Card sx={{ 
             display: 'flex', 
             borderRadius: '10px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             mb: 4,
-            minHeight: '250px'
+            minHeight: '250px',
+            maxWidth: '100%',
         }}>
             <Box sx={{ 
                 width: '30%', 
-                backgroundImage: `url(${image})`, 
+                backgroundImage: image ? `url(data:image/jpeg;base64,${image})` : 'none', 
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
             }} />

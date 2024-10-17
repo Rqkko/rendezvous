@@ -36,6 +36,9 @@ public class EventController : ControllerBase
             {
                 while (reader.Read())
                 {
+                    byte[] locationImageBytes = (byte[])reader["locationImage"];
+                    string locationImageBase64 = Convert.ToBase64String(locationImageBytes);
+
                     locations.Add(new Location
                         {
                             LocationId = (int) reader["locationId"],
@@ -44,7 +47,8 @@ public class EventController : ControllerBase
                             Area = (int) reader["area"],
                             Capacity = (int) reader["capacity"],
                             Cost = (int) reader["cost"],
-                            LocationImage = (byte[]) reader["locationImage"],
+                            LocationImage = locationImageBase64,
+                            Address = (string) reader["province"],
                             Province = (string) reader["province"],
                             PostalCode = (string) reader["postalCode"],
                             Additional = (string) reader["additional"],
