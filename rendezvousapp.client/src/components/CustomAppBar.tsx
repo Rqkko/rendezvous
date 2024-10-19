@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AppBar, Toolbar, IconButton, Button, Box, Menu, MenuItem, Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { getUser, User } from '../utils/apiUtils';
@@ -10,17 +10,48 @@ import logoSmall from '../assets/logo_small.png';
 function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
     const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
     
     // ----- Try Nav Stuff -----
     const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+    const handleMenuItemClick = (setting: string) => {
+        if (setting === "Logout") {
+            fetch('api/user/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Logout failed');
+                    }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            setUser(null);
+            navigate('/login');
+        }
+        handleCloseUserMenu();
+    };
     // ----- End Nav Stuff -----
+
+    function handleOpenAccount(event: React.MouseEvent<HTMLElement>): void {
+        setAnchorElAccount(event.currentTarget);
+    }
+    function handleCloseAccount(): void {
+        setAnchorElAccount(null);
+    }
 
     function handleLogin(): void {
         window.location.pathname = '/login';
@@ -62,13 +93,31 @@ function CustomAppBar(): JSX.Element | null {
 
                     {user 
                         ? (
-                            <IconButton
-                                color="inherit"
-                                aria-label="profile"
-                                sx={{ mr: 2 }}
-                            >
-                                <AccountCircle />
-                            </IconButton>
+                            <>
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="profile"
+                                    sx={{ mr: 2 }}
+                                    onClick={handleOpenAccount}
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    anchorEl={anchorElAccount}
+                                    open={Boolean(anchorElAccount)}
+                                    onClose={handleCloseAccount}
+                                    anchorOrigin={{
+                                        vertical: 'center',
+                                        horizontal: 'left',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'center',
+                                        horizontal: 'right',
+                                    }}
+                                >
+                                    <Typography>{user.firstname + " " + user.lastname}</Typography>
+                                </Menu>
+                            </>
                         )
                         : (
                             <Button
@@ -105,7 +154,7 @@ function CustomAppBar(): JSX.Element | null {
                         onClose={handleCloseUserMenu}
                         >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <MenuItem key={setting} onClick={() => handleMenuItemClick(setting)}>
                             <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                             </MenuItem>
                         ))}

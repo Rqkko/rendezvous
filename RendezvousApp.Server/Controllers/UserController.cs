@@ -96,4 +96,11 @@ public class UserController : ControllerBase
             email = HttpContext.Session.GetString("Email")
         });
     }
+
+    [HttpPost("Logout")]
+    public ActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return Ok(new { message = "Logged out" });
+    }
 }
