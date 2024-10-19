@@ -19,17 +19,6 @@ function Home(): JSX.Element {
     const location = useLocation();
     const [locations, setLocations] = useState<Location[]>([]);
 
-    // Example Locations
-    // const locations: Location[] = [
-    //     { name: "Anyamanee Cafe and Roastery", address: "163, Bang Sao Thong, Bang Sao Thong, Samut Prakan", image: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-    //     { name: "Mystic Falls", address: "123, Enchanted Forest, Fairyland", image: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-    //     { name: "Dragon's Den", address: "456, Dragon Mountain, Mythica", image: "https://via.placeholder.com/150" },
-    //     { name: "Atlantis", address: "789, Underwater City, Ocean", image: "https://via.placeholder.com/150" },
-    //     { name: "Sky Castle", address: "101, Floating Island, Sky Realm", image: "https://via.placeholder.com/150" },
-    //     { name: "Elven Grove", address: "202, Ancient Woods, Elvenland", image: "https://via.placeholder.com/150" },
-    //     { name: "Wizard's Tower", address: "303, Mystic Hills, Magica", image: "https://via.placeholder.com/150" }
-    // ];
-
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
     };
