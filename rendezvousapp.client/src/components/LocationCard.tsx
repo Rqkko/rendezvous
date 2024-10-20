@@ -18,7 +18,7 @@ function LocationCard({ name, address, image, handleSeeMoreClick }: LocationCard
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             mb: 4,
             minHeight: '250px',
-            maxWidth: '100%',
+            width: '100%',
         }}>
             <Box sx={{ 
                 width: '30%', 

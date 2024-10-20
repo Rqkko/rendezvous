@@ -1,16 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface LocationProps {
-    locationId: string;
+    locationId: string | undefined;
 }
 
+
 function Location({ locationId }: LocationProps): JSX.Element {
-  return (
-    <>
-        <div>Location</div>
-        <div>{locationId}</div>
-    </>
-  )
+    function fetchLocationDetail(locationId: string): void {
+        console.log("fetchLocationDetail is called")
+    }
+    
+    
+    useEffect(() => {
+        if (locationId !== undefined) {
+            fetchLocationDetail(locationId);
+        }
+    })
+    
+    
+    if (locationId === undefined) {
+        return (
+            <>
+                <div>Location Not Found</div>
+            </>
+        )
+    }
+
+    return (
+        <>
+            <div>Location</div>
+
+            <div>{locationId}</div>
+        </>
+    )
 }
 
 export default Location
