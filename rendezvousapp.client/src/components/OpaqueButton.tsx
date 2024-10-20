@@ -7,7 +7,7 @@ interface OpaqueButtonProps {
     text: string;
 }
 
-function OpaqueButton({ handleClick, style, text }: OpaqueButtonProps) {
+function OpaqueButton({ handleClick, style, text }: OpaqueButtonProps): JSX.Element {
     return (
         <Button
         variant="contained"

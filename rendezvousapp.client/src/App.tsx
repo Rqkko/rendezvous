@@ -1,38 +1,24 @@
-import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
+import { Box } from '@mui/material';
 
+import './App.css';
 import Home from './views/Home';
 import Login from './views/Login';
+import CustomAppBar from './components/CustomAppBar';
 
-function App() {
-    // const [user, setUser] = useState<string>();
-
-    // useEffect(() => {
-    //     getUser();
-    // }, []);
-
-    // const c = user === undefined
-    //     ? <div>User is no where to be found</div>
-    //     : <div>
-    //         <div>{user}</div>
-    //         <div>User should be here ^^^</div>
-    //     </div>
-
+function App(): JSX.Element {
     return (
         <Router>
-            <Routes>
-                <Route path="/" element={<Home/>} />
-                <Route path="/login" element={<Login/>} />
-            </Routes>
-         </Router>
+            <CustomAppBar />
+            {/* Use Box to keep it centered */}
+            <Box sx={{ width: '100vw' }}> 
+                <Routes>
+                    <Route path="/" element={<Home/>} />
+                    <Route path="/login" element={<Login/>} />
+                </Routes>
+            </Box>
+        </Router>
     );
-
-    // async function getUser() {
-    //     const response = await fetch('user/getfirstname');
-    //     const data = await response.text();
-    //     setUser(data);
-    // }
 }
 
 export default App;

@@ -1,70 +1,109 @@
-import { Container, Typography } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
-import OpaqueButton from "../components/OpaqueButton";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { Container, Typography, Paper, IconButton, InputBase, Box } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { useLocation } from 'react-router-dom';
+import { User, getUser } from '../utils/apiUtils';
+import LocationCard from '../components/LocationCard';
 
-interface User {
-    userId: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    phone: string;
+interface Location {
+    locationName: string;
+    address: string;
+    locationImage: string;
 }
 
-function Home() {
-    const navigate = useNavigate();
-    const location = useLocation();
+function Home(): JSX.Element {
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
+    const location = useLocation(); // For path url
+    const [locations, setLocations] = useState<Location[]>([]);
 
-    async function getUser(): Promise<User | null> {
-        return fetch('/api/user/getUser')
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((data) => {
-                        throw new Error(data.message);
-                    });
-                }
-                return response.json();
-            })
+    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        setSearchTerm(event.target.value);
+    };
+
+    function handleSearchChange(): void {
+        setSearchQuery(searchTerm);
+    };
+
+    function fetchLocations(): void {
+        fetch('/api/event/getAllLocations')
+            .then((response) => response.json())
             .then((data) => {
-                return {
-                    userId: data.userId,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
-                    email: data.email,
-                    phone: data.phone
-                };
+                setLocations(data);
             })
-            .catch(() => {
-                return null;
+            .catch((error) => {
+                alert(error.message);
             });
-    }
+    };
+
+    const filteredLocations = locations.filter(location =>
+        location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     useEffect(() => {
         getUser().then((result) => setUser(result));
-    }, [location]);
+        fetchLocations();
+    }, [location.pathname]);
 
     return (
-        <Container>
-            {user !== null ? (
-                <>
-                    <Typography variant="h1">Welcome to Home Page, {user.firstname}!</Typography>
-                    <Typography variant="h2">User Id: {user.userId}</Typography>
-                    <Typography variant="h2">Name: {user.firstname} {user.lastname}</Typography>
-                    <Typography variant="h2">Phone: {user.phone}</Typography>
-                    <Typography variant="h2">Email: {user.email}</Typography>
-                </>
-            ) : (                 
-                <>
-                    <Typography variant="h1">User Not Logged In</Typography>
-                    <OpaqueButton 
-                        handleClick={() => navigate("/login")} 
-                        text="Go to Login Page"
-                    />
-                </>
-            )}
+        <Container sx={{ overflow: 'hidden', width: '100vw' }}>
+            <Typography variant="h2" sx={{ mb: 4}}>Locations</Typography>
+
+            <Paper
+                component="form"
+                sx={{ 
+                    p: '2px 4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '600px',
+                    height: '70px',
+                    mx: 'auto',
+                    mb: 4,
+                    borderRadius: '20px'
+                }}
+            >
+                <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search Locations"
+                inputProps={{ 'aria-label': 'search locations' }}
+                value={searchTerm}
+                onChange={handleInputChange}
+                />
+                <IconButton 
+                    type="button"
+                    sx={{ p: '10px' }}
+                    aria-label="search"
+                    onClick={handleSearchChange}
+                >
+                    <SearchIcon />
+                </IconButton>
+            </Paper>
+
+            <Paper sx={{ 
+                height: '60vh',
+                width: '60vw',
+                overflow: 'auto',
+                bgcolor: 'transparent',
+                p: 4,
+                borderRadius: 6,
+                borderStyle: 'none',
+                boxShadow: 5,
+                borderColor: 'black',
+                mb: 2
+                }}
+            >
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}>
+                    {filteredLocations.map((location) => (
+                        <LocationCard key={location.locationName} name={location.locationName} address={location.address} image={location.locationImage} />
+                    ))}
+                    {filteredLocations.map((location) => (
+                        <LocationCard key={location.locationName} name={location.locationName} address={location.address} image={location.locationImage} />
+                    ))}
+                </Box>
+            </Paper>
         </Container>
     );
-}
+};
 
 export default Home;

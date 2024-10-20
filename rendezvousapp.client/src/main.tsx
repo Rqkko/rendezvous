@@ -4,15 +4,17 @@ import App from './App.tsx'
 import './index.css'
 import { createTheme, ThemeProvider } from '@mui/material'
 
-
 const theme = createTheme({
   palette: {
     primary: {
       main: "#395536"
     },
     secondary: {
-      main: "#988265"
+      main: "#988265",
     },
+    info: {
+      main: "#f3ede0",
+    }
   },
   typography: {
     fontFamily: 'Montserrat',
@@ -35,10 +37,19 @@ const theme = createTheme({
   },
 })
 
-createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  rootElement.style.margin = '0';
+  rootElement.style.padding = '0';
+  rootElement.style.width = '100%';
+  rootElement.style.height = '100%';
+}
+
+createRoot(rootElement!).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+          <App />
+      </ThemeProvider>
   </StrictMode>,
-)
+);
