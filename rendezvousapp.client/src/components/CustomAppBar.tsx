@@ -11,18 +11,17 @@ function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
-    
-    // ----- Try Nav Stuff -----
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+    const settings = ['Profile', 'Account', 'Dashboard', 'Logout']; // For Menu
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+
+    function handleOpenUserMenu(event: React.MouseEvent<HTMLElement>): void {
         setAnchorElUser(event.currentTarget);
     };
-    const handleCloseUserMenu = () => {
+    function handleCloseUserMenu(): void {
         setAnchorElUser(null);
     };
-    const handleMenuItemClick = (setting: string) => {
+    function handleMenuItemClick(setting: string): void {
         if (setting === "Logout") {
             fetch('api/user/logout', {
                 method: 'POST',
@@ -44,8 +43,7 @@ function CustomAppBar(): JSX.Element | null {
         }
         handleCloseUserMenu();
     };
-    // ----- End Nav Stuff -----
-
+    
     function handleOpenAccount(event: React.MouseEvent<HTMLElement>): void {
         setAnchorElAccount(event.currentTarget);
     }

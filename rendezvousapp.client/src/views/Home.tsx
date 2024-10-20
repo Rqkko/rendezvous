@@ -14,9 +14,8 @@ interface Location {
 function Home(): JSX.Element {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
-    // const [tabValue, setTabValue] = useState(0);
     const [user, setUser] = useState<User | null>(null);
-    const location = useLocation();
+    const location = useLocation(); // For path url
     const [locations, setLocations] = useState<Location[]>([]);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -26,10 +25,6 @@ function Home(): JSX.Element {
     function handleSearchChange(): void {
         setSearchQuery(searchTerm);
     };
-
-    // const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    //     setTabValue(newValue);
-    // };
 
     function fetchLocations(): void {
         fetch('/api/event/getAllLocations')
@@ -54,15 +49,6 @@ function Home(): JSX.Element {
     return (
         <Container sx={{ overflow: 'hidden', width: '100vw' }}>
             <Typography variant="h2" sx={{ mb: 4}}>Locations</Typography>
-
-            {/* <TextField
-                fullWidth
-                placeholder="Search"
-                variant="outlined"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                sx={{ maxWidth: '600px', bgcolor: 'white', borderRadius: '20px', mb: 4 }}
-            /> */}
 
             <Paper
                 component="form"
@@ -93,11 +79,6 @@ function Home(): JSX.Element {
                     <SearchIcon />
                 </IconButton>
             </Paper>
-
-            {/* <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
-                <Tab label="Locations" />
-                <Tab label="My Reservations" />
-            </Tabs> */}
 
             <Paper sx={{ 
                 height: '60vh',
