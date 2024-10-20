@@ -6,9 +6,10 @@ interface LocationCardProps {
     name: string;
     address: string;
     image: string | null;
+    handleSeeMoreClick: () => void;
 }
 
-function LocationCard({ name, address, image }: LocationCardProps): JSX.Element {
+function LocationCard({ name, address, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
     console.log(name, address, image);
     return (
         <Card sx={{ 
@@ -68,16 +69,18 @@ function LocationCard({ name, address, image }: LocationCardProps): JSX.Element 
                     >
                         description
                     </Button>
-                    <Typography 
-                        variant="body2" 
+
+                    <Button
                         sx={{ 
                             cursor: 'pointer',
                             color: '#2e5d4b',
-                            fontStyle: 'italic'
+                            textDecoration: 'underline',
+                            fontSize: '0.8rem'
                         }}
+                        onClick={handleSeeMoreClick}
                     >
                         See more
-                    </Typography>
+                    </Button>
                 </Box>
             </CardContent>
         </Card>
