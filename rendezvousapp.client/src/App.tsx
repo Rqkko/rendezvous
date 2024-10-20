@@ -7,6 +7,7 @@ import Login from './views/Login';
 import CustomAppBar from './components/CustomAppBar';
 import Reservations from './views/Reservations';
 import Account from './views/Account';
+import Location from './views/Location';
 
 function App(): JSX.Element {
     return (
@@ -19,6 +20,7 @@ function App(): JSX.Element {
                     <Route path="/login" element={<Login/>} />
                     <Route path="/reservations" element={<Reservations/>} />
                     <Route path="account" element={<Account/>} />
+                    <Route path="/location/:id" element={<Location />} />
                 </Routes>
             </Box>
         </Router>
