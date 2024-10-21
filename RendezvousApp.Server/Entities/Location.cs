@@ -9,7 +9,6 @@ namespace RendezvousApp.Server.Entities
         public int Capacity { get; set; }
         public int Cost { get; set; }
         public string LocationImage { get; set; }
-        public string Address { get; set; }
         public string Province { get; set; }
         public string PostalCode { get; set; }
         public string Additional { get; set; }
