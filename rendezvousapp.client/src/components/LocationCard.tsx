@@ -4,13 +4,13 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 interface LocationCardProps {
     name: string;
-    address: string;
+    province: string;
     image: string | null;
     handleSeeMoreClick: () => void;
 }
 
-function LocationCard({ name, address, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
-    console.log(name, address, image);
+function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
+    console.log(name, province, image);
     return (
         <Card sx={{ 
             display: 'flex', 
@@ -44,7 +44,7 @@ function LocationCard({ name, address, image, handleSeeMoreClick }: LocationCard
                         mt: 0.5
                     }}>
                         <LocationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#d32f2f' }} />
-                        {address}
+                        {province}
                     </Typography>
                 </Box>
                 <Box sx={{ 

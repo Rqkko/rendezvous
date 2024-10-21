@@ -8,7 +8,7 @@ import LocationCard from '../components/LocationCard';
 interface Location {
     locationId: number;
     locationName: string;
-    address: string;
+    province: string;
     locationImage: string;
 }
 
@@ -112,7 +112,7 @@ function Home(): JSX.Element {
                         <LocationCard
                             key={location.locationName}
                             name={location.locationName}
-                            address={location.address}
+                            province={location.province}
                             image={location.locationImage}
                             handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
                         />
