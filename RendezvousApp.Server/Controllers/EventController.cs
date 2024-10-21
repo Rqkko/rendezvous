@@ -48,7 +48,6 @@ public class EventController : ControllerBase
                             Capacity = (int) reader["capacity"],
                             Cost = (int) reader["cost"],
                             LocationImage = locationImageBase64,
-                            Address = (string) reader["province"],
                             Province = (string) reader["province"],
                             PostalCode = (string) reader["postalCode"],
                             Additional = (string) reader["additional"],
