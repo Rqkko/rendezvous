@@ -15,6 +15,10 @@ function CustomAppBar(): JSX.Element | null {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
 
+    function handleLogoClick(): void {
+        navigate('/');
+    }
+
     function handleOpenUserMenu(event: React.MouseEvent<HTMLElement>): void {
         setAnchorElUser(event.currentTarget);
     };
@@ -87,6 +91,7 @@ function CustomAppBar(): JSX.Element | null {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        onClick={handleLogoClick}
                     >
                         <Box
                             component="img"
