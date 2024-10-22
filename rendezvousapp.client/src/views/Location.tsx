@@ -48,9 +48,8 @@ function Location({ locationId }: LocationProps): JSX.Element {
     
     if (loading) {
         return (
-            <Container>
-                <div>Loading...</div>
-            </Container>
+            // Loading...
+            <div className="loader" style={{marginTop: '100px'}}></div>
         );
     }
 
