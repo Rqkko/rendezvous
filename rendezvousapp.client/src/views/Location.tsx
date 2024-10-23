@@ -1,4 +1,5 @@
-import { Box, Button, Container, Grid, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import React, { useEffect, useState } from 'react'
@@ -68,7 +69,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
         >
             <Box sx={{ my: 4 }}>
                 <Grid container spacing={4}>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Box
                             sx={{
                                 height: '300px',
@@ -80,16 +81,20 @@ function Location({ locationId }: LocationProps): JSX.Element {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} md={8}>
-                        <Typography variant="h4" gutterBottom>{location.locationName}</Typography>
-                        <Typography variant="body1" paragraph>Location: {location.postalCode}, {location.province}</Typography>
-                        <Typography variant="body1" paragraph>Description: {location.locationDescription}</Typography>
-                        <Typography variant="body1">Area: {location.area} square meters</Typography>
-                        <Typography variant="body1">Capacity: {location.capacity} people</Typography>
-                        <Typography variant="body1">Cost: {location.cost} Baht/Event</Typography>
-                        <Typography variant="body1" paragraph>Additional: {location.additional}</Typography>
+
+                    <Grid size={{ xs: 12, md: 7 }}>
+                        <Box>
+                            <Typography variant="h4" gutterBottom>{location.locationName}</Typography>
+                            <Typography variant="body1" paragraph>Location: {location.postalCode}, {location.province}</Typography>
+                            <Typography variant="body1" paragraph>Description: {location.locationDescription}</Typography>
+                            <Typography variant="body1">Area: {location.area} square meters</Typography>
+                            <Typography variant="body1">Capacity: {location.capacity} people</Typography>
+                            <Typography variant="body1">Cost: {location.cost} Baht/Event</Typography>
+                            <Typography variant="body1" paragraph>Additional: {location.additional}</Typography>
+                        </Box>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+
+                    <Grid size={{ xs: 12, md: 5}}>
                         <Paper elevation={3} sx={{ p: 3 }}>
                             <Typography variant="h6" gutterBottom>Reservation</Typography>
                             <TextField
