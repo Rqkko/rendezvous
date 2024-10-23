@@ -69,6 +69,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
         >
             <Box sx={{ my: 4 }}>
                 <Grid container spacing={4}>
+                    {/* Location Image */}
                     <Grid size={12}>
                         <Box
                             sx={{
@@ -82,18 +83,19 @@ function Location({ locationId }: LocationProps): JSX.Element {
                         />
                     </Grid>
 
+                    {/* Location Details */}
                     <Grid size={{ xs: 12, md: 7 }}>
-                        <Box>
-                            <Typography variant="h4" gutterBottom>{location.locationName}</Typography>
-                            <Typography variant="body1" paragraph>Location: {location.postalCode}, {location.province}</Typography>
-                            <Typography variant="body1" paragraph>Description: {location.locationDescription}</Typography>
-                            <Typography variant="body1">Area: {location.area} square meters</Typography>
-                            <Typography variant="body1">Capacity: {location.capacity} people</Typography>
-                            <Typography variant="body1">Cost: {location.cost} Baht/Event</Typography>
-                            <Typography variant="body1" paragraph>Additional: {location.additional}</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 2 }}>
+                            <Typography variant="h2" align="left">{location.locationName}</Typography>
+                            <Typography variant="body1" align="left"><strong>Location:</strong> {location.additional}, {location.province}, {location.postalCode}</Typography>
+                            <Typography variant="body1" align="left"><strong>Description:</strong> {location.locationDescription}</Typography>
+                            <Typography variant="body1" align="left"><strong>Area:</strong> {location.area} square meters</Typography>
+                            <Typography variant="body1" align="left"><strong>Capacity:</strong> {location.capacity} people</Typography>
+                            <Typography variant="body1" align="left"><strong>Cost:</strong> {location.cost} Baht/Event</Typography>
                         </Box>
                     </Grid>
 
+                    {/* Reservation Form */}
                     <Grid size={{ xs: 12, md: 5}}>
                         <Paper elevation={3} sx={{ p: 3 }}>
                             <Typography variant="h6" gutterBottom>Reservation</Typography>
