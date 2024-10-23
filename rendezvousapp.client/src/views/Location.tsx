@@ -62,7 +62,10 @@ function Location({ locationId }: LocationProps): JSX.Element {
     }
 
     return (
-        <Container maxWidth="lg">
+        <Container 
+            maxWidth="xl"
+            sx={{ px:1}}       
+        >
             <Box sx={{ my: 4 }}>
                 <Grid container spacing={4}>
                     <Grid item xs={12}>
@@ -85,21 +88,6 @@ function Location({ locationId }: LocationProps): JSX.Element {
                         <Typography variant="body1">Capacity: {location.capacity} people</Typography>
                         <Typography variant="body1">Cost: {location.cost} Baht/Event</Typography>
                         <Typography variant="body1" paragraph>Additional: {location.additional}</Typography>
-                        
-                        <Grid container spacing={2}>
-                            {[1, 2, 3, 4].map((index) => (
-                                <Grid item xs={3} key={index}>
-                                    <Paper
-                                        sx={{
-                                            height: 100,
-                                            backgroundImage: `url(https://source.unsplash.com/random/150x150?sig=${index})`,
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                        }}
-                                    />
-                                </Grid>
-                            ))}
-                        </Grid>
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <Paper elevation={3} sx={{ p: 3 }}>
