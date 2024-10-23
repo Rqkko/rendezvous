@@ -29,16 +29,18 @@ function Location({ locationId }: LocationProps): JSX.Element {
     const [location, setLocation] = useState<Location | undefined>(undefined);
 
     function fetchLocationDetail(locationId: string): void {
-        fetch(`/api/event/getlocation/${locationId}`)
-            .then(response => response.json())
-            .then(data => {
-                setLocation(data)
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching location details:', error);
-                setLoading(false);
-            });
+        Promise.all([
+            fetch(`/api/event/getlocation/${locationId}`).then(response => response.json()),
+            new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second on loading screen (Just because it looks cooler)
+        ])
+        .then(([data]) => {
+            setLocation(data);
+            setLoading(false);
+        })
+        .catch(error => {
+            console.error('Error fetching location details:', error);
+            setLoading(false);
+        });
     }
     
     useEffect(() => {
