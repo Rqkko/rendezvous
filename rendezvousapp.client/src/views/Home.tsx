@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography, Paper, IconButton, InputBase, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { User, getUser } from '../utils/apiUtils';
 import LocationCard from '../components/LocationCard';
 
