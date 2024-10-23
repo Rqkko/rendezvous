@@ -97,7 +97,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
 
                     {/* Reservation Form */}
                     <Grid size={{ xs: 12, md: 5}}>
-                        <Paper elevation={3} sx={{ p: 3 }}>
+                        <Paper elevation={5} sx={{ p: 3, bgcolor: 'info.main' }}>
                             <Typography variant="h6" gutterBottom>Reservation</Typography>
                             <TextField
                                 fullWidth

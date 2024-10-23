@@ -13,7 +13,10 @@ const theme = createTheme({
       main: "#988265",
     },
     info: {
-      main: "#f3ede0",
+      main: "#AEC1B0"
+    },
+    background: {
+      default: "#f3ede0",
     }
   },
   typography: {
