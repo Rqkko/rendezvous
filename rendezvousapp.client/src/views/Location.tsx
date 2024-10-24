@@ -1,10 +1,13 @@
-import { Box, Button, Container, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+
+import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
+import { eventNames } from 'process';
 
 interface LocationProps {
     locationId: string | undefined;
@@ -27,6 +30,7 @@ interface Location {
 function Location({ locationId }: LocationProps): JSX.Element {
     const [loading, setLoading] = useState<boolean>(true);
     const [location, setLocation] = useState<Location | undefined>(undefined);
+    const [eventName, setEventName] = useState<string>('');
 
     function fetchLocationDetail(locationId: string): void {
         Promise.all([
@@ -99,20 +103,53 @@ function Location({ locationId }: LocationProps): JSX.Element {
 
                     {/* Reservation Form */}
                     <Grid size={{ xs: 12, md: 5}}>
-                        <Paper elevation={5} sx={{ p: 3, bgcolor: 'info.main' }}>
-                            <Typography variant="h6" gutterBottom>Reservation</Typography>
-                            <TextField
-                                fullWidth
+                        <Container 
+                            sx={{ 
+                                px: 3,
+                                bgcolor: 'info.main',
+                                boxShadow: 5,
+                                borderRadius: '24px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}>
+                            <Typography 
+                                color='white' 
+                                sx={{ 
+                                    bgcolor: 'secondary.main', 
+                                    width: '50%', 
+                                    height: '50px', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    borderBottomLeftRadius: '24px',
+                                    borderBottomRightRadius: '24px',
+                                }} 
+                                variant="h3"
+                            >
+                                Reservation
+                            </Typography>
+
+                            <RoundedCornerTextfield
                                 label="Event Name"
-                                variant="outlined"
-                                margin="normal"
-                                // value={eventName}
-                                // onChange={(e) => setEventName(e.target.value)}
+                                value={eventName}
+                                handleChange={(e) => setEventName(e.target.value)}
+                                style={{ width: '100%' }}
                             />
+
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <StaticDatePicker 
-                                    defaultValue={dayjs('2022-04-17')}
-                                />
+                            <DesktopDatePicker
+                                label="Event Date"
+                                // value={selectedDate}
+                                // onChange={(newValue) => setSelectedDate(newValue)}
+                                disablePast
+                                views={['year', 'month', 'day']}
+                                // inputFormat="DD/MM/YYYY"
+                                // renderInput={(params) => <TextField {...params} sx={{ width: '100%', my: 2 }} />}
+                                // PopperComponent={(props) => (
+                                //     <Popper {...props} placement="top-start" modifiers={[{ name: 'offset', options: { offset: [0, 10] } }]} />
+                                // )}
+                            />
                             </LocalizationProvider>
                             <TextField
                                 fullWidth
@@ -145,7 +182,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
                             <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                                 Confirm
                             </Button>
-                        </Paper>
+                        </Container>
                     </Grid>
                 </Grid>
             </Box>
