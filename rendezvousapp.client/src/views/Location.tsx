@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import React, { useEffect, useState } from 'react'
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { DatePicker, DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
@@ -31,6 +31,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
     const [loading, setLoading] = useState<boolean>(true);
     const [location, setLocation] = useState<Location | undefined>(undefined);
     const [eventName, setEventName] = useState<string>('');
+    const [eventDate, setEventDate] = useState<Dayjs | null>(null);
 
     function fetchLocationDetail(locationId: string): void {
         Promise.all([
@@ -134,22 +135,28 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 label="Event Name"
                                 value={eventName}
                                 handleChange={(e) => setEventName(e.target.value)}
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', my: 2 }}
                             />
 
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DesktopDatePicker
+                            <DatePicker
+                                sx = {{ 
+                                    bgcolor: 'white',
+                                    borderRadius: '20px',
+                                    width: '100%',
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            border: 'none',
+                                        },
+                                    }
+                                }}
                                 label="Event Date"
-                                // value={selectedDate}
-                                // onChange={(newValue) => setSelectedDate(newValue)}
+                                value={eventDate}
+                                onChange={(newValue) => setEventDate(newValue)}
                                 disablePast
                                 views={['year', 'month', 'day']}
-                                // inputFormat="DD/MM/YYYY"
-                                // renderInput={(params) => <TextField {...params} sx={{ width: '100%', my: 2 }} />}
-                                // PopperComponent={(props) => (
-                                //     <Popper {...props} placement="top-start" modifiers={[{ name: 'offset', options: { offset: [0, 10] } }]} />
-                                // )}
                             />
+                            <DatePicker label="Uncontrolled picker" defaultValue={dayjs('2022-04-17')} />
                             </LocalizationProvider>
                             <TextField
                                 fullWidth
