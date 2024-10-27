@@ -1,13 +1,9 @@
 import { Box, Button, Container, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import React, { useEffect, useState } from 'react'
-import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker, DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
-import { eventNames } from 'process';
+import CustomDatePicker from '../components/CustomDatePicker';
 
 interface LocationProps {
     locationId: string | undefined;
@@ -138,26 +134,13 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 style={{ width: '100%', my: 2 }}
                             />
 
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                                sx = {{ 
-                                    bgcolor: 'white',
-                                    borderRadius: '20px',
-                                    width: '100%',
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            border: 'none',
-                                        },
-                                    }
-                                }}
+                            <CustomDatePicker 
                                 label="Event Date"
                                 value={eventDate}
                                 onChange={(newValue) => setEventDate(newValue)}
                                 disablePast
-                                views={['year', 'month', 'day']}
                             />
-                            <DatePicker label="Uncontrolled picker" defaultValue={dayjs('2022-04-17')} />
-                            </LocalizationProvider>
+
                             <TextField
                                 fullWidth
                                 label="Theme"
