@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
 import CustomDatePicker from '../components/CustomDatePicker';
+import { Dayjs } from 'dayjs';
 
 interface LocationProps {
     locationId: string | undefined;
@@ -28,6 +29,9 @@ function Location({ locationId }: LocationProps): JSX.Element {
     const [location, setLocation] = useState<Location | undefined>(undefined);
     const [eventName, setEventName] = useState<string>('');
     const [eventDate, setEventDate] = useState<Dayjs | null>(null);
+    const [theme, setTheme] = useState<string>('');
+    const [guest, setGuest] = useState<string>('');
+    const [eventDescription, setEventDescription] = useState<string>('');
 
     function fetchLocationDetail(locationId: string): void {
         Promise.all([
@@ -42,6 +46,10 @@ function Location({ locationId }: LocationProps): JSX.Element {
             console.error('Error fetching location details:', error);
             setLoading(false);
         });
+    }
+
+    function handleConfirmClick(): void {
+        // TODO: post to backend
     }
     
     useEffect(() => {
@@ -141,35 +149,34 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 disablePast
                             />
 
-                            <TextField
-                                fullWidth
+                            <RoundedCornerTextfield
                                 label="Theme"
-                                variant="outlined"
-                                margin="normal"
-                                // value={eventTheme}
-                                // onChange={(e) => setEventTheme(e.target.value)}
+                                value={theme}
+                                handleChange={(e) => setTheme(e.target.value)}
+                                style={{ width: '100%', my:2 }}
                             />
-                            <Select
-                                fullWidth
-                                // value={guestCount}
-                                // onChange={(e) => setGuestCount(Number(e.target.value))}
-                                margin="dense"
-                            >
-                                {[80, 90, 100].map((num) => (
-                                    <MenuItem key={num} value={num}>{num}</MenuItem>
-                                ))}
-                            </Select>
-                            <TextField
-                                fullWidth
+
+                            <RoundedCornerTextfield
+                                label="No. of Guests"
+                                value={guest}
+                                handleChange={(e) => setGuest(e.target.value)}
+                                style={{ width: '100%', my:2 }}
+                            />
+
+                            <RoundedCornerTextfield
                                 label="Event Description"
-                                variant="outlined"
-                                margin="normal"
-                                multiline
-                                rows={4}
-                                // value={eventDescription}
-                                // onChange={(e) => setEventDescription(e.target.value)}
+                                value={eventDescription}
+                                handleChange={(e) => setEventDescription(e.target.value)}
+                                style={{ width: '100%', my:2 }}
                             />
-                            <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+
+                            <Button 
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                sx={{ mt: 2 }}
+                                onClick={handleConfirmClick}
+                            >
                                 Confirm
                             </Button>
                         </Container>
