@@ -18,6 +18,8 @@ else
     connectionString = configuration.GetConnectionString("DefaultConnection");
 }
 
+Console.WriteLine("Using ConnectionString: " + connectionString);
+
 // Register the connection string in the DI container
 builder.Services.AddSingleton(connectionString);
 
