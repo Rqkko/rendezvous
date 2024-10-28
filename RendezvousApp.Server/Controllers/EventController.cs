@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using System.Globalization; // For CultureInfo (force to use AD year format)
 
 using RendezvousApp.Server.Entities;
 
@@ -125,5 +126,85 @@ public class EventController : ControllerBase
     public ActionResult GetUserReservations()
     {
         return Ok();
+    }
+
+    // Add Payment, Event, and Reservation to the Database
+    [HttpPost("AddReservation")]
+    public ActionResult AddReservation([FromBody] ReservationDTO data)
+    {
+        string output = $"EventId: {data.Event.EventId}, ReservationId: {data.Reservation.ReservationId}, PaymentId: {data.Payment.PaymentId}";
+
+        int? userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
+        {
+            return Unauthorized(new { message = "User Not Logged in" });
+        }
+        Console.WriteLine($"UserId: {userId}");
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    // Insert into Payments table
+                    string paymentsQuery = @"
+                        INSERT INTO Payments (paymentAmount, paymentDateTime) 
+                        VALUES (@paymentAmount, @paymentDateTime);
+                        SELECT LAST_INSERT_ID();
+                    ";
+                    MySqlCommand paymentsCmd = new MySqlCommand(paymentsQuery, connection, transaction);
+                    paymentsCmd.Parameters.AddWithValue("@paymentAmount", data.Payment.PaymentAmount);
+                    paymentsCmd.Parameters.AddWithValue("@paymentDateTime", data.Payment.PaymentDateTime);
+                    var paymentId = Convert.ToInt32(paymentsCmd.ExecuteScalar());
+
+                    // Insert into Events table
+                    string eventsQuery = @"
+                        INSERT INTO Events (locationId, eventName, eventDescription, date, theme, guestCount)
+                        VALUES (@locationId, @eventName, @eventDescription, @date, @theme, @guestCount);
+                        SELECT LAST_INSERT_ID();
+                    ";
+                    MySqlCommand eventsCmd = new MySqlCommand(eventsQuery, connection, transaction);
+                    eventsCmd.Parameters.AddWithValue("@locationId", data.LocationId);
+                    eventsCmd.Parameters.AddWithValue("@eventName", data.Event.EventName);
+                    eventsCmd.Parameters.AddWithValue("@eventDescription", data.Event.EventDescription);
+                    eventsCmd.Parameters.AddWithValue("@date", data.Event.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                    eventsCmd.Parameters.AddWithValue("@theme", data.Event.Theme);
+                    eventsCmd.Parameters.AddWithValue("@guestCount", data.Event.GuestCount);
+                    var eventId = Convert.ToInt32(eventsCmd.ExecuteScalar());
+
+                    // Insert into Reservations table
+                    string reservationsQuery = @"
+                        INSERT INTO Reservations (userId, eventId, reservationDateTime, paymentId)
+                        VALUES (@userId, @eventId, @reservationDateTime, @paymentId)
+                    ";
+                    MySqlCommand reservationsCmd = new MySqlCommand(reservationsQuery, connection, transaction);
+                    reservationsCmd.Parameters.AddWithValue("@userId", userId);
+                    reservationsCmd.Parameters.AddWithValue("@eventId", eventId);
+                    reservationsCmd.Parameters.AddWithValue("@reservationDateTime", data.Reservation.ReservationDateTime.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture));
+                    reservationsCmd.Parameters.AddWithValue("@paymentId", paymentId);
+                    var reservationId = reservationsCmd.ExecuteScalar();
+
+                    // Commit the transaction if all inserts succeed
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    // Roll back the transaction if any insert fails
+                    try {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        return StatusCode(500, $"Rollback Failed: {ex2.Message}");
+                    }
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
+            }
+        }
+
+        return Ok("Reservation Added");
     }
 }
