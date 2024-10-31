@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs';
 
-import { Event, Reservation, Payment } from '../utils/apiUtils';
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
 import CustomDatePicker from '../components/CustomDatePicker';
 
@@ -23,6 +22,30 @@ interface Location {
     postalCode: string,
     additional: string,
     adminId: string
+}
+
+interface EventDTO {
+    eventId: number;
+    locationId: number;
+    eventName: string;
+    eventDescription: string;
+    date: string;
+    theme: string;
+    guestCount: number;
+}
+
+interface ReservationDTO {
+    reservationId: number;
+    userId: number;
+    eventId: number;
+    reservationDateTime: string;
+    paymentId: number;
+}
+
+interface PaymentDTO {
+    paymentId: number;
+    paymentAmount: number;
+    paymentDateTime: string;
 }
 
 function Location({ locationId }: LocationProps): JSX.Element {
@@ -57,7 +80,14 @@ function Location({ locationId }: LocationProps): JSX.Element {
         console.log('Guest:', guest);
         console.log('Event Description:', eventDescription);
         
-        
+        const eventDTO: EventDTO = {
+            eventName,
+            eventDate: eventDate?.toISOString() || '',
+            theme,
+            guest: parseInt(guest, 10),
+            eventDescription,
+            locationId: location?.locationId || 0,
+        };
 
         // fetch(`/api/event/addReservation`, {
         //     method: 'POST',
