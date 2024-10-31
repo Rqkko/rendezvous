@@ -130,7 +130,7 @@ public class EventController : ControllerBase
 
     // Add Payment, Event, and Reservation to the Database
     [HttpPost("AddReservation")]
-    public ActionResult AddReservation([FromBody] ReservationDTO data)
+    public ActionResult AddReservation([FromBody] ReservationPayloadDTO data)
     {
         int? userId = HttpContext.Session.GetInt32("UserId");
         if (userId == null)

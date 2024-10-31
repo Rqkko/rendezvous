@@ -1,5 +1,4 @@
 export interface User {
-    // TODO: try change to number
     userId: number;
     firstname: string;
     lastname: string;

@@ -1,10 +1,11 @@
-import { Box, Button, Container, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
+import { Dayjs } from 'dayjs';
 
+import { Event, Reservation, Payment } from '../utils/apiUtils';
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
 import CustomDatePicker from '../components/CustomDatePicker';
-import { Dayjs } from 'dayjs';
 
 interface LocationProps {
     locationId: string | undefined;
@@ -50,6 +51,35 @@ function Location({ locationId }: LocationProps): JSX.Element {
 
     function handleConfirmClick(): void {
         // TODO: post to backend
+        console.log('Event Name:', eventName);
+        console.log('Event Date:', eventDate);
+        console.log('Theme:', theme);
+        console.log('Guest:', guest);
+        console.log('Event Description:', eventDescription);
+        
+        
+
+        // fetch(`/api/event/addReservation`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ contact, password }),
+        // })
+        // .then((response) => {
+        //     if (!response.ok) {
+        //         return response.json().then((data) => {
+        //             throw new Error(data.message);
+        //         });
+        //     }
+        //     return response.json();
+        // })
+        // .then(() => {
+        //     navigate('/');
+        // })
+        // .catch((error) => {
+        //     alert(error.message);
+        // });
     }
     
     useEffect(() => {
