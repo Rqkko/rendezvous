@@ -24,28 +24,22 @@ interface Location {
     adminId: string
 }
 
-interface EventDTO {
-    eventId: number;
-    locationId: number;
-    eventName: string;
-    eventDescription: string;
-    date: string;
-    theme: string;
-    guestCount: number;
-}
-
 interface ReservationDTO {
-    reservationId: number;
-    userId: number;
-    eventId: number;
-    reservationDateTime: string;
-    paymentId: number;
-}
-
-interface PaymentDTO {
-    paymentId: number;
-    paymentAmount: number;
-    paymentDateTime: string;
+    locationId: number,
+    event: {
+        eventName: string,
+        eventDescription: string,
+        date: string,
+        theme: string,
+        guestCount: number
+    },
+    reservation: {
+        reservationDateTime: string
+    },
+    payment: {
+        paymentAmount: number,
+        paymentDateTime: string
+    }
 }
 
 function Location({ locationId }: LocationProps): JSX.Element {
@@ -67,49 +61,54 @@ function Location({ locationId }: LocationProps): JSX.Element {
             setLoading(false);
         })
         .catch(error => {
-            console.error('Error fetching location details:', error);
+            alert('Error fetching location details: ' + error.message);
             setLoading(false);
         });
     }
 
     function handleConfirmClick(): void {
-        // TODO: post to backend
         console.log('Event Name:', eventName);
         console.log('Event Date:', eventDate);
         console.log('Theme:', theme);
         console.log('Guest:', guest);
         console.log('Event Description:', eventDescription);
         
-        const eventDTO: EventDTO = {
-            eventName,
-            eventDate: eventDate?.toISOString() || '',
-            theme,
-            guest: parseInt(guest, 10),
-            eventDescription,
+        const payload: ReservationDTO = {
             locationId: location?.locationId || 0,
+            event: {
+                eventName: eventName,
+                eventDescription: eventDescription,
+                date: eventDate?.format('YYYY-MM-DD') || '',
+                theme: theme,
+                guestCount: parseInt(guest)
+            },
+            reservation: {
+                reservationDateTime: new Date().toISOString()
+            },
+            payment: {
+                paymentAmount: location?.cost || 0,
+                paymentDateTime: new Date().toISOString()
+            }
         };
 
-        // fetch(`/api/event/addReservation`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ contact, password }),
-        // })
-        // .then((response) => {
-        //     if (!response.ok) {
-        //         return response.json().then((data) => {
-        //             throw new Error(data.message);
-        //         });
-        //     }
-        //     return response.json();
-        // })
-        // .then(() => {
-        //     navigate('/');
-        // })
-        // .catch((error) => {
-        //     alert(error.message);
-        // });
+        fetch(`/api/event/addReservation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => {
+                    throw new Error(data.message);
+                });
+            }
+            alert("Reservation Successful");
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
     }
     
     useEffect(() => {
