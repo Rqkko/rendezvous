@@ -132,8 +132,6 @@ public class EventController : ControllerBase
     [HttpPost("AddReservation")]
     public ActionResult AddReservation([FromBody] ReservationDTO data)
     {
-        string output = $"EventId: {data.Event.EventId}, ReservationId: {data.Reservation.ReservationId}, PaymentId: {data.Payment.PaymentId}";
-
         int? userId = HttpContext.Session.GetInt32("UserId");
         if (userId == null)
         {
