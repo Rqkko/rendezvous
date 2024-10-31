@@ -1,9 +1,34 @@
 export interface User {
-    userId: string;
+    // TODO: try change to number
+    userId: number;
     firstname: string;
     lastname: string;
     email: string;
     phone: string;
+}
+
+export interface Event {
+    eventId: number;
+    locationId: number;
+    eventName: string;
+    eventDescription: string;
+    date: string;
+    theme: string;
+    guestCount: number;
+}
+
+export interface Reservation {
+    reservationId: number;
+    userId: number;
+    eventId: number;
+    reservationDateTime: string;
+    paymentId: number;
+}
+
+export interface Payment {
+    paymentId: number;
+    paymentAmount: number;
+    paymentDateTime: string;
 }
 
 export async function getUser(): Promise<User | null> {
