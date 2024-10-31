@@ -1,8 +1,9 @@
 import { Box, Container, Typography, Divider, Button } from "@mui/material";
-import DefaultTextField from "../components/CustomTextfield";
 import OpaqueButton from "../components/OpaqueButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+import SquareTextfield from "../components/SquareTextfield";
 
 import logo from '../assets/logo.png';
 
@@ -98,14 +99,14 @@ function Login() {
                         Please log in
                     </Typography>
 
-                    <DefaultTextField 
+                    <SquareTextfield 
                         placeholder="Email / phone no."
                         style={{ mt: 2, width: '100%' }}
                         value={contact}
                         handleChange={handleContact}
                     />
 
-                    <DefaultTextField 
+                    <SquareTextfield 
                         placeholder="Password"
                         style={{ mt: 2, width: '100%' }}
                         value={password}

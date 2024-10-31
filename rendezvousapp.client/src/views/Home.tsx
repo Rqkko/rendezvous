@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Paper, IconButton, InputBase, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { User, getUser } from '../utils/apiUtils';
 import LocationCard from '../components/LocationCard';
 
 interface Location {
+    locationId: number;
     locationName: string;
-    address: string;
+    province: string;
     locationImage: string;
 }
 
@@ -16,6 +18,7 @@ function Home(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
     const location = useLocation(); // For path url
+    const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -37,6 +40,10 @@ function Home(): JSX.Element {
             });
     };
 
+    function handleSeeMoreClick(locationId: number): void {
+        navigate(`/location/${locationId}`)
+    }
+
     const filteredLocations = locations.filter(location =>
         location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -47,7 +54,15 @@ function Home(): JSX.Element {
     }, [location.pathname]);
 
     return (
-        <Container sx={{ overflow: 'hidden', width: '100vw' }}>
+        <Container 
+            sx={{
+                overflow: 'hidden',
+                width: '100vw',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}
+        >
             <Typography variant="h2" sx={{ mb: 4}}>Locations</Typography>
 
             <Paper
@@ -81,7 +96,7 @@ function Home(): JSX.Element {
             </Paper>
 
             <Paper sx={{ 
-                height: '60vh',
+                height: '50vh',
                 width: '60vw',
                 overflow: 'auto',
                 bgcolor: 'transparent',
@@ -90,15 +105,18 @@ function Home(): JSX.Element {
                 borderStyle: 'none',
                 boxShadow: 5,
                 borderColor: 'black',
-                mb: 2
+                mb: 2,
                 }}
             >
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
                     {filteredLocations.map((location) => (
-                        <LocationCard key={location.locationName} name={location.locationName} address={location.address} image={location.locationImage} />
-                    ))}
-                    {filteredLocations.map((location) => (
-                        <LocationCard key={location.locationName} name={location.locationName} address={location.address} image={location.locationImage} />
+                        <LocationCard
+                            key={location.locationName}
+                            name={location.locationName}
+                            province={location.province}
+                            image={location.locationImage}
+                            handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
+                        />
                     ))}
                 </Box>
             </Paper>

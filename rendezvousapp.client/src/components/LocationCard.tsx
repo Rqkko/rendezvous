@@ -4,12 +4,13 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 interface LocationCardProps {
     name: string;
-    address: string;
+    province: string;
     image: string | null;
+    handleSeeMoreClick: () => void;
 }
 
-function LocationCard({ name, address, image }: LocationCardProps): JSX.Element {
-    console.log(name, address, image);
+function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
+    console.log(name, province, image);
     return (
         <Card sx={{ 
             display: 'flex', 
@@ -17,7 +18,7 @@ function LocationCard({ name, address, image }: LocationCardProps): JSX.Element 
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             mb: 4,
             minHeight: '250px',
-            maxWidth: '100%',
+            width: '100%',
         }}>
             <Box sx={{ 
                 width: '30%', 
@@ -43,7 +44,7 @@ function LocationCard({ name, address, image }: LocationCardProps): JSX.Element 
                         mt: 0.5
                     }}>
                         <LocationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#d32f2f' }} />
-                        {address}
+                        {province}
                     </Typography>
                 </Box>
                 <Box sx={{ 
@@ -68,16 +69,18 @@ function LocationCard({ name, address, image }: LocationCardProps): JSX.Element 
                     >
                         description
                     </Button>
-                    <Typography 
-                        variant="body2" 
+
+                    <Button
                         sx={{ 
                             cursor: 'pointer',
                             color: '#2e5d4b',
-                            fontStyle: 'italic'
+                            textDecoration: 'underline',
+                            fontSize: '0.8rem'
                         }}
+                        onClick={handleSeeMoreClick}
                     >
                         See more
-                    </Typography>
+                    </Button>
                 </Box>
             </CardContent>
         </Card>

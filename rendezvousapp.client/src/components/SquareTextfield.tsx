@@ -8,7 +8,7 @@ interface DefaultTextFieldProps {
     type?: string;
 }
 
-function DefaultTextField({ placeholder, style, value, handleChange, type }: DefaultTextFieldProps): JSX.Element {
+function SquareTextfield({ placeholder, style, value, handleChange, type }: DefaultTextFieldProps): JSX.Element {
 
     return (
         <TextField
@@ -25,4 +25,4 @@ function DefaultTextField({ placeholder, style, value, handleChange, type }: Def
     )
 }
 
-export default DefaultTextField;
+export default SquareTextfield;

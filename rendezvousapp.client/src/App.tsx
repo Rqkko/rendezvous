@@ -1,10 +1,18 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import './App.css';
 import Home from './views/Home';
 import Login from './views/Login';
 import CustomAppBar from './components/CustomAppBar';
+import Reservations from './views/Reservations';
+import Account from './views/Account';
+import Location from './views/Location';
+
+function LocationWrapper() {
+    const { id } = useParams<{ id: string }>();
+    return <Location locationId={id} />;
+}
 
 function App(): JSX.Element {
     return (
@@ -15,6 +23,9 @@ function App(): JSX.Element {
                 <Routes>
                     <Route path="/" element={<Home/>} />
                     <Route path="/login" element={<Login/>} />
+                    <Route path="/reservations" element={<Reservations/>} />
+                    <Route path="account" element={<Account/>} />
+                    <Route path="/location/:id?" element={<LocationWrapper />} />
                 </Routes>
             </Box>
         </Router>

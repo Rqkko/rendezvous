@@ -13,7 +13,10 @@ const theme = createTheme({
       main: "#988265",
     },
     info: {
-      main: "#f3ede0",
+      main: "#AEC1B0"
+    },
+    background: {
+      default: "#f3ede0",
     }
   },
   typography: {
@@ -24,6 +27,14 @@ const theme = createTheme({
     },
     h2: {
       fontSize: '1.5rem',
+      fontWeight: 510,
+    },
+    h3: {
+      fontSize: '1rem',
+      fontWeight: 510,
+    },
+    h4: {
+      fontSize: '0.875rem',
       fontWeight: 510,
     },
     body1: {

@@ -11,9 +11,13 @@ function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout']; // For Menu
+    const settings = ['Home', 'Reservations', 'Account', 'Logout']; // For Menu
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
+
+    function handleLogoClick(): void {
+        navigate('/');
+    }
 
     function handleOpenUserMenu(event: React.MouseEvent<HTMLElement>): void {
         setAnchorElUser(event.currentTarget);
@@ -22,7 +26,16 @@ function CustomAppBar(): JSX.Element | null {
         setAnchorElUser(null);
     };
     function handleMenuItemClick(setting: string): void {
-        if (setting === "Logout") {
+        if (setting === "Home") {
+            navigate('');
+        }
+        else if (setting === "Reservations") {
+            navigate('/reservations')
+        }
+        else if (setting === "Account") {
+            navigate("/account")
+        }
+        else if (setting === "Logout") {
             fetch('api/user/logout', {
                 method: 'POST',
                 headers: {
@@ -43,7 +56,7 @@ function CustomAppBar(): JSX.Element | null {
         }
         handleCloseUserMenu();
     };
-    
+
     function handleOpenAccount(event: React.MouseEvent<HTMLElement>): void {
         setAnchorElAccount(event.currentTarget);
     }
@@ -67,9 +80,9 @@ function CustomAppBar(): JSX.Element | null {
     return (
         <>
             <AppBar
-                color="info"
+                color="main"
                 position="sticky"
-                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box' }}
+                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box', bgcolor: 'background.default' }}
             >
                 <Toolbar>
                     <IconButton
@@ -78,6 +91,7 @@ function CustomAppBar(): JSX.Element | null {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        onClick={handleLogoClick}
                     >
                         <Box
                             component="img"
