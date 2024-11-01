@@ -1,5 +1,5 @@
 import { Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 
 interface EventReservation {
@@ -15,6 +15,10 @@ interface EventReservation {
 function Reservations(): JSX.Element {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [reservations, setReservations] = useState<EventReservation[]>([]);
+    const filteredReservations = reservations.filter(reservation =>
+        reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
@@ -24,10 +28,20 @@ function Reservations(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
-    // TODO
-    // const filteredReservations = reservations.filter(reservation =>
-    //     reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase())
-    // );
+    function fetchReservations(): void {
+        fetch('/api/event/getUserReservations')
+            .then(response => response.json())
+            .then(data => {
+                setReservations(data);
+            })
+            .catch(error => {  
+                alert(error.message);
+            });
+    }
+
+    useEffect(() => {
+        fetchReservations();
+    }, []);
 
     return (
         <Container 
@@ -69,6 +83,10 @@ function Reservations(): JSX.Element {
             >
                 <SearchIcon />
             </IconButton>
+        </Paper>
+
+        <Paper>
+            {filteredReservations.toString()}
         </Paper>
     </Container>
     );
