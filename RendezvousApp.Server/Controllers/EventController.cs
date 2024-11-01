@@ -136,7 +136,7 @@ public class EventController : ControllerBase
             connection.Open();
 
             string query = @"
-                SELECT L.locationName, L.locationImage, E.eventName, E.theme, E.guestCount, E.date, E.eventDescription FROM Reservations AS R
+                SELECT L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date, E.eventDescription FROM Reservations AS R
                 JOIN Events AS E ON R.eventId = E.eventId
                 JOIN Locations AS L ON E.locationId = L.locationId
                 JOIN Addresses AS A ON L.locationId = A.locationId
@@ -158,6 +158,7 @@ public class EventController : ControllerBase
                     {
                         LocationName = (string)reader["locationName"],
                         LocationImage = locationImageBase64,
+                        Province = (string)reader["province"],
                         EventName = (string)reader["eventName"],
                         Theme = (string)reader["theme"],
                         GuestCount = (int)reader["guestCount"],
