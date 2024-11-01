@@ -125,7 +125,56 @@ public class EventController : ControllerBase
     [HttpGet("GetUserReservations")]
     public ActionResult GetUserReservations()
     {
-        return Ok();
+        int? userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
+        {
+            return Unauthorized(new { message = "User Not Logged in" });
+        }
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            string query = @"
+                SELECT L.locationName, L.locationImage, E.eventName, E.theme, E.guestCount, E.date, E.eventDescription FROM Reservations AS R
+                JOIN Events AS E ON R.eventId = E.eventId
+                JOIN Locations AS L ON E.locationId = L.locationId
+                JOIN Addresses AS A ON L.locationId = A.locationId
+                WHERE R.userId = @userId
+            ";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@userId", userId);
+
+            List<EventReservationDTO> eventReservations = new();
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    byte[] locationImageBytes = (byte[])reader["locationImage"];
+                    string locationImageBase64 = Convert.ToBase64String(locationImageBytes);
+
+                    eventReservations.Add(new EventReservationDTO
+                    {
+                        LocationName = (string)reader["locationName"],
+                        LocationImage = locationImageBase64,
+                        EventName = (string)reader["eventName"],
+                        Theme = (string)reader["theme"],
+                        GuestCount = (int)reader["guestCount"],
+                        Date = DateOnly.FromDateTime((DateTime)reader["date"]),
+                        EventDescription = (string)reader["eventDescription"],
+                    });
+                }
+            }
+
+            if (eventReservations.Count == 0)
+            {
+                return NotFound(new { message = "No Reservation Found" });
+            }
+
+            Console.WriteLine(eventReservations.Count + " Reservations Found");
+            return Ok(eventReservations);
+        }
     }
 
     // Add Payment, Event, and Reservation to the Database
@@ -137,7 +186,6 @@ public class EventController : ControllerBase
         {
             return Unauthorized(new { message = "User Not Logged in" });
         }
-        Console.WriteLine($"UserId: {userId}");
 
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
