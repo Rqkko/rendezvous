@@ -2,6 +2,16 @@ import { Container, IconButton, InputBase, Paper, Typography } from '@mui/materi
 import React from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 
+interface EventReservation {
+    locationName: string;
+    locationImage: string;
+    eventName: string;
+    theme: string;
+    guestCount: number;
+    date: Date;
+    eventDescription: string;
+}
+
 function Reservations(): JSX.Element {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
