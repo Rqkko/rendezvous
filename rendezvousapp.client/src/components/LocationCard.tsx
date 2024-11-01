@@ -10,7 +10,6 @@ interface LocationCardProps {
 }
 
 function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
-    console.log(name, province, image);
     return (
         <Card sx={{ 
             display: 'flex', 

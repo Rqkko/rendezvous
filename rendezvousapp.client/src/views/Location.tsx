@@ -67,12 +67,6 @@ function Location({ locationId }: LocationProps): JSX.Element {
     }
 
     function handleConfirmClick(): void {
-        console.log('Event Name:', eventName);
-        console.log('Event Date:', eventDate);
-        console.log('Theme:', theme);
-        console.log('Guest:', guest);
-        console.log('Event Description:', eventDescription);
-        
         const payload: ReservationDTO = {
             locationId: location?.locationId || 0,
             event: {
