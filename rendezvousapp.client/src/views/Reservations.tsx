@@ -1,6 +1,7 @@
-import { Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import { Box, Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
+import ReservationCard from '../components/ReservationCard';
 
 interface EventReservation {
     locationName: string;
@@ -9,6 +10,7 @@ interface EventReservation {
     theme: string;
     guestCount: number;
     date: Date;
+    province: string;
     eventDescription: string;
 }
 
@@ -32,7 +34,11 @@ function Reservations(): JSX.Element {
         fetch('/api/event/getUserReservations')
             .then(response => response.json())
             .then(data => {
-                setReservations(data);
+                const reservations = data.map((reservation: EventReservation) => ({
+                    ...reservation,
+                    date: new Date(reservation.date) // Convert DateOnly to Date
+                }));
+                setReservations(reservations);
             })
             .catch(error => {  
                 alert(error.message);
@@ -85,8 +91,39 @@ function Reservations(): JSX.Element {
             </IconButton>
         </Paper>
 
-        <Paper>
-            {filteredReservations.toString()}
+        <Paper sx={{ 
+                height: '50vh',
+                width: '60vw',
+                overflow: 'auto',
+                bgcolor: 'transparent',
+                p: 4,
+                borderRadius: 6,
+                borderStyle: 'none',
+                boxShadow: 5,
+                borderColor: 'black',
+                mb: 2,
+                }}
+            >
+            {/* {filteredReservations.toString()} */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
+                    {filteredReservations.map((reservation) => (
+                        <ReservationCard
+                            locationName={reservation.locationName}
+                            eventName={reservation.eventName}
+                            date={reservation.date}
+                            theme={reservation.theme}
+                            guestCount={reservation.guestCount}
+                            province={reservation.province}
+                            eventDescription={reservation.eventDescription}
+                            image={reservation.locationImage}
+                            // key={location.locationName}
+                            // name={location.locationName}
+                            // province={location.province}
+                            // image={location.locationImage}
+                            // handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
+                        />
+                    ))}
+                </Box>
         </Paper>
     </Container>
     );
