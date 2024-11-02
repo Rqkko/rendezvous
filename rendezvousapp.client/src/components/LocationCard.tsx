@@ -31,11 +31,17 @@ function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCar
                 flexDirection: 'column', 
                 justifyContent: 'space-between',
                 p: 2
-            }}>
-                <Box>
-                    <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: '#2e5d4b' }}>
-                        {name}
-                    </Typography>
+            }}> 
+                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: '#2e5d4b' }}>
+                    {name}
+                </Typography>
+                
+                <Box sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center',
+                    mt: 2
+                }}>
                     <Typography variant="body2" sx={{ 
                         display: 'flex', 
                         alignItems: 'center', 
@@ -45,29 +51,6 @@ function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCar
                         <LocationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#d32f2f' }} />
                         {province}
                     </Typography>
-                </Box>
-                <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center',
-                    mt: 2
-                }}>
-                    <Button 
-                        variant="outlined" 
-                        size="small" 
-                        sx={{ 
-                            textTransform: 'lowercase', 
-                            borderRadius: '20px',
-                            color: '#2e5d4b',
-                            borderColor: '#2e5d4b',
-                            '&:hover': {
-                                backgroundColor: '#e8f5e9',
-                                borderColor: '#2e5d4b',
-                            }
-                        }}
-                    >
-                        description
-                    </Button>
 
                     <Button
                         sx={{ 
