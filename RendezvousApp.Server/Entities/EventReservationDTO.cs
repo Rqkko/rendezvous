@@ -3,7 +3,6 @@ namespace RendezvousApp.Server.Entities
     // For returning to frontend
     public class EventReservationDTO
     {
-    // TODO
         public string LocationName { get; set; }
         public string LocationImage { get; set; }
         public string Province { get; set; }
