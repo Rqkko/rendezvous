@@ -2,6 +2,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
 import CustomDatePicker from '../components/CustomDatePicker';
@@ -51,6 +52,8 @@ function Location({ locationId }: LocationProps): JSX.Element {
     const [guest, setGuest] = useState<string>('');
     const [eventDescription, setEventDescription] = useState<string>('');
 
+    const navigate = useNavigate();
+
     function fetchLocationDetail(locationId: string): void {
         Promise.all([
             fetch(`/api/event/getlocation/${locationId}`).then(response => response.json()),
@@ -99,6 +102,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
                 });
             }
             alert("Reservation Successful");
+            navigate('/reservations')
         })
         .catch((error) => {
             alert(error.message);
