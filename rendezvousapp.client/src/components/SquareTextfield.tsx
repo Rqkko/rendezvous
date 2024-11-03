@@ -5,10 +5,11 @@ interface DefaultTextFieldProps {
     style?: SxProps;
     value: string;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     type?: string;
 }
 
-function SquareTextfield({ placeholder, style, value, handleChange, type }: DefaultTextFieldProps): JSX.Element {
+function SquareTextfield({ placeholder, style, value, handleChange, handleKeyDown, type }: DefaultTextFieldProps): JSX.Element {
 
     return (
         <TextField
@@ -21,6 +22,7 @@ function SquareTextfield({ placeholder, style, value, handleChange, type }: Defa
             value={value}
             onChange={handleChange}
             {...(type && { type: type })} // Apply type only if it exists
+            onKeyDown={handleKeyDown}
         />
     )
 }
