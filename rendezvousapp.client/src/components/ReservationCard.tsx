@@ -71,7 +71,7 @@ function ReservationCard({ locationName, eventName, date, theme, guestCount, pro
                         {formattedDate}
                     </Typography>
 
-                    // TODO: Add See More function
+                    {/* TODO: Add See More function */}
                     <Button
                         sx={{
                             color: '#2e5d4b',
