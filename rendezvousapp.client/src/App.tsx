@@ -8,6 +8,7 @@ import CustomAppBar from './components/CustomAppBar';
 import Reservations from './views/Reservations';
 import Account from './views/Account';
 import Location from './views/Location';
+import Admin from './views/admin/Admin';
 
 function LocationWrapper() {
     const { id } = useParams<{ id: string }>();
@@ -26,6 +27,7 @@ function App(): JSX.Element {
                     <Route path="/reservations" element={<Reservations/>} />
                     <Route path="account" element={<Account/>} />
                     <Route path="/location/:id?" element={<LocationWrapper />} />
+                    <Route path="/admin" element={<Admin />} />
                 </Routes>
             </Box>
         </Router>
