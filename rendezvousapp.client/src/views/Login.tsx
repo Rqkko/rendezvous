@@ -20,13 +20,18 @@ function Login() {
     function handlePassword(event: React.ChangeEvent<HTMLInputElement>): void {
         setPassword(event.target.value);
     };
+
+    function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
+        if (event.key === 'Enter') {
+            handleLogin();
+        }
+    };
     
     function handleLogin(): void {
         if (contact === "" || password === "") {
             alert("Please fill in all fields");
             return;
         }
-
         // Check for user in database
         fetch(`/api/user/login/`, {
             method: 'POST',
@@ -104,6 +109,7 @@ function Login() {
                         style={{ mt: 2, width: '100%' }}
                         value={contact}
                         handleChange={handleContact}
+                        handleKeyDown={(event) => handleKeyPress(event)}
                     />
 
                     <SquareTextfield 
@@ -111,6 +117,7 @@ function Login() {
                         style={{ mt: 2, width: '100%' }}
                         value={password}
                         handleChange={handlePassword}
+                        handleKeyDown={(event) => handleKeyPress(event)}
                         type="password"
                     />
 
