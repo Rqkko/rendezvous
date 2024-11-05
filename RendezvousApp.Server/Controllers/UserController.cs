@@ -154,4 +154,15 @@ public class UserController : ControllerBase
         HttpContext.Session.Clear();
         return Ok(new { message = "Logged out" });
     }
+
+    [HttpGet("CheckAdmin")]
+    public ActionResult CheckAdmin()
+    {
+        if (HttpContext.Session.GetString("IsActive") == false.ToString())
+        {
+            return Unauthorized(new { message = "User is not an admin" });
+        }
+
+        return Ok();
+    }
 }
