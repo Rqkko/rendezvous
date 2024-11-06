@@ -99,6 +99,7 @@ function Admin(): JSX.Element {
                     alignItems: 'center',
                     width: '60vw',
                     py: 2,
+                    mb: 4
                 }}
             >
                 <Paper
