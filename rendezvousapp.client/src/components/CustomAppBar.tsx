@@ -14,6 +14,7 @@ function CustomAppBar(): JSX.Element | null {
     const settings = ['Home', 'Reservations', 'Account', 'Logout']; // For Menu
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
     function handleLogoClick(): void {
         navigate('/');
@@ -70,6 +71,15 @@ function CustomAppBar(): JSX.Element | null {
 
     useEffect(() => {
         getUser().then((result) => setUser(result));
+
+        fetch('/api/user/checkAdmin')
+        .then((response) => {
+            if (!response.ok) {
+                setIsAdmin(false);
+            } else {
+                setIsAdmin(true);
+            }
+        })
     }, [location.pathname]);
 
     // No AppBar when on login page
@@ -127,7 +137,7 @@ function CustomAppBar(): JSX.Element | null {
                                         horizontal: 'right',
                                     }}
                                 >
-                                    <Typography>{user.firstname + " " + user.lastname}</Typography>
+                                    <Typography>{user.firstname + " " + user.lastname + (isAdmin ? " (Admin)" : "")}</Typography>
                                 </Menu>
                             </>
                         )
