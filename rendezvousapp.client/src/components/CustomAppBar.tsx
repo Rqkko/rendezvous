@@ -17,7 +17,11 @@ function CustomAppBar(): JSX.Element | null {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
     function handleLogoClick(): void {
-        navigate('/');
+        if (isAdmin) {
+            navigate('/admin');
+        } else {
+            navigate('/');
+        }
     }
 
     function handleOpenUserMenu(event: React.MouseEvent<HTMLElement>): void {
@@ -28,9 +32,14 @@ function CustomAppBar(): JSX.Element | null {
     };
     function handleMenuItemClick(setting: string): void {
         if (setting === "Home") {
-            navigate('');
+            if (isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('');
+            }
         }
         else if (setting === "Reservations") {
+            // TODO: Handle Admin's Reservations
             navigate('/reservations')
         }
         else if (setting === "Account") {
