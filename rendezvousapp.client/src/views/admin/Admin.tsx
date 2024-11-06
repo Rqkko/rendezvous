@@ -1,7 +1,8 @@
-import { Box, Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 
 import LocationCard from '../../components/LocationCard';
 import { getUser, User } from '../../utils/apiUtils';
@@ -41,6 +42,10 @@ function Admin(): JSX.Element {
             });
     };
 
+    function handleNewLocationClick(): void {
+        // TODO: Implement
+    }
+
     function handleSeeMoreClick(locationId: number): void {
         navigate(`/location/${locationId}`)
     }
@@ -62,7 +67,7 @@ function Admin(): JSX.Element {
             getUser().then((result) => setUser(result));
             fetchLocations();
         })
-    }, []);
+    }, [location.pathname]);
 
     if (!isAdmin) {
         return (
@@ -80,37 +85,57 @@ function Admin(): JSX.Element {
             alignItems: 'center'
         }}
         >
-            <Typography variant="h2" sx={{ mb: 4}}>Locations</Typography>
+            <Typography variant="h2" sx={{ mb: 2}}>Locations (Admin)</Typography>
 
-            <Paper
-                component="form"
-                sx={{ 
-                    p: '2px 4px',
+            {/* Search & New locaiton Button Group */}
+            <Container 
+                sx={{
                     display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    width: '600px',
-                    height: '70px',
-                    mx: 'auto',
-                    mb: 4,
-                    borderRadius: '20px'
+                    width: '60vw',
+                    py: 2,
                 }}
             >
-                <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search Locations"
-                inputProps={{ 'aria-label': 'search locations' }}
-                value={searchTerm}
-                onChange={handleInputChange}
-                />
-                <IconButton 
-                    type="button"
-                    sx={{ p: '10px' }}
-                    aria-label="search"
-                    onClick={handleSearchChange}
+                <Paper
+                    component="form"
+                    sx={{
+                        pr: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '60%',
+                        height: '70px',
+                        mx: 'auto',
+                        borderRadius: '20px',
+                    }}
                 >
-                    <SearchIcon />
-                </IconButton>
-            </Paper>
+                    <InputBase
+                    sx={{ ml: 1, flex: 1, alignItems: 'center' }}
+                    placeholder="Search Locations"
+                    inputProps={{ 'aria-label': 'search locations' }}
+                    value={searchTerm}
+                    onChange={handleInputChange}
+                    />
+                    <IconButton 
+                        type="button"
+                        sx={{ p: '10px' }}
+                        aria-label="search"
+                        onClick={handleSearchChange}
+                    >
+                        <SearchIcon />
+                    </IconButton>
+                </Paper>
+
+                <Button
+                    startIcon={<AddIcon />}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleNewLocationClick}
+                >
+                    New Location
+                </Button>
+            </Container>
 
             <Paper sx={{ 
                 height: '50vh',
