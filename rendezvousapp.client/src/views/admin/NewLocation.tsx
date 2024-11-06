@@ -1,8 +1,44 @@
 import { Box, Container, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-function NewLocation() {
+function NewLocation(): JSX.Element {
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [canCreate, setCanCreate] = useState<boolean>(false);
+
+    function checkCreatePermission(): void {
+        fetch('/api/user/checkPermission?permission=create')
+        .then((response) => {
+            if (!response.ok) {
+                setCanCreate(false);
+            } else {
+                setCanCreate(true);
+            }
+        });
+    }
+
+    useEffect(() => {
+        fetch('/api/user/checkAdmin')
+        .then((response) => {
+            if (!response.ok) {
+                setIsAdmin(false);
+            } else {
+                setIsAdmin(true);
+            }
+        })
+        .then(() => {
+            if (isAdmin) {
+                checkCreatePermission();
+            }
+        });
+    });
+
+    if (!isAdmin || !canCreate) {
+        return (
+            <Typography>Unauthorized</Typography>
+        )
+    }
+
     return (
         <Container 
             maxWidth="xl"

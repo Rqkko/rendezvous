@@ -165,4 +165,20 @@ public class UserController : ControllerBase
 
         return Ok();
     }
+
+    [HttpGet("CheckPermission")]
+    public ActionResult CheckPermission([FromQuery] string permission)
+    {
+        if (permission != "create" && permission != "read" && permission != "update" && permission != "delete")
+        {
+            return BadRequest(new { message = "Invalid permission" });
+        }
+
+        if (HttpContext.Session.GetString($"Can{permission.First().ToString().ToUpper() + permission.Substring(1)}") == false.ToString()) // Check with Session Data
+        {
+            return Unauthorized(new { message = "User does not have permission" });
+        }
+
+        return Ok();
+    }
 }
