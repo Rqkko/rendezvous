@@ -2,6 +2,7 @@ import { Box, Container, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import React, { useEffect, useState } from 'react'
 import Unauthorized from '../../components/Unauthorized';
+import ImageUploadBox from '../../components/ImageUploadBox';
 
 function NewLocation(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -45,6 +46,8 @@ function NewLocation(): JSX.Element {
             maxWidth="xl"
             sx={{ px:1}}       
         >
+            <ImageUploadBox />
+            
             <Box sx={{ my: 4 }}>
                 <Grid container spacing={4}>
                     {/* Location Image */}
