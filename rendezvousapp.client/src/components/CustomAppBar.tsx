@@ -92,7 +92,7 @@ function CustomAppBar(): JSX.Element | null {
             <AppBar
                 color="main"
                 position="sticky"
-                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box', bgcolor: 'background.default' }}
+                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 1, boxSizing: 'border-box', bgcolor: 'background.default' }}
             >
                 <Toolbar>
                     <IconButton
@@ -100,7 +100,7 @@ function CustomAppBar(): JSX.Element | null {
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ mr: 2 }}
+                        sx={{ mr: 0, p:0 }}
                         onClick={handleLogoClick}
                     >
                         <Box
@@ -111,7 +111,11 @@ function CustomAppBar(): JSX.Element | null {
                     </IconButton>
 
                     {/* To occupy the remaining space */}
-                    <Box sx={{ flexGrow: 1 }} />
+                    <Box sx={{ flexGrow: 1, justifyItems: 'start' }}>
+                        <Typography variant="h6" component="div" sx={{ alignSelf: 'end', mt: 2 }}>
+                            endezvous
+                        </Typography>    
+                    </Box>
 
                     {user 
                         ? (
