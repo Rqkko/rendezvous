@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import LocationCard from '../../components/LocationCard';
 import { getUser, User } from '../../utils/apiUtils';
+import Unauthorized from '../../components/Unauthorized';
 
 interface Location {
     locationId: number;
@@ -71,7 +72,9 @@ function Admin(): JSX.Element {
 
     if (!isAdmin) {
         return (
-            <div>Unauthorized</div>
+            <>
+            <Unauthorized />
+            </>
         )
     }
 

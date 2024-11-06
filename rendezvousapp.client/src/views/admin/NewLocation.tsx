@@ -1,6 +1,7 @@
 import { Box, Container, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import React, { useEffect, useState } from 'react'
+import Unauthorized from '../../components/Unauthorized';
 
 function NewLocation(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -35,7 +36,7 @@ function NewLocation(): JSX.Element {
 
     if (!isAdmin || !canCreate) {
         return (
-            <Typography>Unauthorized</Typography>
+            <Unauthorized />
         )
     }
 
