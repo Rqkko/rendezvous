@@ -4,11 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import imageUploadPlaceholder from '../assets/imageUpload_placeholder.png';
 
-const image = {
-    url: '../assets/imageUpload_placeholder.png',
-    title: 'Breakfast',
-    width: '40%',
-};
+const placeholderImage = '../assets/imageUpload_placeholder.png';
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
@@ -74,17 +70,17 @@ const VisuallyHiddenInput = styled('input')({
 
 function ImageUploadBox(): JSX.Element {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const [image, setImage] = React.useState<string>(placeholderImage);
 
     function handleUploadClick(): void {
         if (fileInputRef.current) {
-            fileInputRef.current.click(); // Programmatically trigger the click event
+            fileInputRef.current.click();
         }
     }
 
     return (
         <ImageButton
             focusRipple
-            key={image.title}
             style={{
                 height: 400,
                 width: 500,
@@ -94,7 +90,7 @@ function ImageUploadBox(): JSX.Element {
             
             <ImageSrc 
                 style={{
-                    backgroundImage: `url(${imageUploadPlaceholder})`,
+                    backgroundImage: `url(${image})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }} 
@@ -109,7 +105,17 @@ function ImageUploadBox(): JSX.Element {
             <VisuallyHiddenInput
                 type="file"
                 ref={fileInputRef}
-                onChange={(event) => console.log(event.target.files)}
+                onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            setImage(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }}
+                accept="image/*"
                 multiple
             />
         </ImageButton>
