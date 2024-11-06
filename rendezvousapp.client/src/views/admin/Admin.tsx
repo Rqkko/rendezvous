@@ -43,7 +43,7 @@ function Admin(): JSX.Element {
     };
 
     function handleNewLocationClick(): void {
-        // TODO: Implement
+        navigate('/admin/location/new');
     }
 
     function handleSeeMoreClick(locationId: number): void {
