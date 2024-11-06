@@ -1,10 +1,7 @@
 import React from 'react';
 import { styled, ButtonBase } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-
-import imageUploadPlaceholder from '../assets/imageUpload_placeholder.png';
-
-const placeholderImage = '../assets/imageUpload_placeholder.png';
+import placeholder from '../assets/imageUpload_placeholder.png';
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
@@ -67,14 +64,30 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
+interface ImageUploadBoxProps {
+    onUpload: (image: string) => void;
+}
 
-function ImageUploadBox(): JSX.Element {
+function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
-    const [image, setImage] = React.useState<string>(placeholderImage);
+    const [image, setImage] = React.useState<string>(placeholder);
 
     function handleUploadClick(): void {
         if (fileInputRef.current) {
             fileInputRef.current.click();
+        }
+    }
+
+    function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>): void {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result as string);
+                onUpload(reader.result as string);
+                console.log("UPLOADING")
+            };
+            reader.readAsDataURL(file);
         }
     }
 
@@ -105,16 +118,7 @@ function ImageUploadBox(): JSX.Element {
             <VisuallyHiddenInput
                 type="file"
                 ref={fileInputRef}
-                onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            setImage(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                }}
+                onChange={handleFileUpload}
                 accept="image/*"
                 multiple
             />

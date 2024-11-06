@@ -7,6 +7,7 @@ import ImageUploadBox from '../../components/ImageUploadBox';
 function NewLocation(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [canCreate, setCanCreate] = useState<boolean>(false);
+    const [locationImage, setLocationImage] = useState<string | null>(null);
 
     function checkCreatePermission(): void {
         fetch('/api/user/checkPermission?permission=create')
@@ -46,8 +47,10 @@ function NewLocation(): JSX.Element {
             maxWidth="xl"
             sx={{ px:1}}       
         >
-            <ImageUploadBox />
+            <ImageUploadBox onUpload={(image) => setLocationImage(image)} />
             
+            <Box sx={{ backgroundImage: `url(${locationImage})`, backgroundSize: 'cover', width: 200, height: 200 }} />
+
             <Box sx={{ my: 4 }}>
                 <Grid container spacing={4}>
                     {/* Location Image */}
