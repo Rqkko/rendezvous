@@ -132,6 +132,7 @@ function Admin(): JSX.Element {
                     variant="contained"
                     color="secondary"
                     onClick={handleNewLocationClick}
+                    sx={{ textTransform: 'none'}}
                 >
                     New Location
                 </Button>
