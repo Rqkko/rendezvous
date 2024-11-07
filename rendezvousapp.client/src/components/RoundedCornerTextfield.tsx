@@ -35,14 +35,6 @@ function RoundedCornerTextfield({ placeholder, style, value, handleChange, type,
             {...(rows && { rows: rows })} // Apply rows only if it exists
             multiline={rows ? true : false}
         />
-
-    //     <TextField
-    //     id="outlined-multiline-static"
-    //     label="Multiline"
-    //     multiline
-    //     rows={4}
-    //     defaultValue="Default Value"
-    //   />
     )
 }
 
