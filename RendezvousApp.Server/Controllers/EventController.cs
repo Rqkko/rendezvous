@@ -68,13 +68,6 @@ public class EventController : ControllerBase
         }
     }
 
-    // For Admin
-    [HttpGet("GetAllReservations")]
-    public ActionResult GetAllReservations()
-    {
-        return Ok();
-    }
-
     [HttpGet("GetLocation/{locationId}")]
     public ActionResult GetLocation([FromRoute] int locationId)
     {
@@ -253,5 +246,89 @@ public class EventController : ControllerBase
         }
 
         return Ok("Reservation Added");
+    }
+
+    // For Admin
+    [HttpPost("AddLocation")]
+    public ActionResult AddLocation([FromBody] LocationPayload data)
+    {
+        int? adminId = HttpContext.Session.GetInt32("AdminId");
+        string? isActive = HttpContext.Session.GetString("IsActive");
+        if (adminId == null || isActive == false.ToString() || isActive == null)
+        {
+            return Unauthorized(new { message = "Not Admin" });
+        }
+
+        // Check for permission
+        string? canCreate = HttpContext.Session.GetString("CanCreate");
+        if (canCreate == false.ToString() || canCreate == null)
+        {
+            return Unauthorized(new { message = "No Permission" });
+        }
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    // Insert into Locations table
+                    string locationQuery = @"
+                        INSERT INTO Locations (locationName, locationDescription, area, capacity, cost, locationImage, adminId) 
+                        VALUES (@locationName, @locationDescription, @area, @capacity, @cost, @locationImage, @adminId);
+                        SELECT LAST_INSERT_ID();
+                    ";
+                    MySqlCommand locationCmd = new MySqlCommand(locationQuery, connection, transaction);
+                    locationCmd.Parameters.AddWithValue("@locationName", data.LocationName);
+                    locationCmd.Parameters.AddWithValue("@locationDescription", data.LocationDescription);
+                    locationCmd.Parameters.AddWithValue("@area", data.Area);
+                    locationCmd.Parameters.AddWithValue("@capacity", data.Capacity);
+                    locationCmd.Parameters.AddWithValue("@cost", data.Cost);
+                    locationCmd.Parameters.AddWithValue("@locationImage", Convert.FromBase64String(data.LocationImage));
+                    locationCmd.Parameters.AddWithValue("@adminId", adminId);
+
+                    var locationId = Convert.ToInt32(locationCmd.ExecuteScalar());
+
+                    // Insert into Events table
+                    string addressQuery = @"
+                        INSERT INTO Addresses (locationId, province, postalCode, additional)
+                        VALUES (@locationId, @province, @postalCode, @additional);
+                        SELECT LAST_INSERT_ID();
+                    ";
+                    MySqlCommand addressCmd = new MySqlCommand(addressQuery, connection, transaction);
+                    addressCmd.Parameters.AddWithValue("@locationId", locationId);
+                    addressCmd.Parameters.AddWithValue("@province", data.Province);
+                    addressCmd.Parameters.AddWithValue("@postalCode", data.PostalCode);
+                    addressCmd.Parameters.AddWithValue("@additional", data.Additional);
+
+                    var addressId = Convert.ToInt32(addressCmd.ExecuteScalar());
+
+                    // Commit the transaction if all inserts succeed
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    // Roll back the transaction if any insert fails
+                    try {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        return StatusCode(500, new { message = $"Rollback Failed: {ex2.Message}" });
+                    }
+                    return StatusCode(500, new { message = $"Internal server error: {ex.Message}" });
+                }
+            }
+        }
+
+        return Ok("Location Added");
+    }
+
+    [HttpGet("GetAllReservations")]
+    public ActionResult GetAllReservations()
+    {
+        return Ok();
     }
 }
