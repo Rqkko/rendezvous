@@ -83,8 +83,10 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImage(reader.result as string);
-                onUpload(reader.result as string);
+                const base64String = reader.result as string;
+                const imageString = base64String.split(',')[1]; // Remove the data URL prefix
+                setImage(base64String);
+                onUpload(imageString);
                 console.log("UPLOADING")
             };
             reader.readAsDataURL(file);
