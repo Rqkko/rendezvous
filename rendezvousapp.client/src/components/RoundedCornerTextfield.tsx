@@ -9,9 +9,10 @@ interface DefaultTextFieldProps {
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     type?: string;
     label: string;
+    rows?: number;
 }
 
-function RoundedCornerTextfield({ placeholder, style, value, handleChange, type, label }: DefaultTextFieldProps): JSX.Element {
+function RoundedCornerTextfield({ placeholder, style, value, handleChange, type, label, rows }: DefaultTextFieldProps): JSX.Element {
 
     return (
         <TextField
@@ -31,7 +32,17 @@ function RoundedCornerTextfield({ placeholder, style, value, handleChange, type,
             onChange={handleChange}
             label={label}
             {...(type && { type: type })} // Apply type only if it exists
+            {...(rows && { rows: rows })} // Apply rows only if it exists
+            multiline={rows ? true : false}
         />
+
+    //     <TextField
+    //     id="outlined-multiline-static"
+    //     label="Multiline"
+    //     multiline
+    //     rows={4}
+    //     defaultValue="Default Value"
+    //   />
     )
 }
 

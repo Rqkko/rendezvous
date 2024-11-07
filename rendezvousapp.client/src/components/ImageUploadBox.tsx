@@ -97,6 +97,7 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
             style={{
                 height: 400,
                 width: 500,
+                marginBottom: 20,
             }}
             onClick={handleUploadClick}
         >
