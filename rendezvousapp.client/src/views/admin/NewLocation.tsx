@@ -6,15 +6,30 @@ import ImageUploadBox from '../../components/ImageUploadBox';
 import RoundedCornerTextfield from '../../components/RoundedCornerTextfield';
 import OpaqueButton from '../../components/OpaqueButton';
 
+interface LocationPayload {
+    locationName: string;
+    locationDescription: string;
+    area: number;
+    capacity: number;
+    cost: number;
+    locationImage: string | null;
+    province: string;
+    postalCode: string;
+    additional: string;
+}
+
 function NewLocation(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [canCreate, setCanCreate] = useState<boolean>(false);
     const [locationImage, setLocationImage] = useState<string | null>(null);
     const [locationName, setLocationName] = useState<string>('');
     const [locationDescription, setLocationDescription] = useState<string>('');
-    const [locationArea, setLocationArea] = useState<string>(0);
-    const [locationCapacity, setLocationCapacity] = useState<string>(0);
-    const [locationCost, setLocationCost] = useState<string>(0);
+    const [locationArea, setLocationArea] = useState<string>('0');
+    const [locationCapacity, setLocationCapacity] = useState<string>('0');
+    const [locationCost, setLocationCost] = useState<string>('0');
+    const [locationProvince, setLocationProvince] = useState<string>('');
+    const [locationPostalCode, setLocationPostalCode] = useState<string>('');
+    const [locationAdditional, setLocationAdditional] = useState<string>('');
 
     function checkCreatePermission(): void {
         fetch('/api/user/checkPermission?permission=create')
@@ -27,8 +42,45 @@ function NewLocation(): JSX.Element {
         });
     }
 
+    function handlePostalCodeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        if (event.target.value.length > 5) {
+            setLocationPostalCode(event.target.value.slice(0, 5));
+        } else {
+            setLocationPostalCode(event.target.value);
+        }
+    }
+
     function handleSubmitClick(): void {
-        // TODO
+        const payload: LocationPayload = {
+            locationName: locationName,
+            locationDescription: locationDescription,
+            area: parseInt(locationArea),
+            capacity: parseInt(locationCapacity),
+            cost: parseInt(locationCost),
+            locationImage: locationImage,
+            province: locationProvince,
+            postalCode: locationPostalCode,
+            additional: locationAdditional,
+        };
+
+        fetch('/api/event/addLocation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => {
+                    throw new Error(data.message);
+                });
+            }
+            alert('Location created successfully!');
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
     }
 
     useEffect(() => {
@@ -104,6 +156,29 @@ function NewLocation(): JSX.Element {
                 handleChange={(e) => setLocationCost(e.target.value)}
                 style={{ width: '50%', my: 2 }}
                 type="number"
+            />
+
+            <RoundedCornerTextfield
+                label="Province"
+                value={locationProvince}
+                handleChange={(e) => setLocationProvince(e.target.value)}
+                style={{ width: '50%', my: 2 }}
+            />
+
+            <RoundedCornerTextfield
+                label="Postal Code"
+                value={locationPostalCode}
+                handleChange={handlePostalCodeChange}
+                style={{ width: '50%', my: 2 }}
+                type="number"
+            />
+
+            <RoundedCornerTextfield
+                label="Additional Address Information"
+                value={locationAdditional}
+                handleChange={(e) => setLocationAdditional(e.target.value)}
+                style={{ width: '50%', my: 2 }}
+                rows={3}
             />
 
             <OpaqueButton handleClick={handleSubmitClick} text="Submit" />
