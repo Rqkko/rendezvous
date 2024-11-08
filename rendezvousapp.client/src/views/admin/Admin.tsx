@@ -1,4 +1,4 @@
-import { Box, Button, Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputBase, Paper, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
@@ -23,6 +23,7 @@ function Admin(): JSX.Element {
     const location = useLocation(); // For path url
     const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
+    const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
@@ -51,6 +52,10 @@ function Admin(): JSX.Element {
         navigate(`/location/${locationId}`)
     }
 
+    const handleClose = () => {
+        setPopupOpen(false);
+    };
+
     function handleEditClick(locationId: number): void {
         // TODO: Check edit permission
         
@@ -58,7 +63,7 @@ function Admin(): JSX.Element {
 
     function handleDeleteClick(locationId: number): void {
         // TODO: Check delete permission
-
+        setPopupOpen(true);
     }
 
     const filteredLocations = locations.filter(location =>
@@ -179,6 +184,30 @@ function Admin(): JSX.Element {
                     ))}
                 </Box>
             </Paper>
+
+            {/* Overlay */}
+            <Dialog
+                open={popupOpen}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                {"Use Google's location service?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    Let Google help apps determine location. This means sending anonymous
+                    location data to Google, even when no apps are running.
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleClose}>Disagree</Button>
+                <Button onClick={handleClose} autoFocus>
+                    Agree
+                </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     )
 }
