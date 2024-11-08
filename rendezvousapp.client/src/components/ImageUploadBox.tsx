@@ -13,7 +13,7 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
     '&:hover, &.Mui-focusVisible': {
         zIndex: 1,
         '& .MuiImageBackdrop-root': {
-        opacity: 0.1,
+        opacity: 0.5,
         },
     },
 }));
@@ -48,7 +48,7 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
     top: 0,
     bottom: 0,
     backgroundColor: theme.palette.common.black,
-    opacity: 0.4,
+    opacity: 0,
     transition: theme.transitions.create('opacity'),
 }));
 
@@ -71,6 +71,7 @@ interface ImageUploadBoxProps {
 function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const [image, setImage] = React.useState<string>(placeholder);
+    const [hover, setHover] = React.useState<boolean>(false);
 
     function handleUploadClick(): void {
         if (fileInputRef.current) {
@@ -97,33 +98,37 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
         <ImageButton
             focusRipple
             style={{
-                height: 400,
-                width: 500,
-                marginBottom: 20,
+            height: 400,
+            width: 500,
+            marginBottom: 20,
             }}
             onClick={handleUploadClick}
+            onPointerEnter={() => setHover(true)}
+            onPointerLeave={() => setHover(false)}
         >
-            
             <ImageSrc 
-                style={{
-                    backgroundImage: `url(${image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                }} 
+            style={{
+                backgroundImage: `url(${image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: image === placeholder ? 'brightness(80%)' : 'none', // Darken the placeholder image
+            }} 
             />
 
             <ImageBackdrop className="MuiImageBackdrop-root" />
 
+            {(image === placeholder || hover) && (
             <Image>
-                <AddIcon style={{ fontSize: 100 }} />
+                <AddIcon style={{ fontSize: 100, fontVariant: '' }} />
             </Image>
+            )}
 
             <VisuallyHiddenInput
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-                accept="image/*"
-                multiple
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            accept="image/*"
+            multiple
             />
         </ImageButton>
     )
