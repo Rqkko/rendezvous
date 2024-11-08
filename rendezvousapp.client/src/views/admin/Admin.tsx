@@ -24,6 +24,7 @@ function Admin(): JSX.Element {
     const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
     const [popupOpen, setPopupOpen] = useState<boolean>(false);
+    const [locationToDelete, setLocationToDelete] = useState<Location | null>(null);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
@@ -61,9 +62,31 @@ function Admin(): JSX.Element {
         
     }
 
-    function handleDeleteClick(locationId: number): void {
+    function handleDeleteClick(location: Location): void {
         // TODO: Check delete permission
+        setLocationToDelete(location)
         setPopupOpen(true);
+    }
+
+    function handlePopupNoClick(): void {
+        setPopupOpen(false);
+    }
+
+    function handlePopupYesClick(): void {
+        // TODO
+        fetch(`/api/location/deleteLocation/${locationToDelete?.locationId}`, {
+            method: 'DELETE',
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Failed to delete location');
+            }
+            setPopupOpen(false);
+            fetchLocations();
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
     }
 
     const filteredLocations = locations.filter(location =>
@@ -179,7 +202,7 @@ function Admin(): JSX.Element {
                             image={location.locationImage}
                             handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
                             handleEditClick={() => handleEditClick(location.locationId)}
-                            handleDeleteClick={() => handleDeleteClick(location.locationId)}
+                            handleDeleteClick={() => handleDeleteClick(location)}
                         />
                     ))}
                 </Box>
@@ -189,23 +212,18 @@ function Admin(): JSX.Element {
             <Dialog
                 open={popupOpen}
                 onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                {"Use Google's location service?"}
+                    Delete {locationToDelete?.locationName}?
                 </DialogTitle>
-                <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Let Google help apps determine location. This means sending anonymous
-                    location data to Google, even when no apps are running.
-                </DialogContentText>
-                </DialogContent>
+
                 <DialogActions>
-                <Button onClick={handleClose}>Disagree</Button>
-                <Button onClick={handleClose} autoFocus>
-                    Agree
-                </Button>
+                    <Button onClick={handlePopupNoClick}>
+                        No
+                    </Button>
+                    <Button onClick={handlePopupYesClick} autoFocus>
+                        Yes
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Container>
