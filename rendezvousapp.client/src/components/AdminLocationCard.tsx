@@ -8,9 +8,11 @@ interface LocationCardProps {
     province: string;
     image: string | null;
     handleSeeMoreClick: () => void;
+    handleEditClick: () => void;
+    handleDeleteClick: () => void;
 }
 
-function AdminLocationCard({ name, province, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
+function AdminLocationCard({ name, province, image, handleSeeMoreClick, handleEditClick, handleDeleteClick }: LocationCardProps): JSX.Element {
     return (
         <Card sx={{ 
             display: 'flex', 
@@ -44,11 +46,23 @@ function AdminLocationCard({ name, province, image, handleSeeMoreClick }: Locati
                     </Typography>
 
                     <Container sx={{ width: '25%', display: 'flex', flexDirection: 'row'}}>
-                        <IconButton sx = {{ alignSelf: 'start', justifySelf: 'end' }}>
+                        <IconButton 
+                            sx = {{
+                                alignSelf: 'start',
+                                justifySelf: 'end'
+                            }}
+                            onClick={handleEditClick}
+                        >
                             <EditIcon sx={{ color: 'secondary' }} />
                         </IconButton>
 
-                        <IconButton sx = {{ alignSelf: 'start', justifySelf: 'end' }}>
+                        <IconButton
+                            sx = {{
+                                alignSelf: 'start',
+                                justifySelf: 'end'
+                            }}
+                            onClick={handleDeleteClick}
+                        >
                             <DeleteIcon sx={{ color: 'secondary' }} />
                         </IconButton>
                     </Container>

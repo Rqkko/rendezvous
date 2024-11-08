@@ -51,6 +51,16 @@ function Admin(): JSX.Element {
         navigate(`/location/${locationId}`)
     }
 
+    function handleEditClick(locationId: number): void {
+        // TODO: Check edit permission
+        
+    }
+
+    function handleDeleteClick(locationId: number): void {
+        // TODO: Check delete permission
+
+    }
+
     const filteredLocations = locations.filter(location =>
         location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -163,6 +173,8 @@ function Admin(): JSX.Element {
                             province={location.province}
                             image={location.locationImage}
                             handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
+                            handleEditClick={() => handleEditClick(location.locationId)}
+                            handleDeleteClick={() => handleDeleteClick(location.locationId)}
                         />
                     ))}
                 </Box>
