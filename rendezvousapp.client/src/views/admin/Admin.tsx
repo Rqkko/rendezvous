@@ -4,9 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 
-import LocationCard from '../../components/LocationCard';
 import { getUser, User } from '../../utils/apiUtils';
 import Unauthorized from '../../components/Unauthorized';
+import AdminLocationCard from '../../components/AdminLocationCard';
 
 interface Location {
     locationId: number;
@@ -157,7 +157,7 @@ function Admin(): JSX.Element {
             >
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
                     {filteredLocations.map((location) => (
-                        <LocationCard
+                        <AdminLocationCard
                             key={location.locationName}
                             name={location.locationName}
                             province={location.province}
