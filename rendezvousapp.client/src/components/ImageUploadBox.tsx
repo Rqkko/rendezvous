@@ -1,7 +1,8 @@
-import React from 'react';
-import { styled, ButtonBase } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { styled } from '@mui/material/styles';
+import ButtonBase from '@mui/material/ButtonBase';
 import AddIcon from '@mui/icons-material/Add';
-import placeholder from '../assets/imageUpload_placeholder.png';
+import imageUploadPlaceholder from '../assets/imageUpload_placeholder.png';
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
@@ -13,7 +14,7 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
     '&:hover, &.Mui-focusVisible': {
         zIndex: 1,
         '& .MuiImageBackdrop-root': {
-        opacity: 0.5,
+            opacity: 0.1, // Adjust the opacity for hover effect
         },
     },
 }));
@@ -40,7 +41,6 @@ const Image = styled('span')(({ theme }) => ({
     color: theme.palette.common.white,
 }));
 
-// The black color that is in front of the image
 const ImageBackdrop = styled('span')(({ theme }) => ({
     position: 'absolute',
     left: 0,
@@ -69,9 +69,10 @@ interface ImageUploadBoxProps {
 }
 
 function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
-    const [image, setImage] = React.useState<string>(placeholder);
-    const [hover, setHover] = React.useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [image, setImage] = useState<string>(imageUploadPlaceholder);
+    const [hover, setHover] = useState<boolean>(false);
+    const [dragging, setDragging] = useState<boolean>(false);
 
     function handleUploadClick(): void {
         if (fileInputRef.current) {
@@ -79,8 +80,10 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
         }
     }
 
-    function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>): void {
-        const file = event.target.files?.[0];
+    function handleFileUpload(event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLButtonElement>): void {
+        const files = 'dataTransfer' in event ? event.dataTransfer?.files : event.target.files;
+        const file = files?.[0];
+        console.log(file);
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -88,50 +91,68 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
                 const imageString = base64String.split(',')[1]; // Remove the data URL prefix
                 setImage(base64String);
                 onUpload(imageString);
-                console.log("UPLOADING")
             };
             reader.readAsDataURL(file);
         }
+    }
+
+    function handleDragOver(event: React.DragEvent<HTMLButtonElement>): void {
+        event.preventDefault();
+        setDragging(true);
+    }
+
+    function handleDragLeave(): void {
+        setDragging(false);
+    }
+
+    function handleDrop(event: React.DragEvent<HTMLButtonElement>): void {
+        event.preventDefault();
+        setDragging(false);
+        handleFileUpload(event);
     }
 
     return (
         <ImageButton
             focusRipple
             style={{
-            height: 400,
-            width: 500,
-            marginBottom: 20,
+                height: 400,
+                width: 500,
+                marginBottom: 20,
+                border: dragging ? '2px dashed #000' : 'none', // Add dashed border when dragging
             }}
             onClick={handleUploadClick}
             onPointerEnter={() => setHover(true)}
             onPointerLeave={() => setHover(false)}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
         >
             <ImageSrc 
-            style={{
-                backgroundImage: `url(${image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: image === placeholder ? 'brightness(80%)' : 'none', // Darken the placeholder image
-            }} 
+                style={{
+                    backgroundImage: `url(${image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    filter: image === imageUploadPlaceholder ? 'brightness(80%)' : 'none', // Darken the placeholder image
+                }} 
             />
 
             <ImageBackdrop className="MuiImageBackdrop-root" />
 
-            {(image === placeholder || hover) && (
-            <Image>
-                <AddIcon style={{ fontSize: 100, fontVariant: '' }} />
-            </Image>
+            {(image === imageUploadPlaceholder || hover) && (
+                <Image>
+                    <AddIcon style={{ fontSize: 100 }} />
+                </Image>
             )}
 
             <VisuallyHiddenInput
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            accept="image/*"
-            multiple
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                accept="image/*"
+                multiple
             />
         </ImageButton>
-    )
+    );
 }
 
-export default ImageUploadBox
+export default ImageUploadBox;
