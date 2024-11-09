@@ -12,6 +12,5 @@ namespace RendezvousApp.Server.Entities
         public string Theme { get; set; }
         public int GuestCount { get; set; }
         public DateOnly Date { get; set; }
-        public DateTime ReservationDateTime { get; set; }
     }
 }

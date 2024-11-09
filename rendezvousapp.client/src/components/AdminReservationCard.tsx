@@ -9,7 +9,6 @@ interface AdminReservationCardProps {
     theme: string;
     guestCount: number;
     province: string;
-    eventDescription: string;
     image: string;
 }
 

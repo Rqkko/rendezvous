@@ -6,6 +6,8 @@ import Unauthorized from '../../components/Unauthorized';
 import { set } from 'date-fns';
 
 interface EventReservation {
+    firstname: string;
+    lastname: string;
     locationName: string;
     locationImage: string;
     eventName: string;
@@ -13,7 +15,6 @@ interface EventReservation {
     guestCount: number;
     date: Date;
     province: string;
-    eventDescription: string;
 }
 
 function Reservations(): JSX.Element {
@@ -55,7 +56,7 @@ function Reservations(): JSX.Element {
             .then(data => {
                 const reservations = data.map((reservation: EventReservation) => ({
                     ...reservation,
-                    date: new Date(reservation.date) // Convert DateOnly to Date
+                    date: new Date(reservation.date), // Convert DateOnly to Date
                 }));
                 return reservations;
             })
@@ -177,19 +178,14 @@ function Reservations(): JSX.Element {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
                     {filteredReservations.map((reservation) => (
                         <AdminReservationCard
+                            // TODO: Add other props
                             locationName={reservation.locationName}
                             eventName={reservation.eventName}
                             date={reservation.date}
                             theme={reservation.theme}
                             guestCount={reservation.guestCount}
                             province={reservation.province}
-                            eventDescription={reservation.eventDescription}
                             image={reservation.locationImage}
-                            // key={location.locationName}
-                            // name={location.locationName}
-                            // province={location.province}
-                            // image={location.locationImage}
-                            // handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
                         />
                     ))}
                 </Box>
