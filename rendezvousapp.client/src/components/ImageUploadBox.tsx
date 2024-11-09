@@ -112,9 +112,35 @@ function ImageUploadBox({ onUpload, locationImage }: ImageUploadBoxProps): JSX.E
         handleFileUpload(event);
     }
 
+    function convertImageToBase64(url: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    resolve(reader.result as string);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.onerror = reject;
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.send();
+        });
+    };
+
     useEffect(() => {
+        async function loadPlaceholderImage() {
+            const base64Placeholder = await convertImageToBase64(imageUploadPlaceholder);
+            const imageString = base64Placeholder.split(',')[1];
+            setImage(imageString);
+        }
+        
         if (locationImage !== undefined) {
             setImage(locationImage);
+        } else {
+            loadPlaceholderImage();
         }
     }, [locationImage]);
 
@@ -136,7 +162,7 @@ function ImageUploadBox({ onUpload, locationImage }: ImageUploadBoxProps): JSX.E
         >
             <ImageSrc 
                 style={{
-                    backgroundImage: image === imageUploadPlaceholder ? `url(${image})` : `url(data:image/jpeg;base64,${image})`,
+                    backgroundImage: image.startsWith("data:") ? `url(${image})` : `url(data:image/jpeg;base64,${image})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     filter: image === imageUploadPlaceholder ? 'brightness(80%)' : 'none', // Darken the placeholder image
