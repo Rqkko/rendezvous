@@ -365,6 +365,79 @@ public class EventController : ControllerBase
         return Ok("Location Deleted");
     }
 
+    [HttpPut("UpdateLocation/{locationId}")]
+    public ActionResult UpdateLocation([FromRoute] int locationId, [FromBody] LocationPayload data)
+    {
+        string? isActive = HttpContext.Session.GetString("IsActive");
+        if (isActive == false.ToString() || isActive == null)
+        {
+            return Unauthorized(new { message = "Not Admin" });
+        }
+
+        // Check for permission
+        string? canUpdate = HttpContext.Session.GetString("CanUpdate");
+        if (canUpdate == false.ToString() || canUpdate == null)
+        {
+            return Unauthorized(new { message = "No Permission" });
+        }
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    // Update Locations table
+                    string locationQuery = @"
+                        UPDATE Locations
+                        SET locationName=@locationName, locationDescription=@locationDescription, area=@area, capacity=@capacity, cost=@cost, locationImage=@locationImage
+                        WHERE locationId=@locationId;
+                    ";
+                    MySqlCommand locationCmd = new MySqlCommand(locationQuery, connection, transaction);
+                    locationCmd.Parameters.AddWithValue("@locationName", data.LocationName);
+                    locationCmd.Parameters.AddWithValue("@locationDescription", data.LocationDescription);
+                    locationCmd.Parameters.AddWithValue("@area", data.Area);
+                    locationCmd.Parameters.AddWithValue("@capacity", data.Capacity);
+                    locationCmd.Parameters.AddWithValue("@cost", data.Cost);
+                    locationCmd.Parameters.AddWithValue("@locationImage", Convert.FromBase64String(data.LocationImage));
+                    locationCmd.Parameters.AddWithValue("@locationId", locationId);
+                    locationCmd.ExecuteNonQuery();
+
+                    // Update Addresses table
+                    string addressQuery = @"
+                        UPDATE Addresses
+                        SET province=@province, postalCode=@postalCode, additional=@additional
+                        WHERE locationId=@locationId;
+                    ";
+                    MySqlCommand addressCmd = new MySqlCommand(addressQuery, connection, transaction);
+                    addressCmd.Parameters.AddWithValue("@province", data.Province);
+                    addressCmd.Parameters.AddWithValue("@postalCode", data.PostalCode);
+                    addressCmd.Parameters.AddWithValue("@additional", data.Additional);
+                    addressCmd.Parameters.AddWithValue("@locationId", locationId);
+                    addressCmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        return StatusCode(500, new { message = $"Rollback Failed: {ex2.Message}" });
+                    }
+                    return StatusCode(500, new { message = $"Internal server error: {ex.Message}" });
+                }
+            }
+        }
+
+            return Ok("Location Updated");
+    }
+
     [HttpGet("GetAllReservations")]
     public ActionResult GetAllReservations()
     {
