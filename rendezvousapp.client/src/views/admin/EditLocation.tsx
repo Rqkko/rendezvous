@@ -109,7 +109,7 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
         });
     }
 
-    // TODO: fix repeated fetch
+    // FIXME: fix repeated fetch
     useEffect(() => {
         fetch('/api/user/checkAdmin')
         .then((response) => {
