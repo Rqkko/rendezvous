@@ -87,7 +87,6 @@ function Admin(): JSX.Element {
     }
 
     function handlePopupYesClick(): void {
-        // TODO
         fetch(`/api/location/deleteLocation/${locationToDelete?.locationId}`, {
             method: 'DELETE',
         })
@@ -124,9 +123,7 @@ function Admin(): JSX.Element {
 
     if (!isAdmin) {
         return (
-            <>
             <Unauthorized />
-            </>
         )
     }
 
