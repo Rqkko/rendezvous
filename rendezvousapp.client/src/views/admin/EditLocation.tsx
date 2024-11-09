@@ -4,6 +4,7 @@ import { Container } from '@mui/material';
 import RoundedCornerTextfield from '../../components/RoundedCornerTextfield';
 import OpaqueButton from '../../components/OpaqueButton';
 import { useNavigate } from 'react-router-dom';
+import ImageUploadBox from '../../components/ImageUploadBox';
 
 interface EditLocationProps {
     locationId: string | undefined;
@@ -81,7 +82,7 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
             area: parseInt(locationArea),
             capacity: parseInt(locationCapacity),
             cost: parseInt(locationCost),
-            locationImage: "string",
+            locationImage: locationImage || '',
             province: locationProvince,
             postalCode: locationPostalCode,
             additional: locationAdditional,
@@ -104,7 +105,7 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
             navigate('/admin');
         })
         .catch((error) => {
-            alert(error.message);
+            console.log(error.message);
         });
     }
 
@@ -184,6 +185,8 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
             alignItems: 'center',
         }}       
         >
+            <ImageUploadBox onUpload={(image) => setLocationImage(image)} locationImage={locationImage} />
+
             <RoundedCornerTextfield
                 label="Location Name"
                 value={locationName}

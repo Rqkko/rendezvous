@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 import AddIcon from '@mui/icons-material/Add';
@@ -66,9 +66,10 @@ const VisuallyHiddenInput = styled('input')({
 
 interface ImageUploadBoxProps {
     onUpload: (image: string) => void;
+    locationImage?: string;
 }
 
-function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
+function ImageUploadBox({ onUpload, locationImage }: ImageUploadBoxProps): JSX.Element {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [image, setImage] = useState<string>(imageUploadPlaceholder);
     const [hover, setHover] = useState<boolean>(false);
@@ -83,7 +84,7 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
     function handleFileUpload(event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLButtonElement>): void {
         const files = 'dataTransfer' in event ? event.dataTransfer?.files : event.target.files;
         const file = files?.[0];
-        console.log(file);
+        
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -111,6 +112,12 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
         handleFileUpload(event);
     }
 
+    useEffect(() => {
+        if (locationImage !== undefined) {
+            setImage(locationImage);
+        }
+    }, [locationImage]);
+
     return (
         <ImageButton
             focusRipple
@@ -129,7 +136,7 @@ function ImageUploadBox({ onUpload }: ImageUploadBoxProps): JSX.Element {
         >
             <ImageSrc 
                 style={{
-                    backgroundImage: `url(${image})`,
+                    backgroundImage: image === imageUploadPlaceholder ? `url(${image})` : `url(data:image/jpeg;base64,${image})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     filter: image === imageUploadPlaceholder ? 'brightness(80%)' : 'none', // Darken the placeholder image
