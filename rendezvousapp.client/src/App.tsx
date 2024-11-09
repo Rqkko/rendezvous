@@ -11,6 +11,7 @@ import Location from './views/Location';
 import Admin from './views/admin/Admin';
 import NewLocation from './views/admin/NewLocation';
 import EditLocation from './views/admin/EditLocation';
+import AdminReservations from './views/admin/AdminReservations';
 
 function LocationWrapper() {
     const { id } = useParams<{ id: string }>();
@@ -37,6 +38,7 @@ function App(): JSX.Element {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/admin/location/new" element={<NewLocation />} />
                     <Route path="/admin/location/edit/:id" element={<EditLocationWrapper />} />
+                    <Route path="/admin/reservations" element={<AdminReservations />} />
                 </Routes>
             </Box>
         </Router>

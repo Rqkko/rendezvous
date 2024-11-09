@@ -457,12 +457,6 @@ public class EventController : ControllerBase
         {
             connection.Open();
 
-            // SELECT L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date, E.eventDescription FROM Reservations AS R
-            // JOIN Events AS E ON R.eventId = E.eventId
-            // JOIN Locations AS L ON E.locationId = L.locationId
-            // JOIN Addresses AS A ON L.locationId = A.locationId
-            // WHERE R.userId = @userId
-
             string query = @"
                 SELECT U.firstname, U.lastname, L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date, R.reservationDateTime
                 FROM Reservations AS R
