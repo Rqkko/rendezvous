@@ -62,10 +62,24 @@ function Admin(): JSX.Element {
         
     }
 
-    function handleDeleteClick(location: Location): void {
-        // TODO: Check delete permission
+    async function handleDeleteClick(location: Location): Promise<void> {
+        const canDelete = await checkDeletePermission();
+
+        if (!canDelete) {
+            alert('You do not have permission to delete locations');
+            return;
+        }
+
         setLocationToDelete(location)
         setPopupOpen(true);
+    }
+
+    async function checkDeletePermission(): Promise<boolean> {
+        const response = await fetch('/api/user/checkPermission?permission=delete');
+        if (!response.ok) {
+            return false;
+        }
+        return true;
     }
 
     function handlePopupNoClick(): void {
