@@ -25,19 +25,19 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
     const [loading, setLoading] = useState<boolean>(true);
     const [location, setLocation] = useState<Location | undefined>(undefined);
 
-    function checkUpdatePermission(): void {
-        fetch('/api/user/checkPermission?permission=create')
+    async function checkUpdatePermission(): Promise<boolean> {
+        return fetch('/api/user/checkPermission?permission=create')
         .then((response) => {
             if (!response.ok) {
-                setCanUpdate(false);
+                return false;
             } else {
-                setCanUpdate(true);
+                return true;
             }
         });
     }
 
-    function fetchLocationDetail(locationId: string): void {
-        fetch(`/api/event/getlocation/${locationId}`)
+    async function fetchLocationDetail(locationId: string): Promise<Location | undefined> {
+        return fetch(`/api/event/getlocation/${locationId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Location not found');
@@ -45,34 +45,47 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
             return response.json()
         })
         .then((data) => {
-            setLocation(data);
-            setLoading(false);
+            return data;
         })
         .catch(error => {
-            console.log(error);
-            setLoading(false);
+            console.log("Error fetching location: " + error);
+            return undefined
         });
     }
 
+    // TODO: fix repeated fetch
     useEffect(() => {
         fetch('/api/user/checkAdmin')
         .then((response) => {
+            console.log(response)
             if (!response.ok) {
                 setIsAdmin(false);
                 setLoading(false);
+                throw new Error('Not an admin'); // Exit early
             } else {
                 setIsAdmin(true);
+                return
             }
         })
         .then(() => {
-            if (isAdmin) {
-                checkUpdatePermission();
-            }
+            checkUpdatePermission().then((canUpdate) => {
+                setCanUpdate(canUpdate);
+                // console.log("CanUpdate: " + canUpdate);
+                if (canUpdate && locationId !== undefined) {
+                    fetchLocationDetail(locationId).then((location) => {
+                        if (location === undefined) {
+                            throw new Error('Location not found');
+                        }
+                        setLocation(location);
+                        // console.log(location?.postalCode);
+                        setLoading(false);
+                    });
+                } else {
+                    setLoading(false);
+                    throw new Error('No update permission');
+                }
+            })
         });
-
-        if (locationId !== undefined) {
-            fetchLocationDetail(locationId);
-        }
     })
 
     if (loading) {
@@ -82,7 +95,7 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
         );
     }
 
-    if ((!isAdmin || !canUpdate) && location !== undefined) {
+    if (!isAdmin || !canUpdate) {
         return (
             <Unauthorized />
         )
