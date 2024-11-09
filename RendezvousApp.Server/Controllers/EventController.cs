@@ -441,6 +441,70 @@ public class EventController : ControllerBase
     [HttpGet("GetAllReservations")]
     public ActionResult GetAllReservations()
     {
-        return Ok();
+        string? isActive = HttpContext.Session.GetString("IsActive");
+        if (isActive == false.ToString() || isActive == null)
+        {
+            return Unauthorized(new { message = "Not Admin" });
+        }
+
+        string? canRead = HttpContext.Session.GetString("CanRead");
+        if (canRead == false.ToString() || canRead == null)
+        {
+            return Unauthorized(new { message = "No Permission" });
+        }
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            // SELECT L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date, E.eventDescription FROM Reservations AS R
+            // JOIN Events AS E ON R.eventId = E.eventId
+            // JOIN Locations AS L ON E.locationId = L.locationId
+            // JOIN Addresses AS A ON L.locationId = A.locationId
+            // WHERE R.userId = @userId
+
+            string query = @"
+                SELECT U.firstname, U.lastname, L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date, R.reservationDateTime
+                FROM Reservations AS R
+                JOIN Users AS U ON R.userId = U.userId
+                JOIN Events AS E ON R.eventId = E.eventId
+                JOIN Locations AS L ON E.locationId = L.locationId
+                JOIN Addresses AS A ON L.locationId = A.locationId;
+            ";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+
+            List<AdminEventReservationDTO> adminEventReservations = new();
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    byte[] locationImageBytes = (byte[])reader["locationImage"];
+                    string locationImageBase64 = Convert.ToBase64String(locationImageBytes);
+
+                    adminEventReservations.Add(new AdminEventReservationDTO
+                    {
+                        Firstname = (string)reader["firstname"],
+                        Lastname = (string)reader["lastname"],
+                        LocationName = (string)reader["locationName"],
+                        LocationImage = locationImageBase64,
+                        Province = (string)reader["province"],
+                        EventName = (string)reader["eventName"],
+                        Theme = (string)reader["theme"],
+                        GuestCount = (int)reader["guestCount"],
+                        Date = DateOnly.FromDateTime((DateTime)reader["date"]),
+                        ReservationDateTime = DateTime.Parse(reader["reservationDateTime"].ToString()),
+                    });
+                }
+            }
+
+            if (adminEventReservations.Count == 0)
+            {
+                return NotFound(new { message = "No Reservation Found" });
+            }
+
+            Console.WriteLine(adminEventReservations.Count + " Reservations Found");
+            return Ok(adminEventReservations);
+        }
     }
 }
