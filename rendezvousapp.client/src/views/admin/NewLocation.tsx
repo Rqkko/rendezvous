@@ -5,6 +5,7 @@ import Unauthorized from '../../components/Unauthorized';
 import ImageUploadBox from '../../components/ImageUploadBox';
 import RoundedCornerTextfield from '../../components/RoundedCornerTextfield';
 import OpaqueButton from '../../components/OpaqueButton';
+import { useNavigate } from 'react-router-dom';
 
 interface LocationPayload {
     locationName: string;
@@ -30,6 +31,7 @@ function NewLocation(): JSX.Element {
     const [locationProvince, setLocationProvince] = useState<string>('');
     const [locationPostalCode, setLocationPostalCode] = useState<string>('');
     const [locationAdditional, setLocationAdditional] = useState<string>('');
+    const navigate = useNavigate();
 
     function checkCreatePermission(): void {
         fetch('/api/user/checkPermission?permission=create')
@@ -77,6 +79,7 @@ function NewLocation(): JSX.Element {
                 });
             }
             alert('Location created successfully!');
+            navigate('/admin');
         })
         .catch((error) => {
             alert(error.message);
