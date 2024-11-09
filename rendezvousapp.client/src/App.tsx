@@ -10,10 +10,16 @@ import Account from './views/Account';
 import Location from './views/Location';
 import Admin from './views/admin/Admin';
 import NewLocation from './views/admin/NewLocation';
+import EditLocation from './views/admin/EditLocation';
 
 function LocationWrapper() {
     const { id } = useParams<{ id: string }>();
     return <Location locationId={id} />;
+}
+
+function EditLocationWrapper() {
+    const { id } = useParams<{ id: string }>();
+    return <EditLocation locationId={id} />;
 }
 
 function App(): JSX.Element {
@@ -30,6 +36,7 @@ function App(): JSX.Element {
                     <Route path="/location/:id?" element={<LocationWrapper />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/admin/location/new" element={<NewLocation />} />
+                    <Route path="/admin/location/edit/:id" element={<EditLocationWrapper />} />
                 </Routes>
             </Box>
         </Router>

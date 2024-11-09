@@ -1,4 +1,4 @@
-import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Dialog, DialogActions, DialogTitle, IconButton, InputBase, Paper, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
@@ -58,8 +58,7 @@ function Admin(): JSX.Element {
     };
 
     function handleEditClick(locationId: number): void {
-        // TODO: Check edit permission
-        
+        navigate(`/admin/location/edit/${locationId}`);
     }
 
     async function handleDeleteClick(location: Location): Promise<void> {
