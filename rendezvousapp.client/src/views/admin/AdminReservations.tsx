@@ -2,6 +2,8 @@ import { Box, Container, IconButton, InputBase, Paper, Typography } from '@mui/m
 import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import AdminReservationCard from '../../components/AdminReservationCard';
+import Unauthorized from '../../components/Unauthorized';
+import { set } from 'date-fns';
 
 interface EventReservation {
     locationName: string;
@@ -15,6 +17,7 @@ interface EventReservation {
 }
 
 function Reservations(): JSX.Element {
+    const [loading, setLoading] = useState<boolean>(true);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [canRead, setCanRead] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -72,15 +75,18 @@ function Reservations(): JSX.Element {
 
     useEffect(() => {
         // FIXME: redundant useEffect called (called two times)
+        console.log("useEffect called");
         checkIsAdmin()
         .then((isAdmin) => {
             if (isAdmin) {
+                setIsAdmin(true);
                 return checkReadPermission();
             }
             throw new Error('Not Admin');
         })
         .then((canRead) => {
             if (canRead) {
+                setCanRead(true);
                 return fetchReservations();
             }
             throw new Error('Not Enough Permissions');
@@ -88,9 +94,29 @@ function Reservations(): JSX.Element {
         .then((reservations) => {
             if (reservations != null) {
                 setReservations(reservations);
+            } else {
+                console.log("No reservations found");
             }
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.log(error.message);
+            setLoading(false);
         })
     }, []);
+
+    if (loading) {
+        return (
+            // Loading...
+            <div className="loader" style={{marginTop: '100px'}}></div>
+        );
+    }
+
+    if (!isAdmin || !canRead) {
+        return (
+            <Unauthorized />
+        )
+    }
 
     return (
         <Container 
