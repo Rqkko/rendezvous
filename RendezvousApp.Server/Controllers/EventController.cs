@@ -326,6 +326,45 @@ public class EventController : ControllerBase
         return Ok("Location Added");
     }
 
+    [HttpDelete("DeleteLocation/{locationId}")]
+    public ActionResult DeleteLocation([FromRoute] int locationId)
+    {
+        string? isActive = HttpContext.Session.GetString("IsActive");
+        if (isActive == false.ToString() || isActive == null)
+        {
+            return Unauthorized(new { message = "Not Admin" });
+        }
+
+        // Check for permission
+        string? canDelete = HttpContext.Session.GetString("CanDelete");
+        if (canDelete == false.ToString() || canDelete == null)
+        {
+            return Unauthorized(new { message = "No Permission" });
+        }
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            try
+            {
+                // Delete from Locations table (Address will cascade delete)
+                string locationQuery = @"
+                    DELETE FROM Locations WHERE locationId=@locationId;
+                ";
+                MySqlCommand locationCmd = new MySqlCommand(locationQuery, connection);
+                locationCmd.Parameters.AddWithValue("@locationId", locationId);
+                locationCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Internal server error: {ex.Message}" });
+            }
+        }
+
+        return Ok("Location Deleted");
+    }
+
     [HttpGet("GetAllReservations")]
     public ActionResult GetAllReservations()
     {
