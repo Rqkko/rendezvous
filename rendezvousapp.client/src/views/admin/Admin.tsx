@@ -87,18 +87,20 @@ function Admin(): JSX.Element {
     }
 
     function handlePopupYesClick(): void {
-        fetch(`/api/location/deleteLocation/${locationToDelete?.locationId}`, {
+        fetch(`/api/event/deleteLocation/${locationToDelete?.locationId}`, {
             method: 'DELETE',
         })
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Failed to delete location');
             }
+            alert('Location deleted successfully');
             setPopupOpen(false);
             fetchLocations();
         })
         .catch((error) => {
             alert(error.message);
+            setPopupOpen(false);
         });
     }
 
