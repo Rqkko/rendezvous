@@ -8,10 +8,19 @@ import CustomAppBar from './components/CustomAppBar';
 import Reservations from './views/Reservations';
 import Account from './views/Account';
 import Location from './views/Location';
+import Admin from './views/admin/Admin';
+import NewLocation from './views/admin/NewLocation';
+import EditLocation from './views/admin/EditLocation';
+import AdminReservations from './views/admin/AdminReservations';
 
 function LocationWrapper() {
     const { id } = useParams<{ id: string }>();
     return <Location locationId={id} />;
+}
+
+function EditLocationWrapper() {
+    const { id } = useParams<{ id: string }>();
+    return <EditLocation locationId={id} />;
 }
 
 function App(): JSX.Element {
@@ -26,6 +35,10 @@ function App(): JSX.Element {
                     <Route path="/reservations" element={<Reservations/>} />
                     <Route path="account" element={<Account/>} />
                     <Route path="/location/:id?" element={<LocationWrapper />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/admin/location/new" element={<NewLocation />} />
+                    <Route path="/admin/location/edit/:id" element={<EditLocationWrapper />} />
+                    <Route path="/admin/reservations" element={<AdminReservations />} />
                 </Routes>
             </Box>
         </Router>

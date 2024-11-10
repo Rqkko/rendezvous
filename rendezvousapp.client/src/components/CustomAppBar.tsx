@@ -14,9 +14,14 @@ function CustomAppBar(): JSX.Element | null {
     const settings = ['Home', 'Reservations', 'Account', 'Logout']; // For Menu
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
     function handleLogoClick(): void {
-        navigate('/');
+        if (isAdmin) {
+            navigate('/admin');
+        } else {
+            navigate('/');
+        }
     }
 
     function handleOpenUserMenu(event: React.MouseEvent<HTMLElement>): void {
@@ -27,10 +32,19 @@ function CustomAppBar(): JSX.Element | null {
     };
     function handleMenuItemClick(setting: string): void {
         if (setting === "Home") {
-            navigate('');
+            if (isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('');
+            }
         }
         else if (setting === "Reservations") {
-            navigate('/reservations')
+            // TODO: Handle Admin's Reservations
+            if (isAdmin) {
+                navigate('/admin/reservations');
+            } else {
+                navigate('/reservations')
+            }
         }
         else if (setting === "Account") {
             navigate("/account")
@@ -70,6 +84,15 @@ function CustomAppBar(): JSX.Element | null {
 
     useEffect(() => {
         getUser().then((result) => setUser(result));
+
+        fetch('/api/user/checkAdmin')
+        .then((response) => {
+            if (!response.ok) {
+                setIsAdmin(false);
+            } else {
+                setIsAdmin(true);
+            }
+        })
     }, [location.pathname]);
 
     // No AppBar when on login page
@@ -82,7 +105,7 @@ function CustomAppBar(): JSX.Element | null {
             <AppBar
                 color="main"
                 position="sticky"
-                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 0, boxSizing: 'border-box', bgcolor: 'background.default' }}
+                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 1, boxSizing: 'border-box', bgcolor: 'background.default' }}
             >
                 <Toolbar>
                     <IconButton
@@ -90,7 +113,7 @@ function CustomAppBar(): JSX.Element | null {
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ mr: 2 }}
+                        sx={{ mr: 0, p:0 }}
                         onClick={handleLogoClick}
                     >
                         <Box
@@ -101,7 +124,11 @@ function CustomAppBar(): JSX.Element | null {
                     </IconButton>
 
                     {/* To occupy the remaining space */}
-                    <Box sx={{ flexGrow: 1 }} />
+                    <Box sx={{ flexGrow: 1, justifyItems: 'start' }}>
+                        <Typography variant="h6" component="div" sx={{ alignSelf: 'end', mt: 2 }}>
+                            endezvous
+                        </Typography>    
+                    </Box>
 
                     {user 
                         ? (
@@ -127,7 +154,7 @@ function CustomAppBar(): JSX.Element | null {
                                         horizontal: 'right',
                                     }}
                                 >
-                                    <Typography>{user.firstname + " " + user.lastname}</Typography>
+                                    <Typography>{user.firstname + " " + user.lastname + (isAdmin ? " (Admin)" : "")}</Typography>
                                 </Menu>
                             </>
                         )

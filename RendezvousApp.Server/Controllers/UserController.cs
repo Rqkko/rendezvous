@@ -77,7 +77,58 @@ public class UserController : ControllerBase
         HttpContext.Session.SetString("Phone", user.Phone);
         HttpContext.Session.SetString("Email", user.Email);
 
-        return Ok(user);
+        // Check for Admin Access
+        Admin? admin = null;
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            string query = "SELECT * FROM Admins WHERE userId = @userId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@userId", user.UserId);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    admin = new Admin
+                    {
+                        AdminId = (int) reader["adminId"],
+                        UserId = (int) reader["userId"],
+                        IsActive = (bool) reader["isActive"],
+                        canCreate = (bool) reader["canCreate"],
+                        canRead = (bool) reader["canRead"],
+                        canUpdate = (bool) reader["canUpdate"],
+                        canDelete = (bool) reader["canDelete"],
+                    };
+                }
+            }
+        }
+
+        // Admin Session Data
+
+        if (admin != null)
+        {
+            HttpContext.Session.SetInt32("AdminId", admin.AdminId);
+            HttpContext.Session.SetInt32("UserId", admin.UserId);
+            HttpContext.Session.SetString("IsActive", admin.IsActive.ToString());
+            HttpContext.Session.SetString("CanCreate", admin.canCreate.ToString());
+            HttpContext.Session.SetString("CanRead", admin.canRead.ToString());
+            HttpContext.Session.SetString("CanUpdate", admin.canUpdate.ToString());
+            HttpContext.Session.SetString("CanDelete", admin.canDelete.ToString());
+        } else
+        {
+            HttpContext.Session.SetString("IsActive", false.ToString());
+        }
+        
+        var payload = new
+        {
+            User = user,
+            IsActive = HttpContext.Session.GetString("IsActive")
+        };
+
+        return Ok(payload);
     }
 
     [HttpGet("GetUser")]
@@ -102,5 +153,32 @@ public class UserController : ControllerBase
     {
         HttpContext.Session.Clear();
         return Ok(new { message = "Logged out" });
+    }
+
+    [HttpGet("CheckAdmin")]
+    public ActionResult CheckAdmin()
+    {
+        if (HttpContext.Session.GetString("IsActive") == false.ToString())
+        {
+            return Unauthorized(new { message = "User is not an admin" });
+        }
+
+        return Ok();
+    }
+
+    [HttpGet("CheckPermission")]
+    public ActionResult CheckPermission([FromQuery] string permission)
+    {
+        if (permission != "create" && permission != "read" && permission != "update" && permission != "delete")
+        {
+            return BadRequest(new { message = "Invalid permission" });
+        }
+
+        if (HttpContext.Session.GetString($"Can{permission.First().ToString().ToUpper() + permission.Substring(1)}") == false.ToString()) // Check with Session Data
+        {
+            return Unauthorized(new { message = "User does not have permission" });
+        }
+
+        return Ok();
     }
 }

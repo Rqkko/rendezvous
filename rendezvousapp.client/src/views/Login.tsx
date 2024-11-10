@@ -48,8 +48,12 @@ function Login() {
             }
             return response.json();
         })
-        .then(() => {
-            navigate('/');
+        .then((data) => {
+            if (data.isActive == "True") {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
         })
         .catch((error) => {
             alert(error.message);
