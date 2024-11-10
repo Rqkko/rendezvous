@@ -1,11 +1,13 @@
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Dialog, DialogTitle, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
 import CustomDatePicker from '../components/CustomDatePicker';
+import paymentQR from '../assets/paymentQR.png';
+import { set } from 'date-fns';
 
 interface LocationProps {
     locationId: string | undefined;
@@ -51,7 +53,8 @@ function Location({ locationId }: LocationProps): JSX.Element {
     const [theme, setTheme] = useState<string>('');
     const [guest, setGuest] = useState<string>('');
     const [eventDescription, setEventDescription] = useState<string>('');
-
+    const [openPayment, setOpenPayment] = useState<boolean>(false);
+    const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     function fetchLocationDetail(locationId: string): void {
@@ -76,7 +79,15 @@ function Location({ locationId }: LocationProps): JSX.Element {
             return;
         }
 
-        //TODO Popup
+        setOpenPayment(true);
+    }
+
+    function handleClosePayment(): void {
+        setOpenPayment(false);
+    }
+
+    function handlePayConfirmClick(): void {
+        setIsPaymentLoading(!isPaymentLoading);
 
         const payload: ReservationDTO = {
             locationId: location?.locationId || 0,
@@ -96,25 +107,34 @@ function Location({ locationId }: LocationProps): JSX.Element {
             }
         };
 
-        fetch(`/api/event/addReservation`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                return response.json().then((data) => {
-                    throw new Error(data.message);
-                });
-            }
-            alert("Reservation Successful");
+        return;
+
+        Promise.all([
+            // fetch(`/api/event/addReservation`, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(payload),
+            // })
+            // .then((response) => {
+            //     if (!response.ok) {
+            //         return response.json().then((data) => {
+            //             throw new Error(data.message);
+            //         });
+            //     }
+            //     alert("Reservation Successful");
+            //     navigate('/reservations')
+            // })
+            // .catch((error) => {
+            //     alert(error.message);
+            // }),
+
+            new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 seconds for payment
+        ]).then(() => {
+            alert("Payment Successful");
             navigate('/reservations')
         })
-        .catch((error) => {
-            alert(error.message);
-        });
     }
     
     useEffect(() => {
@@ -245,10 +265,64 @@ function Location({ locationId }: LocationProps): JSX.Element {
                             >
                                 Confirm
                             </Button>
+
                         </Container>
                     </Grid>
                 </Grid>
             </Box>
+
+            {/* Popup */}
+            <Dialog
+                onClose={handleClosePayment}
+                open={openPayment}
+            >
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 2,
+                    p: 2,
+                    height: '500px',
+                    width: '420px'
+                }}>
+                    <DialogTitle 
+                        variant="h2"
+                        color="primary"
+                        sx={{ textAlign: 'center' }}
+                    >
+                        Scan To Pay
+                    </DialogTitle>
+
+                    {isPaymentLoading
+                        ? (
+                            // <CircularProgress size={100} color="secondary" />
+                            <label className="container">
+                                <input checked={true} type="checkbox"/>
+                                <div className="checkmark"></div>
+                            </label>
+                        )
+                        : (
+                            <>
+                            <Typography variant="body1">Total Amount: {location.cost} Baht</Typography>
+
+                            <img src={paymentQR} alt="QR Code" style={{ width: '200px', height: '200px' }} />
+
+                            <Typography variant="body2">Please scan the QR code to pay</Typography>
+
+                            </>
+                        )
+                    }
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handlePayConfirmClick}
+                            sx = {{ justifySelf: 'end' }}
+                        >
+                            Confirm
+                        </Button>
+                </Box>
+            </Dialog>
         </Container>
     );
 }
