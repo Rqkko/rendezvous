@@ -111,34 +111,37 @@ function Location({ locationId }: LocationProps): JSX.Element {
 
 
         Promise.all([
-            // fetch(`/api/event/addReservation`, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(payload),
-            // })
-            // .then((response) => {
-            //     if (!response.ok) {
-            //         return response.json().then((data) => {
-            //             throw new Error(data.message);
-            //         });
-            //     }
-            //     alert("Reservation Successful");
-            //     navigate('/reservations')
-            // })
-            // .catch((error) => {
-            //     alert(error.message);
-            // }),
+            fetch(`/api/event/addReservation`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => {
+                        throw new Error(data.message);
+                    });
+                }
+            })
+            .catch((error) => {
+                throw new Error(error.message);
+            }),
 
             new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 seconds for payment
-        ]).then(() => {
+        ])
+        .then(() => {
             setShowLoading(false);
             setShowCheckmark(true);
             setTimeout(() => {
                 navigate('/reservations')
             }, 1000);
         })
+        .catch((error) => {
+            alert('Error making reservation: ' + error.message);
+            setShowLoading(false);
+        });
     }
     
     useEffect(() => {
@@ -313,7 +316,6 @@ function Location({ locationId }: LocationProps): JSX.Element {
                             <img src={paymentQR} alt="QR Code" style={{ width: '200px', height: '200px' }} />
 
                             <Typography variant="body2">Please scan the QR code to pay</Typography>
-
                             </>
                         )
                     )}
