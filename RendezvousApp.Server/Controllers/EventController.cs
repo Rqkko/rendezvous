@@ -458,7 +458,7 @@ public class EventController : ControllerBase
             connection.Open();
 
             string query = @"
-                SELECT U.firstname, U.lastname, L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date, R.reservationDateTime
+                SELECT U.firstname, U.lastname, L.locationName, L.locationImage, A.province, E.eventName, E.theme, E.guestCount, E.date
                 FROM Reservations AS R
                 JOIN Users AS U ON R.userId = U.userId
                 JOIN Events AS E ON R.eventId = E.eventId
@@ -487,7 +487,6 @@ public class EventController : ControllerBase
                         Theme = (string)reader["theme"],
                         GuestCount = (int)reader["guestCount"],
                         Date = DateOnly.FromDateTime((DateTime)reader["date"]),
-                        ReservationDateTime = DateTime.Parse(reader["reservationDateTime"].ToString()),
                     });
                 }
             }
