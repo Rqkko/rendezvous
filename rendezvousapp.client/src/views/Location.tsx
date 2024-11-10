@@ -209,6 +209,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
+                                pb: 2,
                             }}>
                             <Typography 
                                 color='white' 
