@@ -54,7 +54,9 @@ function Location({ locationId }: LocationProps): JSX.Element {
     const [guest, setGuest] = useState<string>('');
     const [eventDescription, setEventDescription] = useState<string>('');
     const [openPayment, setOpenPayment] = useState<boolean>(false);
-    const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
+    const [showLoading, setShowLoading] = useState<boolean>(false);
+    const [showCheckmark, setShowCheckmark] = useState<boolean>(false);
+    
     const navigate = useNavigate();
 
     function fetchLocationDetail(locationId: string): void {
@@ -87,7 +89,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
     }
 
     function handlePayConfirmClick(): void {
-        setIsPaymentLoading(!isPaymentLoading);
+        setShowLoading(true);
 
         const payload: ReservationDTO = {
             locationId: location?.locationId || 0,
@@ -107,7 +109,6 @@ function Location({ locationId }: LocationProps): JSX.Element {
             }
         };
 
-        return;
 
         Promise.all([
             // fetch(`/api/event/addReservation`, {
@@ -132,8 +133,11 @@ function Location({ locationId }: LocationProps): JSX.Element {
 
             new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 seconds for payment
         ]).then(() => {
-            alert("Payment Successful");
-            navigate('/reservations')
+            setShowLoading(false);
+            setShowCheckmark(true);
+            setTimeout(() => {
+                navigate('/reservations')
+            }, 1000);
         })
     }
     
@@ -294,15 +298,15 @@ function Location({ locationId }: LocationProps): JSX.Element {
                         Scan To Pay
                     </DialogTitle>
 
-                    {isPaymentLoading
-                        ? (
-                            // <CircularProgress size={100} color="secondary" />
-                            <label className="container">
-                                <input checked={true} type="checkbox"/>
-                                <div className="checkmark"></div>
-                            </label>
-                        )
-                        : (
+                    {showLoading ? (
+                        <CircularProgress size={100} color="secondary" />
+                    ) : (
+                        showCheckmark ? (
+                                <label className="container">
+                                    <input checked={true} type="checkbox"/>
+                                    <div className="checkmark"></div>
+                                </label>
+                        ) : (
                             <>
                             <Typography variant="body1">Total Amount: {location.cost} Baht</Typography>
 
@@ -312,12 +316,13 @@ function Location({ locationId }: LocationProps): JSX.Element {
 
                             </>
                         )
-                    }
+                    )}
                         <Button
                             variant="contained"
                             color="secondary"
                             onClick={handlePayConfirmClick}
                             sx = {{ justifySelf: 'end' }}
+                            disabled={showLoading || showCheckmark}
                         >
                             Confirm
                         </Button>
