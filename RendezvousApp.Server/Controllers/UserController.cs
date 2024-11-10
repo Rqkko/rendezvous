@@ -158,7 +158,7 @@ public class UserController : ControllerBase
     [HttpGet("CheckAdmin")]
     public ActionResult CheckAdmin()
     {
-        if (HttpContext.Session.GetString("IsActive") == false.ToString())
+        if (HttpContext.Session.GetString("IsActive") == false.ToString() || HttpContext.Session.GetInt32("AdminId") == null)
         {
             return Unauthorized(new { message = "User is not an admin" });
         }
