@@ -70,6 +70,14 @@ function Location({ locationId }: LocationProps): JSX.Element {
     }
 
     function handleConfirmClick(): void {
+        // Validate input
+        if (eventName === '' || eventDate === null || theme === '' || guest === '' || eventDescription === '') {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        //TODO Popup
+
         const payload: ReservationDTO = {
             locationId: location?.locationId || 0,
             event: {
