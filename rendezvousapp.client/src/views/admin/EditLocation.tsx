@@ -39,7 +39,7 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
     const navigate = useNavigate();
 
     async function checkUpdatePermission(): Promise<boolean> {
-        return fetch('/api/user/checkPermission?permission=create')
+        return fetch('/api/user/checkPermission?permission=update')
         .then((response) => {
             if (!response.ok) {
                 return false;
