@@ -225,6 +225,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 value={eventDescription}
                                 handleChange={(e) => setEventDescription(e.target.value)}
                                 style={{ width: '100%', my:2 }}
+                                rows={3}
                             />
 
                             <Button 
