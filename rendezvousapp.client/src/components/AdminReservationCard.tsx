@@ -3,16 +3,15 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 interface AdminReservationCardProps {
+    firstname: string;
+    lastname: string;
     locationName: string;
     eventName: string;
     date: Date;
-    theme: string;
-    guestCount: number;
-    province: string;
     image: string;
 }
 
-function AdminReservationCard({ locationName, eventName, date, theme, guestCount, province, eventDescription, image }: AdminReservationCardProps): JSX.Element {
+function AdminReservationCard({ firstname, lastname, locationName, eventName, date, image }: AdminReservationCardProps): JSX.Element {
     const formattedDate = date instanceof Date ? date.toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
@@ -46,17 +45,9 @@ function AdminReservationCard({ locationName, eventName, date, theme, guestCount
                     {eventName}
                 </Typography>
 
-                <Typography variant="body1" align="left" sx={{ color: '#2e5d4b' }}><strong>Location:</strong> {locationName}</Typography>
+                <Typography variant="body2" align="left" sx={{ color: '#2e5d4b' }}><strong>Location:</strong> {locationName}</Typography>
 
-                <Typography variant="body2" sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    color: '#666',
-                    mt: 0.5
-                }}>
-                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5, color: '#d32f2f' }} />
-                    {province}
-                </Typography>
+                <Typography variant="body2" align="left" sx={{ color: '#2e5d4b' }}><strong>Reserved By:</strong> {firstname} {lastname}</Typography>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Typography variant="body2" sx={{ 
@@ -70,7 +61,7 @@ function AdminReservationCard({ locationName, eventName, date, theme, guestCount
                     </Typography>
 
                     {/* TODO: Add See More function */}
-                    <Button
+                    {/* <Button
                         sx={{
                             color: '#2e5d4b',
                             textDecoration: 'underline',
@@ -80,7 +71,7 @@ function AdminReservationCard({ locationName, eventName, date, theme, guestCount
                         onClick={() => alert(eventDescription)}
                     >
                         See more (***)
-                    </Button>
+                    </Button> */}
                 </Box>
             </CardContent>
         </Card>

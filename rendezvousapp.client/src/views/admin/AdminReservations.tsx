@@ -11,10 +11,7 @@ interface EventReservation {
     locationName: string;
     locationImage: string;
     eventName: string;
-    theme: string;
-    guestCount: number;
     date: Date;
-    province: string;
 }
 
 function Reservations(): JSX.Element {
@@ -179,12 +176,11 @@ function Reservations(): JSX.Element {
                     {filteredReservations.map((reservation) => (
                         <AdminReservationCard
                             // TODO: Add other props
+                            firstname={reservation.firstname}
+                            lastname={reservation.lastname}
                             locationName={reservation.locationName}
                             eventName={reservation.eventName}
                             date={reservation.date}
-                            theme={reservation.theme}
-                            guestCount={reservation.guestCount}
-                            province={reservation.province}
                             image={reservation.locationImage}
                         />
                     ))}
