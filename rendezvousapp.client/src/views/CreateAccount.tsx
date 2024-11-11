@@ -1,4 +1,5 @@
 import { Box, Button, Container, Divider, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
 
 import SquareTextfield from '../components/SquareTextfield'
 import OpaqueButton from '../components/OpaqueButton'
@@ -6,6 +7,7 @@ import { useState } from 'react';
 import logo from '../assets/logo.png';
 
 function CreateAccount() {
+    const navigate = useNavigate();
     const [firstname, setFirstname] = useState<string>("");
     const [lastname, setLastname] = useState<string>("");
     const [phone, setPhone] = useState<string>("");
@@ -21,31 +23,21 @@ function CreateAccount() {
 
     function handleRegister(): void {
         // TODO
+
     }
 
     return (
-        <Container
-            sx={{ 
-                overflow: 'hidden', 
-                height: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-        >
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    width: '100%',
-                    maxWidth: '1200px',
-                }}
-            >
+        <Container sx= {{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
                 <Box
                     component="img"
                     alt="Rendezvous Logo"
                     src={logo}
-                    sx={{ width: '50%', maxWidth: '400px', mr: 4 }}
+                    sx={{ width: '50%', maxWidth: '400px' }}
                 />
 
                 <Box 
@@ -68,7 +60,7 @@ function CreateAccount() {
                         color="black"
                         sx={{ mt: 2, mb: 4 }}
                     >
-                        Please log in
+                        Please Enter Your Details
                     </Typography>
 
                     <SquareTextfield 
@@ -130,7 +122,7 @@ function CreateAccount() {
 
                     <Divider sx={{ mt: 3, width: '100%', borderWidth: 1, borderColor: 'black' }} />
                     <Typography color="black" sx={{ mt: 2 }}>
-                        Don't have an account? 
+                        Already have an account?
                         <Button 
                             variant="text" 
                             sx={{ 
@@ -139,13 +131,12 @@ function CreateAccount() {
                                 textDecoration: 'underline',
                                 ml: 1
                             }}
-                            onClick={() => navigate('/register')}
+                            onClick={() => navigate('/login')}
                         >
-                            Create One
+                            Login Here
                         </Button>
                     </Typography>
                 </Box>
-            </Box>
         </Container>
     )
 }
