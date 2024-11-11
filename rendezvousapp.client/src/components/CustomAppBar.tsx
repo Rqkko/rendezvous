@@ -11,7 +11,7 @@ function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
-    const settings = ['Home', 'Reservations', 'Account', 'Logout']; // For Menu
+    const settings = ['Home', 'Reservations', /* 'Account', */ 'Logout']; // For Menu
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
