@@ -157,6 +157,10 @@ function Admin(): JSX.Element {
                     value={searchTerm}
                     onChange={handleInputChange}
                     onSearch={handleSearchChange}
+                    onClear={() => {
+                        setSearchTerm('');
+                        setSearchQuery('');
+                    }}
                     style={{
                         pr: '4px',
                         display: 'flex',

@@ -66,6 +66,10 @@ function Reservations(): JSX.Element {
             value={searchTerm}
             onChange={handleInputChange}
             onSearch={handleSearchChange}
+            onClear={() => {
+                setSearchTerm('');
+                setSearchQuery('');
+            }}
         />
 
         <Paper sx={{ 

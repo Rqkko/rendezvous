@@ -1,14 +1,16 @@
 import { IconButton, InputBase, Paper, SxProps } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 interface SearchBarProps {
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onSearch: () => void;
+    onClear: () => void;
     style?: SxProps;
 }
 
-function SearchBar({ value, onChange, onSearch, style }: SearchBarProps): JSX.Element {
+function SearchBar({ value, onChange, onSearch, style, onClear }: SearchBarProps): JSX.Element {
     function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent from submitting form
@@ -36,21 +38,33 @@ function SearchBar({ value, onChange, onSearch, style }: SearchBarProps): JSX.El
             }
         >
             <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Locations"
-            inputProps={{ 'aria-label': 'search locations' }}
-            value={value}
-            onChange={onChange}
-            onKeyDown={handleKeyDown}
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search Locations"
+                inputProps={{ 'aria-label': 'search locations' }}
+                value={value}
+                onChange={onChange}
+                onKeyDown={handleKeyDown}
             />
+
             <IconButton
-            type="button"
-            sx={{ p: '10px' }}
-            aria-label="search"
-            onClick={onSearch}
+                type="button"
+                sx={{ p: '10px', transition: 'opacity 0.3s', opacity: value ? 1 : 0 }}
+                aria-label="clear"
+                onClick={onClear}
             >
-            <SearchIcon />
+                <ClearIcon />
             </IconButton>
+
+            <IconButton
+                type="button"
+                sx={{ p: '10px' }}
+                aria-label="search"
+                onClick={onSearch}
+            >
+                <SearchIcon />
+            </IconButton>
+
+
         </Paper>
     )
 }
