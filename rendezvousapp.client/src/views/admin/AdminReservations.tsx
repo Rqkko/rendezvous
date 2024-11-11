@@ -37,7 +37,7 @@ function Reservations(): JSX.Element {
     }
 
     async function checkReadPermission(): Promise<boolean> {
-        return fetch('/api/user/checkPermission?permission=create')
+        return fetch('/api/user/checkPermission?permission=read')
         .then((response) => {
             if (!response.ok) {
                 return false;
