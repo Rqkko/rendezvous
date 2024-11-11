@@ -41,7 +41,7 @@ function Admin(): JSX.Element {
                 setLocations(data);
             })
             .catch((error) => {
-                alert(error.message);
+                console.log(error.message);
             });
     };
 
@@ -140,7 +140,7 @@ function Admin(): JSX.Element {
         >
             <Typography variant="h2" sx={{ mb: 2}}>Locations (Admin)</Typography>
 
-            {/* Search & New locaiton Button Group */}
+            {/* Search & New loction Button Group */}
             <Container 
                 sx={{
                     display: 'flex',
@@ -206,17 +206,22 @@ function Admin(): JSX.Element {
                 }}
             >
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
-                    {filteredLocations.map((location) => (
-                        <AdminLocationCard
-                            key={location.locationName}
-                            name={location.locationName}
-                            province={location.province}
-                            image={location.locationImage}
-                            handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
-                            handleEditClick={() => handleEditClick(location.locationId)}
-                            handleDeleteClick={() => handleDeleteClick(location)}
-                        />
-                    ))}
+                    {filteredLocations.length === 0 ? (
+                        <Typography variant="h4">No locations found</Typography>
+                    ) : (
+                        filteredLocations.map((location) => (
+                            <AdminLocationCard
+                                key={location.locationName}
+                                name={location.locationName}
+                                province={location.province}
+                                image={location.locationImage}
+                                handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
+                                handleEditClick={() => handleEditClick(location.locationId)}
+                                handleDeleteClick={() => handleDeleteClick(location)}
+                            />
+                        ))
+                    )}
+                    
                 </Box>
             </Paper>
 

@@ -109,15 +109,19 @@ function Home(): JSX.Element {
                 }}
             >
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
-                    {filteredLocations.map((location) => (
-                        <LocationCard
-                            key={location.locationName}
-                            name={location.locationName}
-                            province={location.province}
-                            image={location.locationImage}
-                            handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
-                        />
-                    ))}
+                    {filteredLocations.length === 0 ? (
+                        <Typography variant="h4">No locations found</Typography>
+                    ) : (
+                        filteredLocations.map((location) => (
+                            <LocationCard
+                                key={location.locationName}
+                                name={location.locationName}
+                                province={location.province}
+                                image={location.locationImage}
+                                handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
+                            />
+                        ))
+                    )}
                 </Box>
             </Paper>
         </Container>

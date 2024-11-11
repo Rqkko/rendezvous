@@ -41,7 +41,7 @@ function Reservations(): JSX.Element {
                 setReservations(reservations);
             })
             .catch(error => {  
-                alert(error.message);
+                console.log(error.message);
             });
     }
 
@@ -104,10 +104,14 @@ function Reservations(): JSX.Element {
                 mb: 2,
                 }}
             >
-            {/* {filteredReservations.toString()} */}
+            
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
-                    {filteredReservations.map((reservation) => (
+                {filteredReservations.length === 0 ? (
+                    <Typography variant="h4">No reservations found</Typography>
+                ) : (
+                    filteredReservations.map((reservation) => (
                         <ReservationCard
+                            key={reservation.locationName}
                             locationName={reservation.locationName}
                             eventName={reservation.eventName}
                             date={reservation.date}
@@ -116,14 +120,10 @@ function Reservations(): JSX.Element {
                             province={reservation.province}
                             eventDescription={reservation.eventDescription}
                             image={reservation.locationImage}
-                            // key={location.locationName}
-                            // name={location.locationName}
-                            // province={location.province}
-                            // image={location.locationImage}
-                            // handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
                         />
-                    ))}
-                </Box>
+                    ))
+                )}
+            </Box>
         </Paper>
     </Container>
     );

@@ -159,21 +159,23 @@ function Reservations(): JSX.Element {
         </Paper>
 
         <Paper sx={{ 
-                height: '50vh',
-                width: '60vw',
-                overflow: 'auto',
-                bgcolor: 'transparent',
-                p: 4,
-                borderRadius: 6,
-                borderStyle: 'none',
-                boxShadow: 5,
-                borderColor: 'black',
-                mb: 2,
-                }}
-            >
-            {/* {filteredReservations.toString()} */}
+            height: '50vh',
+            width: '60vw',
+            overflow: 'auto',
+            bgcolor: 'transparent',
+            p: 4,
+            borderRadius: 6,
+            borderStyle: 'none',
+            boxShadow: 5,
+            borderColor: 'black',
+            mb: 2,
+            }}
+        >
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
-                    {filteredReservations.map((reservation) => (
+                {filteredReservations.length === 0 ? (
+                    <Typography variant="h4">No locations found</Typography>
+                ) : (
+                    filteredReservations.map((reservation) => (
                         <AdminReservationCard
                             // TODO: Add other props
                             firstname={reservation.firstname}
@@ -183,8 +185,9 @@ function Reservations(): JSX.Element {
                             date={reservation.date}
                             image={reservation.locationImage}
                         />
-                    ))}
-                </Box>
+                    ))
+                )}
+            </Box>
         </Paper>
     </Container>
     );
