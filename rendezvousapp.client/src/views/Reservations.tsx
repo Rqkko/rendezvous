@@ -2,6 +2,7 @@ import { Box, Container, IconButton, InputBase, Paper, Typography } from '@mui/m
 import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import ReservationCard from '../components/ReservationCard';
+import SearchBar from '../components/SearchBar';
 
 interface EventReservation {
     locationName: string;
@@ -61,35 +62,11 @@ function Reservations(): JSX.Element {
     >
         <Typography variant="h2" sx={{ mb: 4}}>My Reservations</Typography>
 
-        <Paper
-            component="form"
-            sx={{ 
-                p: '2px 4px',
-                display: 'flex',
-                alignItems: 'center',
-                width: '600px',
-                height: '70px',
-                mx: 'auto',
-                mb: 4,
-                borderRadius: '20px'
-            }}
-        >
-            <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search Reservations"
-                inputProps={{ 'aria-label': 'search reservations' }}
-                value={searchTerm}
-                onChange={handleInputChange}
-            />
-            <IconButton 
-                type="button"
-                sx={{ p: '10px' }}
-                aria-label="search"
-                onClick={handleSearchChange}
-            >
-                <SearchIcon />
-            </IconButton>
-        </Paper>
+        <SearchBar
+            value={searchTerm}
+            onChange={handleInputChange}
+            onSearch={handleSearchChange}
+        />
 
         <Paper sx={{ 
                 height: '50vh',

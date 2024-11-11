@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { getUser, User } from '../../utils/apiUtils';
 import Unauthorized from '../../components/Unauthorized';
 import AdminLocationCard from '../../components/AdminLocationCard';
+import SearchBar from '../../components/SearchBar';
 
 interface Location {
     locationId: number;
@@ -152,9 +153,11 @@ function Admin(): JSX.Element {
                     mb: 4
                 }}
             >
-                <Paper
-                    component="form"
-                    sx={{
+                <SearchBar
+                    value={searchTerm}
+                    onChange={handleInputChange}
+                    onSearch={handleSearchChange}
+                    style={{
                         pr: '4px',
                         display: 'flex',
                         alignItems: 'center',
@@ -163,23 +166,7 @@ function Admin(): JSX.Element {
                         mx: 'auto',
                         borderRadius: '20px',
                     }}
-                >
-                    <InputBase
-                    sx={{ ml: 1, flex: 1, alignItems: 'center' }}
-                    placeholder="Search Locations"
-                    inputProps={{ 'aria-label': 'search locations' }}
-                    value={searchTerm}
-                    onChange={handleInputChange}
-                    />
-                    <IconButton 
-                        type="button"
-                        sx={{ p: '10px' }}
-                        aria-label="search"
-                        onClick={handleSearchChange}
-                    >
-                        <SearchIcon />
-                    </IconButton>
-                </Paper>
+                />
 
                 <Button
                     startIcon={<AddIcon />}

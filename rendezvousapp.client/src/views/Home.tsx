@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Paper, IconButton, InputBase, Box } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Container, Typography, Paper, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { User, getUser } from '../utils/apiUtils';
 import LocationCard from '../components/LocationCard';
+import SearchBar from '../components/SearchBar';
 
 interface Location {
     locationId: number;
@@ -65,35 +65,11 @@ function Home(): JSX.Element {
         >
             <Typography variant="h2" sx={{ mb: 4}}>Locations</Typography>
 
-            <Paper
-                component="form"
-                sx={{ 
-                    p: '2px 4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    width: '600px',
-                    height: '70px',
-                    mx: 'auto',
-                    mb: 4,
-                    borderRadius: '20px'
-                }}
-            >
-                <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search Locations"
-                inputProps={{ 'aria-label': 'search locations' }}
+            <SearchBar
                 value={searchTerm}
                 onChange={handleInputChange}
-                />
-                <IconButton 
-                    type="button"
-                    sx={{ p: '10px' }}
-                    aria-label="search"
-                    onClick={handleSearchChange}
-                >
-                    <SearchIcon />
-                </IconButton>
-            </Paper>
+                onSearch={handleSearchChange}
+            />
 
             <Paper sx={{ 
                 height: '50vh',
