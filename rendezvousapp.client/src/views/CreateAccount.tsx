@@ -6,6 +6,14 @@ import OpaqueButton from '../components/OpaqueButton'
 import { useState } from 'react';
 import logo from '../assets/logo.png';
 
+interface UserDTO {
+    firstname: string;
+    lastname: string;
+    phone: string;
+    email: string;
+    password: string;
+}
+
 function CreateAccount() {
     const navigate = useNavigate();
     const [firstname, setFirstname] = useState<string>("");
@@ -22,8 +30,42 @@ function CreateAccount() {
     };
 
     function handleRegister(): void {
-        // TODO
+        // Add validation for the fields
+        if (firstname === "" || lastname === "" || phone === "" || email === "" || password === "" || confirmPassword === "") {
+            alert("Please fill in all fields");
+            return;
+        }
+    
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
 
+        const payload: UserDTO = {
+            firstname: firstname,
+            lastname: lastname,
+            phone: phone,
+            email: email,
+            password: password
+        };
+
+        fetch('/api/user/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }).then(response => {
+            if (response.ok) {
+                alert("Account created successfully");
+                navigate('/login');
+            } else {
+                alert("An error occurred. Please try again later.");
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred. Please try again later.");
+        });
     }
 
     return (
@@ -32,6 +74,7 @@ function CreateAccount() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            mb: 4,
         }}>
                 <Box
                     component="img"
@@ -77,7 +120,6 @@ function CreateAccount() {
                         value={lastname}
                         handleChange={(event) => setLastname(event.target.value)}
                         handleKeyDown={(event) => handleKeyPress(event)}
-                        type="password"
                     />
 
                     <SquareTextfield 
