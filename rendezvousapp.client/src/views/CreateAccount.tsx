@@ -55,16 +55,43 @@ function CreateAccount() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
-        }).then(response => {
+        })
+        .then(response => {
             if (response.ok) {
                 alert("Account created successfully");
-                navigate('/login');
             } else {
-                alert("An error occurred. Please try again later.");
+                throw("An error occurred. Please try again later.");
             }
-        }).catch(error => {
-            console.error('Error:', error);
-            alert("An error occurred. Please try again later.");
+        })
+        .then(() => {
+            fetch(`/api/user/login/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ contact: phone, password }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => {
+                        throw new Error(data.message);
+                    });
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.isActive == "True") {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+        })
+        .catch(error => {
+            console.log(error.message);
         });
     }
 
