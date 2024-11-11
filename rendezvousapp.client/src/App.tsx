@@ -12,6 +12,7 @@ import Admin from './views/admin/Admin';
 import NewLocation from './views/admin/NewLocation';
 import EditLocation from './views/admin/EditLocation';
 import AdminReservations from './views/admin/AdminReservations';
+import CreateAccount from './views/CreateAccount';
 
 function LocationWrapper() {
     const { id } = useParams<{ id: string }>();
@@ -32,6 +33,7 @@ function App(): JSX.Element {
                 <Routes>
                     <Route path="/" element={<Home/>} />
                     <Route path="/login" element={<Login/>} />
+                    <Route path="/register" element={<CreateAccount/>} />
                     <Route path="/reservations" element={<Reservations/>} />
                     <Route path="account" element={<Account/>} />
                     <Route path="/location/:id?" element={<LocationWrapper />} />

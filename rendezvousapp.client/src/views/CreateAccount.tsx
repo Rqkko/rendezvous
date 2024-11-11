@@ -1,62 +1,26 @@
-import { Box, Container, Typography, Divider, Button } from "@mui/material";
-import OpaqueButton from "../components/OpaqueButton";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Box, Button, Container, Divider, Typography } from '@mui/material'
 
-import SquareTextfield from "../components/SquareTextfield";
+import SquareTextfield from '../components/SquareTextfield'
+import OpaqueButton from '../components/OpaqueButton'
+import { useState } from 'react';
 import logo from '../assets/logo.png';
 
-function Login() {
-    const navigate = useNavigate();
-
-    const [contact, setContact] = useState<string>("");
+function CreateAccount() {
+    const [firstname, setFirstname] = useState<string>("");
+    const [lastname, setLastname] = useState<string>("");
+    const [phone, setPhone] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    
-    function handleContact(event: React.ChangeEvent<HTMLInputElement>): void {
-        setContact(event.target.value);
-    };
-
-    function handlePassword(event: React.ChangeEvent<HTMLInputElement>): void {
-        setPassword(event.target.value);
-    };
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
 
     function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
         if (event.key === 'Enter') {
-            handleLogin();
+            handleRegister();
         }
     };
-    
-    function handleLogin(): void {
-        if (contact === "" || password === "") {
-            alert("Please fill in all fields");
-            return;
-        }
-        // Check for user in database
-        fetch(`/api/user/login/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ contact, password }),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                return response.json().then((data) => {
-                    throw new Error(data.message);
-                });
-            }
-            return response.json();
-        })
-        .then((data) => {
-            if (data.isActive == "True") {
-                navigate('/admin');
-            } else {
-                navigate('/');
-            }
-        })
-        .catch((error) => {
-            alert(error.message);
-        });
+
+    function handleRegister(): void {
+        // TODO
     }
 
     return (
@@ -108,10 +72,35 @@ function Login() {
                     </Typography>
 
                     <SquareTextfield 
-                        placeholder="Email / phone no."
+                        placeholder="Firstname"
                         style={{ mt: 2, width: '100%' }}
-                        value={contact}
-                        handleChange={handleContact}
+                        value={firstname}
+                        handleChange={(event) => setFirstname(event.target.value)}
+                        handleKeyDown={(event) => handleKeyPress(event)}
+                    />
+
+                    <SquareTextfield 
+                        placeholder="Lastname"
+                        style={{ mt: 2, width: '100%' }}
+                        value={lastname}
+                        handleChange={(event) => setLastname(event.target.value)}
+                        handleKeyDown={(event) => handleKeyPress(event)}
+                        type="password"
+                    />
+
+                    <SquareTextfield 
+                        placeholder="Phone Number"
+                        style={{ mt: 2, width: '100%' }}
+                        value={phone}
+                        handleChange={(event) => setPhone(event.target.value)}
+                        handleKeyDown={(event) => handleKeyPress(event)}
+                    />
+
+                    <SquareTextfield 
+                        placeholder="Email"
+                        style={{ mt: 2, width: '100%' }}
+                        value={email}
+                        handleChange={(event) => setEmail(event.target.value)}
                         handleKeyDown={(event) => handleKeyPress(event)}
                     />
 
@@ -119,14 +108,23 @@ function Login() {
                         placeholder="Password"
                         style={{ mt: 2, width: '100%' }}
                         value={password}
-                        handleChange={handlePassword}
+                        handleChange={(event) => setPassword(event.target.value)}
+                        handleKeyDown={(event) => handleKeyPress(event)}
+                        type="password"
+                    />
+
+                    <SquareTextfield 
+                        placeholder="Confirm Password"
+                        style={{ mt: 2, width: '100%' }}
+                        value={confirmPassword}
+                        handleChange={(event) => setConfirmPassword(event.target.value)}
                         handleKeyDown={(event) => handleKeyPress(event)}
                         type="password"
                     />
 
                     <OpaqueButton 
-                        handleClick={handleLogin}
-                        text="Login"
+                        handleClick={handleRegister}
+                        text="Create Account"
                         style={{ mt: 3, width: '50%', alignSelf: 'center' }}
                     />
 
@@ -149,7 +147,7 @@ function Login() {
                 </Box>
             </Box>
         </Container>
-    );
+    )
 }
 
-export default Login;
+export default CreateAccount
