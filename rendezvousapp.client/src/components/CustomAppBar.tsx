@@ -193,7 +193,7 @@ function CustomAppBar(): JSX.Element | null {
                         onClose={handleCloseUserMenu}
                         >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={() => handleMenuItemClick(setting)}>
+                            <MenuItem key={setting} onClick={() => handleMenuItemClick(setting)} disabled={user===null}>
                             <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                             </MenuItem>
                         ))}
