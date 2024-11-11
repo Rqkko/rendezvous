@@ -131,6 +131,27 @@ public class UserController : ControllerBase
         return Ok(payload);
     }
 
+    [HttpPost("Register")]
+    public ActionResult Register([FromBody] User user)
+    {
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            string query = "INSERT INTO Users (firstname, lastname, phone, email, password) VALUES (@firstname, @lastname, @phone, @email, @password)";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@firstname", user.Firstname);
+            cmd.Parameters.AddWithValue("@lastname", user.Lastname);
+            cmd.Parameters.AddWithValue("@phone", user.Phone);
+            cmd.Parameters.AddWithValue("@email", user.Email);
+            cmd.Parameters.AddWithValue("@password", user.Password);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        return Ok(new { message = "User registered" });
+    }
+
     [HttpGet("GetUser")]
     public ActionResult GetUser()
     {

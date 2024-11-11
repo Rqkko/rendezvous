@@ -96,7 +96,7 @@ function CustomAppBar(): JSX.Element | null {
     }, [location.pathname]);
 
     // No AppBar when on login page
-    if (location.pathname === '/login') {
+    if (location.pathname === '/login' || location.pathname === '/register') {
         return null;
     }
 

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import SquareTextfield from "../components/SquareTextfield";
-
 import logo from '../assets/logo.png';
 
 function Login() {
@@ -142,6 +141,7 @@ function Login() {
                                 textDecoration: 'underline',
                                 ml: 1
                             }}
+                            onClick={() => navigate('/register')}
                         >
                             Create One
                         </Button>
