@@ -111,8 +111,11 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
 
     // FIXME: fix repeated fetch
     useEffect(() => {
-        fetch('/api/user/checkAdmin')
-        .then((response) => {
+        Promise.all([
+            fetch('/api/user/checkAdmin'),
+            new Promise(resolve => setTimeout(resolve, 500))
+        ])
+        .then(([response]) => {
             console.log(response)
             if (!response.ok) {
                 setIsAdmin(false);

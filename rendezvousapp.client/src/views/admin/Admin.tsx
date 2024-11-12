@@ -26,6 +26,7 @@ function Admin(): JSX.Element {
     const [locations, setLocations] = useState<Location[]>([]);
     const [popupOpen, setPopupOpen] = useState<boolean>(false);
     const [locationToDelete, setLocationToDelete] = useState<Location | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
@@ -37,13 +38,14 @@ function Admin(): JSX.Element {
 
     function fetchLocations(): void {
         fetch('/api/event/getAllLocations')
-            .then((response) => response.json())
-            .then((data) => {
-                setLocations(data);
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
+        .then((response) => response.json())
+        .then((data) => {
+            setLocations(data);
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.log(error.message);
+        });
     };
 
     function handleNewLocationClick(): void {
@@ -109,10 +111,15 @@ function Admin(): JSX.Element {
     );
 
     useEffect(() => {
-        fetch('/api/user/checkAdmin')
-        .then((response) => {
+        Promise.all([
+            fetch('/api/user/checkAdmin'),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ])
+        .then(([response]) => {
             if (!response.ok) {
                 setIsAdmin(false);
+                setLoading(false);
+                throw new Error('Not Admin');
             } else {
                 setIsAdmin(true);
             }
@@ -123,11 +130,19 @@ function Admin(): JSX.Element {
         })
     }, [location.pathname]);
 
+    if (loading) {
+        return (
+            // Loading...
+            <div className="loader" style={{marginTop: '100px'}}></div>
+        );
+    }
+
     if (!isAdmin) {
         return (
             <Unauthorized />
         )
     }
+    
 
     return (
         <Container 

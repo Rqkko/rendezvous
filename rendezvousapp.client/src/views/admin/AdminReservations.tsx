@@ -75,8 +75,11 @@ function Reservations(): JSX.Element {
     useEffect(() => {
         // FIXME: redundant useEffect called (called two times)
         console.log("useEffect called");
-        checkIsAdmin()
-        .then((isAdmin) => {
+        Promise.all([
+            checkIsAdmin(),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ])
+        .then(([isAdmin]) => {
             if (isAdmin) {
                 setIsAdmin(true);
                 return checkReadPermission();

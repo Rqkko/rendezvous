@@ -32,9 +32,10 @@ function NewLocation(): JSX.Element {
     const [locationPostalCode, setLocationPostalCode] = useState<string>('');
     const [locationAdditional, setLocationAdditional] = useState<string>('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState<boolean>(true);
 
-    function checkCreatePermission(): void {
-        fetch('/api/user/checkPermission?permission=create')
+    async function checkCreatePermission(): Promise<void> {
+        return fetch('/api/user/checkPermission?permission=create')
         .then((response) => {
             if (!response.ok) {
                 setCanCreate(false);
@@ -87,20 +88,32 @@ function NewLocation(): JSX.Element {
     }
 
     useEffect(() => {
-        fetch('/api/user/checkAdmin')
-        .then((response) => {
+        Promise.all([
+            fetch('/api/user/checkAdmin'),
+            new Promise(resolve => setTimeout(resolve, 500))
+        ])
+        .then(([response]) => {
             if (!response.ok) {
                 setIsAdmin(false);
+                setLoading(false);
+                throw new Error('Not Admin');
             } else {
                 setIsAdmin(true);
             }
         })
         .then(() => {
             if (isAdmin) {
-                checkCreatePermission();
+                checkCreatePermission()
+                .then(() => setLoading(false));
             }
         });
     });
+
+    if (loading) {
+        return (
+            <div className="loader" style={{marginTop: '100px'}}></div>
+        );
+    }
 
     if (!isAdmin || !canCreate) {
         return (

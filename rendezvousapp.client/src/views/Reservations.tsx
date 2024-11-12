@@ -22,6 +22,7 @@ function Reservations(): JSX.Element {
     const filteredReservations = reservations.filter(reservation =>
         reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    const [loading, setLoading] = useState<boolean>(true);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
@@ -32,23 +33,34 @@ function Reservations(): JSX.Element {
     };
 
     function fetchReservations(): void {
-        fetch('/api/event/getUserReservations')
-            .then(response => response.json())
-            .then(data => {
-                const reservations = data.map((reservation: EventReservation) => ({
-                    ...reservation,
-                    date: new Date(reservation.date) // Convert DateOnly to Date
-                }));
-                setReservations(reservations);
-            })
-            .catch(error => {  
-                console.log(error.message);
-            });
+        Promise.all([
+            fetch('/api/event/getUserReservations'),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ])
+        .then(([response]) => response.json())
+        .then(data => {
+            const reservations = data.map((reservation: EventReservation) => ({
+                ...reservation,
+                date: new Date(reservation.date) // Convert DateOnly to Date
+            }));
+            setReservations(reservations);
+            setLoading(false);
+        })
+        .catch(error => {  
+            console.log(error.message);
+        });
     }
 
     useEffect(() => {
         fetchReservations();
     }, []);
+
+    if (loading) {
+        return (
+            // Loading...
+            <div className="loader" style={{marginTop: '100px'}}></div>
+        );
+    }
 
     return (
         <Container 

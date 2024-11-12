@@ -20,6 +20,7 @@ function Home(): JSX.Element {
     const location = useLocation(); // For path url
     const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setSearchTerm(event.target.value);
@@ -30,14 +31,18 @@ function Home(): JSX.Element {
     };
 
     function fetchLocations(): void {
-        fetch('/api/event/getAllLocations')
-            .then((response) => response.json())
-            .then((data) => {
-                setLocations(data);
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
+        Promise.all([
+            fetch('/api/event/getAllLocations'),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ])
+        .then(([response]) => response.json())
+        .then((data) => {
+            setLocations(data);
+            setLoading(false);
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
     };
 
     function handleSeeMoreClick(locationId: number): void {
@@ -52,6 +57,13 @@ function Home(): JSX.Element {
         getUser().then((result) => setUser(result));
         fetchLocations();
     }, [location.pathname]);
+
+    if (loading) {
+        return (
+            // Loading...
+            <div className="loader" style={{marginTop: '100px'}}></div>
+        );
+    }
 
     return (
         <Container 
