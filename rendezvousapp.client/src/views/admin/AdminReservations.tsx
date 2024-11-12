@@ -161,7 +161,7 @@ function Reservations(): JSX.Element {
                 ) : (
                     filteredReservations.map((reservation) => (
                         <AdminReservationCard
-                            // TODO: Add other props
+                            // TODO: Add other props (See more?)
                             firstname={reservation.firstname}
                             lastname={reservation.lastname}
                             locationName={reservation.locationName}
