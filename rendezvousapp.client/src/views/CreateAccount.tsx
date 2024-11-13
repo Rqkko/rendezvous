@@ -30,13 +30,10 @@ function CreateAccount() {
             return;
         }
 
-        // Validate phone number (basic validation for demonstration purposes)
+        // Validate phone number
         const phoneRegex = /^[0-9\b-]+$/;
         if (value === '' || phoneRegex.test(value)) {
             setPhone(formatPhoneNumber(value));
-            // setError('');
-        } else {
-            // setError('Please enter a valid phone number');
         }
     }
 
