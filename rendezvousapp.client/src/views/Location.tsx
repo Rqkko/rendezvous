@@ -94,6 +94,27 @@ function Location({ locationId }: LocationProps): JSX.Element {
         }
 
         setOpenPayment(true);
+
+        // Check availability of the selected date
+        fetch(`/api/event/checkDateIsAvailable/${location?.locationId}/${eventDate?.format('YYYY-MM-DD')}`)
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => {
+                    throw new Error(data.message);
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.isAvailable) {
+                setOpenPayment(true);
+            } else {
+                alert("Location is already reserved for the date: " + eventDate?.format('DD-MM-YYYY'));
+            }
+        })
+        .catch((error) => {
+            alert('Error checking date availability: ' + error.message);
+        });
     }
 
     function handleClosePayment(): void {
@@ -151,8 +172,13 @@ function Location({ locationId }: LocationProps): JSX.Element {
             }, 1000);
         })
         .catch((error) => {
-            alert('Error making reservation: ' + error.message);
-            setShowLoading(false);
+            if (error.message.includes('Location is already reserved')) {
+                alert("Location is already reserved for the date: " + eventDate?.format('DD-MM-YYYY'));
+                setShowLoading(false);
+            } else {
+                alert('Error making reservation: ' + error.message);
+                setShowLoading(false);
+            }
         });
     }
     

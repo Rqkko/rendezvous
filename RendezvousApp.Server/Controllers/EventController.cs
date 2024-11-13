@@ -171,6 +171,34 @@ public class EventController : ControllerBase
         }
     }
 
+    [HttpGet("CheckDateIsAvailable/{locationId}/{date}")]
+    public ActionResult CheckDateIsAvailable([FromRoute] int locationId, [FromRoute] DateOnly date)
+    {
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            MySqlCommand cmd = new MySqlCommand("CheckDateIsAvailable", connection);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@c_locationId", locationId);
+            cmd.Parameters.AddWithValue("@c_date", date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+
+            // output parameter
+            MySqlParameter isAvailableParam = new MySqlParameter("@isAvailable", MySqlDbType.Byte);
+            isAvailableParam.Direction = System.Data.ParameterDirection.Output;
+            cmd.Parameters.Add(isAvailableParam);
+
+            cmd.ExecuteNonQuery();
+
+
+            // Retrieve the output parameter value
+            bool isAvailable = Convert.ToBoolean(isAvailableParam.Value);
+
+            return Ok(new { isAvailable });
+        }
+    }
+
     // Add Payment, Event, and Reservation to the Database
     [HttpPost("AddReservation")]
     public ActionResult AddReservation([FromBody] ReservationPayloadDTO data)
@@ -181,67 +209,38 @@ public class EventController : ControllerBase
             return Unauthorized(new { message = "User Not Logged in" });
         }
 
-        using (MySqlConnection connection = new MySqlConnection(_connectionString))
-        {
-            connection.Open();
-
-            using (var transaction = connection.BeginTransaction())
+        try{
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                try
-                {
-                    // Insert into Payments table
-                    string paymentsQuery = @"
-                        INSERT INTO Payments (paymentAmount, paymentDateTime) 
-                        VALUES (@paymentAmount, @paymentDateTime);
-                        SELECT LAST_INSERT_ID();
-                    ";
-                    MySqlCommand paymentsCmd = new MySqlCommand(paymentsQuery, connection, transaction);
-                    paymentsCmd.Parameters.AddWithValue("@paymentAmount", data.Payment.PaymentAmount);
-                    paymentsCmd.Parameters.AddWithValue("@paymentDateTime", data.Payment.PaymentDateTime);
-                    var paymentId = Convert.ToInt32(paymentsCmd.ExecuteScalar());
+                connection.Open();
 
-                    // Insert into Events table
-                    string eventsQuery = @"
-                        INSERT INTO Events (locationId, eventName, eventDescription, date, theme, guestCount)
-                        VALUES (@locationId, @eventName, @eventDescription, @date, @theme, @guestCount);
-                        SELECT LAST_INSERT_ID();
-                    ";
-                    MySqlCommand eventsCmd = new MySqlCommand(eventsQuery, connection, transaction);
-                    eventsCmd.Parameters.AddWithValue("@locationId", data.LocationId);
-                    eventsCmd.Parameters.AddWithValue("@eventName", data.Event.EventName);
-                    eventsCmd.Parameters.AddWithValue("@eventDescription", data.Event.EventDescription);
-                    eventsCmd.Parameters.AddWithValue("@date", data.Event.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-                    eventsCmd.Parameters.AddWithValue("@theme", data.Event.Theme);
-                    eventsCmd.Parameters.AddWithValue("@guestCount", data.Event.GuestCount);
-                    var eventId = Convert.ToInt32(eventsCmd.ExecuteScalar());
+                MySqlCommand cmd = new MySqlCommand("ReserveEvent", connection);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    // Insert into Reservations table
-                    string reservationsQuery = @"
-                        INSERT INTO Reservations (userId, eventId, reservationDateTime, paymentId)
-                        VALUES (@userId, @eventId, @reservationDateTime, @paymentId)
-                    ";
-                    MySqlCommand reservationsCmd = new MySqlCommand(reservationsQuery, connection, transaction);
-                    reservationsCmd.Parameters.AddWithValue("@userId", userId);
-                    reservationsCmd.Parameters.AddWithValue("@eventId", eventId);
-                    reservationsCmd.Parameters.AddWithValue("@reservationDateTime", data.Reservation.ReservationDateTime.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture));
-                    reservationsCmd.Parameters.AddWithValue("@paymentId", paymentId);
-                    var reservationId = reservationsCmd.ExecuteScalar();
+                cmd.Parameters.AddWithValue("@p_locationId", data.LocationId);
+                cmd.Parameters.AddWithValue("@p_eventName", data.Event.EventName);
+                cmd.Parameters.AddWithValue("@p_eventDescription", data.Event.EventDescription);
+                cmd.Parameters.AddWithValue("@p_eventDate", data.Event.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("@p_theme", data.Event.Theme);
+                cmd.Parameters.AddWithValue("@p_guestCount", data.Event.GuestCount);
+                cmd.Parameters.AddWithValue("@p_reservationDateTime", data.Reservation.ReservationDateTime.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("@p_paymentAmount", data.Payment.PaymentAmount);
+                cmd.Parameters.AddWithValue("@p_paymentDateTime", data.Payment.PaymentDateTime);
+                cmd.Parameters.AddWithValue("@p_userId", userId);
 
-                    // Commit the transaction if all inserts succeed
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    // Roll back the transaction if any insert fails
-                    try {
-                        transaction.Rollback();
-                    }
-                    catch (Exception ex2)
-                    {
-                        return StatusCode(500, $"Rollback Failed: {ex2.Message}");
-                    }
-                    return StatusCode(500, $"Internal server error: {ex.Message}");
-                }
+                cmd.ExecuteNonQuery();
+            }
+        }
+        catch (MySqlException ex)
+        {
+            if (ex.Number == 45000 || ex.Message.Contains("Location is already reserved")) // Custom error codes start at 50000 in SQL Server
+            {
+                return BadRequest(new { message = ex.Message});
+            }
+            else
+            {
+                // Handle other SQL errors here
+                return StatusCode(500, new { message = "An error occurred while processing the reservation. " + ex.Message });
             }
         }
 
