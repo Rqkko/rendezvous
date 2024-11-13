@@ -107,7 +107,7 @@ function CreateAccount() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ contact: phone, password }),
+            body: JSON.stringify({ contact: phone.replace(/-/g, ''), password }),
             })
             .then((response) => {
                 if (!response.ok) {
@@ -194,7 +194,7 @@ function CreateAccount() {
                         handleChange={handlePhoneChange}
                         handleKeyDown={(event) => handleKeyPress(event)}
                     />
-                    
+
                     <SquareTextfield 
                         placeholder="Email"
                         style={{ mt: 2, width: '100%' }}
