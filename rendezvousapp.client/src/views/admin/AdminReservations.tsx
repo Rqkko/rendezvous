@@ -157,7 +157,7 @@ function Reservations(): JSX.Element {
         >
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
                 {filteredReservations.length === 0 ? (
-                    <Typography variant="h4">No locations found</Typography>
+                    <Typography variant="h4">No reservations found</Typography>
                 ) : (
                     filteredReservations.map((reservation) => (
                         <AdminReservationCard
