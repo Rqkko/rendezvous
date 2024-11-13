@@ -171,6 +171,34 @@ public class EventController : ControllerBase
         }
     }
 
+    [HttpGet("CheckDateIsAvailable/{locationId}/{date}")]
+    public ActionResult CheckDateIsAvailable([FromRoute] int locationId, [FromRoute] DateOnly date)
+    {
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            MySqlCommand cmd = new MySqlCommand("CheckDateIsAvailable", connection);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@c_locationId", locationId);
+            cmd.Parameters.AddWithValue("@c_date", date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+
+            // output parameter
+            MySqlParameter isAvailableParam = new MySqlParameter("@isAvailable", MySqlDbType.Byte);
+            isAvailableParam.Direction = System.Data.ParameterDirection.Output;
+            cmd.Parameters.Add(isAvailableParam);
+
+            cmd.ExecuteNonQuery();
+
+
+            // Retrieve the output parameter value
+            bool isAvailable = Convert.ToBoolean(isAvailableParam.Value);
+
+            return Ok(new { isAvailable });
+        }
+    }
+
     // Add Payment, Event, and Reservation to the Database
     [HttpPost("AddReservation")]
     public ActionResult AddReservation([FromBody] ReservationPayloadDTO data)
