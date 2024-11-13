@@ -87,6 +87,12 @@ function Location({ locationId }: LocationProps): JSX.Element {
             return;
         }
 
+        // Handle guest count
+        if (location && parseInt(guest) > location.capacity) {
+            alert('Number of guests exceeds capacity');
+            return;
+        }
+
         setOpenPayment(true);
     }
 
