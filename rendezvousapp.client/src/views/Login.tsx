@@ -11,9 +11,49 @@ function Login() {
 
     const [contact, setContact] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
+    function formatPhoneNumber(value: string): string {
+        // Remove all non-numeric characters
+        const cleaned = value.replace(/\D/g, '');
+
+        // Format the cleaned number
+        const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+
+        if (match) {
+            return [match[1], match[2], match[3]].filter(Boolean).join('-');
+        }
+
+        return value;
+    }
+
+    function cleanContact(contact: string): string {
+        if (contact.startsWith("0")) {
+            return contact.replace(/-/g, '');
+        }
     
+        return contact;
+    }
+
     function handleContact(event: React.ChangeEvent<HTMLInputElement>): void {
-        setContact(event.target.value);
+        const value = event.target.value;
+
+        // Phone number
+        if (value.startsWith("0")) {
+            if (value.length > 12) {
+                return;
+            }
+    
+            // Validate phone number (basic validation for demonstration purposes)
+            const phoneRegex = /^[0-9\b-]+$/;
+            if (value === '' || phoneRegex.test(value)) {
+                setContact(formatPhoneNumber(value));
+            }
+        }
+
+        // Email
+        else {
+            setContact(value);
+        }
     };
 
     function handlePassword(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -31,13 +71,16 @@ function Login() {
             alert("Please fill in all fields");
             return;
         }
+
+        const cleanedContact = cleanContact(contact);
+
         // Check for user in database
         fetch(`/api/user/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ contact, password }),
+            body: JSON.stringify({ contact: cleanedContact, password }),
         })
         .then((response) => {
             if (!response.ok) {
