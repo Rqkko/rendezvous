@@ -81,6 +81,12 @@ function Location({ locationId }: LocationProps): JSX.Element {
             return;
         }
 
+        // Handle past date
+        if (eventDate?.isBefore(new Date(), 'day')) {
+            alert('Please reserve a future date');
+            return;
+        }
+
         setOpenPayment(true);
     }
 
@@ -239,7 +245,6 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 label="Event Date"
                                 value={eventDate}
                                 onChange={(newValue) => setEventDate(newValue)}
-                                disablePast
                             />
 
                             <RoundedCornerTextfield

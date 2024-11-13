@@ -7,10 +7,9 @@ interface CustomDatePickerProps {
     value: Dayjs | null;
     label: string;
     onChange: (newValue: Dayjs | null) => void;
-    disablePast: boolean;
 }
 
-function CustomDatePicker({ value, label, onChange, disablePast }: CustomDatePickerProps): JSX.Element {
+function CustomDatePicker({ value, label, onChange }: CustomDatePickerProps): JSX.Element {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -28,7 +27,6 @@ function CustomDatePicker({ value, label, onChange, disablePast }: CustomDatePic
                     },
                 }}
                 onChange={(newValue) => onChange(newValue)}
-                disablePast={disablePast}
                 views={['year', 'month', 'day']}
                 format="DD/MM/YYYY"
                 slots={{
