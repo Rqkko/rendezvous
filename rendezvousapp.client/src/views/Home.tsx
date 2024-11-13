@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { User, getUser } from '../utils/apiUtils';
 import LocationCard from '../components/LocationCard';
 import SearchBar from '../components/SearchBar';
+import { set } from 'date-fns';
 
 interface Location {
     locationId: number;
@@ -20,6 +21,7 @@ function Home(): JSX.Element {
     const location = useLocation(); // For path url
     const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
+    const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -28,6 +30,9 @@ function Home(): JSX.Element {
 
     function handleSearchChange(): void {
         setSearchQuery(searchTerm);
+        setFilteredLocations(locations.filter(location =>
+            location.locationName.toLowerCase().includes(searchTerm.toLowerCase())
+        ));
     };
 
     function fetchLocations(): void {
@@ -35,13 +40,22 @@ function Home(): JSX.Element {
             fetch('/api/event/getAllLocations'),
             new Promise(resolve => setTimeout(resolve, 1000))
         ])
-        .then(([response]) => response.json())
+        .then(([response]) => {
+            if (!response.ok) {
+                setLocations([]);
+                setFilteredLocations([]);
+                setLoading(false);
+                throw new Error('Failed to fetch locations');
+            }
+            return response.json();
+        })
         .then((data) => {
             setLocations(data);
+            setFilteredLocations(data);
             setLoading(false);
         })
         .catch((error) => {
-            alert(error.message);
+            console.log(error.message);
         });
     };
 
@@ -49,9 +63,11 @@ function Home(): JSX.Element {
         navigate(`/location/${locationId}`)
     }
 
-    const filteredLocations = locations.filter(location =>
-        location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // if (locations.length !== 0) {
+    //     const filteredLocations = locations.filter(location =>
+    //         location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
+    //     );
+    // }
 
     useEffect(() => {
         getUser().then((result) => setUser(result));
@@ -100,7 +116,7 @@ function Home(): JSX.Element {
                 mb: 2,
                 }}
             >
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, }}> 
                     {filteredLocations.length === 0 ? (
                         <Typography variant="h4">No locations found</Typography>
                     ) : (

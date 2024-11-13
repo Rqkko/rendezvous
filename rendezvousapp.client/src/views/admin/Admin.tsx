@@ -24,6 +24,7 @@ function Admin(): JSX.Element {
     const location = useLocation(); // For path url
     const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
+    const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
     const [popupOpen, setPopupOpen] = useState<boolean>(false);
     const [locationToDelete, setLocationToDelete] = useState<Location | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -37,10 +38,22 @@ function Admin(): JSX.Element {
     };
 
     function fetchLocations(): void {
-        fetch('/api/event/getAllLocations')
-        .then((response) => response.json())
+        Promise.all([
+            fetch('/api/event/getAllLocations'),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ])
+        .then(([response]) => {
+            if (!response.ok) {
+                setLocations([]);
+                setFilteredLocations([]);
+                setLoading(false);
+                throw new Error('Failed to fetch locations');
+            }
+            return response.json();
+        })
         .then((data) => {
             setLocations(data);
+            setFilteredLocations(data);
             setLoading(false);
         })
         .catch((error) => {
@@ -105,10 +118,6 @@ function Admin(): JSX.Element {
             setPopupOpen(false);
         });
     }
-
-    const filteredLocations = locations.filter(location =>
-        location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     useEffect(() => {
         Promise.all([
