@@ -74,6 +74,27 @@ function Location({ locationId }: LocationProps): JSX.Element {
         });
     }
 
+    function handleGuestChange(e: React.ChangeEvent<HTMLInputElement>): void {
+        if (e.target.value.includes('-')) {
+            return;
+        }
+
+        if (e.target.value === '') {
+            setGuest('');
+            return;
+        }
+
+        if (parseInt(e.target.value) >= 0) {
+            setGuest(e.target.value);
+        }
+    }
+
+    function handleGuestKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
+        if (e.key === '-') {
+            e.preventDefault();
+        }
+    }
+
     function handleConfirmClick(): void {
         // Validate input
         if (eventName === '' || eventDate === null || theme === '' || guest === '' || eventDescription === '') {
@@ -87,15 +108,15 @@ function Location({ locationId }: LocationProps): JSX.Element {
             return;
         }
 
-        // Handle guest count
-        if (location && parseInt(guest) > location.capacity) {
-            alert('Number of guests exceeds capacity');
+        // Check Guest Count is a non-zero number
+        if (parseInt(guest) <= 0) {
+            alert('Please enter a valid number of guests');
             return;
         }
 
-        // Check Guest Count is a number
-        if (isNaN(parseInt(guest))) {
-            alert('Please enter a valid number of guests');
+        // Handle guest count
+        if (location && parseInt(guest) > location.capacity) {
+            alert('Number of guests exceeds capacity');
             return;
         }
 
@@ -293,8 +314,11 @@ function Location({ locationId }: LocationProps): JSX.Element {
                             <RoundedCornerTextfield
                                 label="No. of Guests"
                                 value={guest}
-                                handleChange={(e) => setGuest(e.target.value)}
+                                // handleChange={(e) => setGuest(e.target.value)}
+                                handleChange={handleGuestChange}
+                                handleKeyDown={handleGuestKeyDown}
                                 style={{ width: '100%', my:2 }}
+                                type="number"
                             />
 
                             <RoundedCornerTextfield
