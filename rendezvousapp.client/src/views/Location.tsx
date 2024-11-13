@@ -93,7 +93,11 @@ function Location({ locationId }: LocationProps): JSX.Element {
             return;
         }
 
-        setOpenPayment(true);
+        // Check Guest Count is a number
+        if (isNaN(parseInt(guest))) {
+            alert('Please enter a valid number of guests');
+            return;
+        }
 
         // Check availability of the selected date
         fetch(`/api/event/checkDateIsAvailable/${location?.locationId}/${eventDate?.format('YYYY-MM-DD')}`)
