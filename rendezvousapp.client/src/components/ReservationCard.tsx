@@ -72,7 +72,7 @@ function ReservationCard({ locationName, eventName, date, theme, guestCount, pro
                     </Typography>
 
                     {/* TODO: Add See More function */}
-                    <Button
+                    {/* <Button
                         sx={{
                             color: '#2e5d4b',
                             textDecoration: 'underline',
@@ -82,7 +82,7 @@ function ReservationCard({ locationName, eventName, date, theme, guestCount, pro
                         onClick={() => alert(eventDescription)}
                     >
                         See more (***)
-                    </Button>
+                    </Button> */}
                 </Box>
             </CardContent>
         </Card>
