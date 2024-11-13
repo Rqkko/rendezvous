@@ -81,6 +81,21 @@ function Location({ locationId }: LocationProps): JSX.Element {
             return;
         }
 
+        // Handle past date
+        if (eventDate?.isBefore(new Date(), 'day')) {
+            alert('Please reserve a future date');
+            return;
+        }
+
+        // Handle guest count
+        if (location && parseInt(guest) > location.capacity) {
+            alert('Number of guests exceeds capacity');
+            return;
+        }
+
+        setOpenPayment(true);
+
+        // Check availability of the selected date
         fetch(`/api/event/checkDateIsAvailable/${location?.locationId}/${eventDate?.format('YYYY-MM-DD')}`)
         .then((response) => {
             if (!response.ok) {
@@ -262,7 +277,6 @@ function Location({ locationId }: LocationProps): JSX.Element {
                                 label="Event Date"
                                 value={eventDate}
                                 onChange={(newValue) => setEventDate(newValue)}
-                                disablePast
                             />
 
                             <RoundedCornerTextfield

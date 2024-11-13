@@ -39,7 +39,6 @@ function CustomAppBar(): JSX.Element | null {
             }
         }
         else if (setting === "Reservations") {
-            // TODO: Handle Admin's Reservations
             if (isAdmin) {
                 navigate('/admin/reservations');
             } else {
