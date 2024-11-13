@@ -139,8 +139,13 @@ function Location({ locationId }: LocationProps): JSX.Element {
             }, 1000);
         })
         .catch((error) => {
-            alert('Error making reservation: ' + error.message);
-            setShowLoading(false);
+            if (error.message.includes('Location is already reserved')) {
+                alert("Location is already reserved for the date: " + eventDate?.format('DD-MM-YYYY'));
+                setShowLoading(false);
+            } else {
+                alert('Error making reservation: ' + error.message);
+                setShowLoading(false);
+            }
         });
     }
     
