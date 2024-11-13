@@ -23,6 +23,37 @@ function CreateAccount() {
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
 
+    function handlePhoneChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        const value = event.target.value;
+        // Invalid phone length
+        if (value.length > 12) {
+            return;
+        }
+
+        // Validate phone number (basic validation for demonstration purposes)
+        const phoneRegex = /^[0-9\b-]+$/;
+        if (value === '' || phoneRegex.test(value)) {
+            setPhone(formatPhoneNumber(value));
+            // setError('');
+        } else {
+            // setError('Please enter a valid phone number');
+        }
+    }
+
+    function formatPhoneNumber(value: string): string {
+        // Remove all non-numeric characters
+        const cleaned = value.replace(/\D/g, '');
+
+        // Format the cleaned number
+        const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+
+        if (match) {
+            return [match[1], match[2], match[3]].filter(Boolean).join('-');
+        }
+
+        return value;
+    }
+
     function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
         if (event.key === 'Enter') {
             handleRegister();
@@ -35,6 +66,13 @@ function CreateAccount() {
             alert("Please fill in all fields");
             return;
         }
+
+        // Add validation for email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address");
+            return;
+        }
     
         if (password !== confirmPassword) {
             alert("Passwords do not match");
@@ -44,7 +82,7 @@ function CreateAccount() {
         const payload: UserDTO = {
             firstname: firstname,
             lastname: lastname,
-            phone: phone,
+            phone: phone.replace(/-/g, ''),
             email: email,
             password: password
         };
@@ -153,10 +191,10 @@ function CreateAccount() {
                         placeholder="Phone Number"
                         style={{ mt: 2, width: '100%' }}
                         value={phone}
-                        handleChange={(event) => setPhone(event.target.value)}
+                        handleChange={handlePhoneChange}
                         handleKeyDown={(event) => handleKeyPress(event)}
                     />
-
+                    
                     <SquareTextfield 
                         placeholder="Email"
                         style={{ mt: 2, width: '100%' }}
