@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 14, 2024 at 01:08 PM
+-- Generation Time: Nov 14, 2024 at 04:02 PM
 -- Server version: 8.0.35
 -- PHP Version: 8.2.20
 
@@ -187,7 +187,9 @@ CREATE TABLE `Events` (
 
 INSERT INTO `Events` (`eventId`, `locationId`, `eventName`, `eventDescription`, `date`, `theme`, `guestCount`) VALUES
 (3, 3, 'Admin Meetup', 'Meeting to have a discussion on the upcoming Database Project Presentation', '2024-11-20', 'Casual', 3),
-(4, 2, 'Alone Time with Myself', 'Treat myself by renting the entire cafe to myself', '2024-11-30', 'Moody', 1);
+(4, 2, 'Alone Time with Myself', 'Treat myself by renting the entire cafe to myself', '2024-11-30', 'Moody', 1),
+(5, 1, 'John\'s Birthday Party', 'The best party in town!', '2024-12-30', 'Royal', 30),
+(6, 1, 'Graduation Party', 'SIIT Graduation Party', '2024-12-01', 'Disco', 25);
 
 -- --------------------------------------------------------
 
@@ -235,7 +237,9 @@ CREATE TABLE `Payments` (
 
 INSERT INTO `Payments` (`paymentId`, `paymentAmount`, `paymentDateTime`) VALUES
 (3, 4000, '2024-11-14 13:00:01'),
-(4, 6000, '2024-11-14 13:01:24');
+(4, 6000, '2024-11-14 13:01:24'),
+(5, 5000, '2024-11-14 13:14:24'),
+(6, 5000, '2024-11-14 13:37:22');
 
 -- --------------------------------------------------------
 
@@ -257,7 +261,9 @@ CREATE TABLE `Reservations` (
 
 INSERT INTO `Reservations` (`reservationId`, `userId`, `eventId`, `reservationDateTime`, `paymentId`) VALUES
 (3, 1, 3, '2024-11-14 13:00:01', 3),
-(4, 4, 4, '2024-11-14 13:01:24', 4);
+(4, 4, 4, '2024-11-14 13:01:24', 4),
+(5, 5, 5, '2024-11-14 13:14:24', 5),
+(6, 7, 6, '2024-11-14 13:37:22', 6);
 
 --
 -- Triggers `Reservations`
@@ -304,7 +310,8 @@ INSERT INTO `Users` (`userId`, `phone`, `email`, `password`, `firstname`, `lastn
 (2, '0999999999', '6522781051@g.siit.tu.ac.th', '1234', 'Acharawan', 'Muenpilomthong'),
 (3, '0888888888', '6522771268@g.siit.tu.ac.th', '1234', 'Siraprapha', 'Pongpan'),
 (4, '0777777777', 'reader@gmail.com', '1234', 'Reader', 'Guy'),
-(5, '0123456789', 'test@example.com', '1234', 'John', 'Doe');
+(5, '0123456789', 'test@example.com', '1234', 'John', 'Doe'),
+(7, '0998887777', 'adam.smith@gmail.com', '1234', 'Adam', 'Smith');
 
 --
 -- Indexes for dumped tables
@@ -379,7 +386,7 @@ ALTER TABLE `Admins`
 -- AUTO_INCREMENT for table `Events`
 --
 ALTER TABLE `Events`
-  MODIFY `eventId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `eventId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `Locations`
@@ -391,19 +398,19 @@ ALTER TABLE `Locations`
 -- AUTO_INCREMENT for table `Payments`
 --
 ALTER TABLE `Payments`
-  MODIFY `paymentId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `paymentId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `Reservations`
 --
 ALTER TABLE `Reservations`
-  MODIFY `reservationId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `reservationId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
