@@ -37,6 +37,12 @@ function Admin(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
+    function filterLocations(): void {
+        setFilteredLocations(locations.filter(location =>
+            location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
+        ));
+    }
+
     function fetchLocations(): void {
         Promise.all([
             fetch('/api/event/getAllLocations'),
@@ -138,6 +144,10 @@ function Admin(): JSX.Element {
             fetchLocations();
         })
     }, [location.pathname]);
+
+    useEffect(() => {
+        filterLocations();
+    }, [searchQuery]);
 
     if (loading) {
         return (

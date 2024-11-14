@@ -22,9 +22,7 @@ function Reservations(): JSX.Element {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [reservations, setReservations] = useState<EventReservation[]>([]);
-    const filteredReservations = reservations.filter(reservation =>
-        reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const [filteredReservations, setFilteredReservations] = useState<EventReservation[]>([]);
 
     async function checkIsAdmin(): Promise<boolean> {
         return fetch('/api/user/checkAdmin')
@@ -72,6 +70,12 @@ function Reservations(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
+    function filterReservations(): void {
+        setFilteredReservations(reservations.filter(reservation =>
+            reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+        ));
+    }
+
     useEffect(() => {
         // FIXME: redundant useEffect called (called two times)
         console.log("useEffect called");
@@ -106,6 +110,10 @@ function Reservations(): JSX.Element {
             setLoading(false);
         })
     }, []);
+
+    useEffect(() => {
+        filterReservations();
+    }, [searchQuery]);
 
     if (loading) {
         return (

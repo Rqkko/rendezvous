@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { User, getUser } from '../utils/apiUtils';
 import LocationCard from '../components/LocationCard';
 import SearchBar from '../components/SearchBar';
-import { set } from 'date-fns';
 
 interface Location {
     locationId: number;
@@ -30,10 +29,13 @@ function Home(): JSX.Element {
 
     function handleSearchChange(): void {
         setSearchQuery(searchTerm);
+    };
+
+    function filterLocations(): void {
         setFilteredLocations(locations.filter(location =>
             location.locationName.toLowerCase().includes(searchTerm.toLowerCase())
         ));
-    };
+    }
 
     function fetchLocations(): void {
         Promise.all([
@@ -63,16 +65,14 @@ function Home(): JSX.Element {
         navigate(`/location/${locationId}`)
     }
 
-    // if (locations.length !== 0) {
-    //     const filteredLocations = locations.filter(location =>
-    //         location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
-    //     );
-    // }
-
     useEffect(() => {
         getUser().then((result) => setUser(result));
         fetchLocations();
     }, [location.pathname]);
+
+    useEffect(() => {
+        filterLocations();
+    }, [searchQuery]);
 
     if (loading) {
         return (
@@ -98,12 +98,12 @@ function Home(): JSX.Element {
                 onChange={handleInputChange}
                 onSearch={handleSearchChange}
                 onClear={() => {
-                    setSearchTerm('');
+                    setSearchTerm('')
                     setSearchQuery('');
                 }}
             />
 
-            <Paper sx={{ 
+            <Paper sx={{
                 height: '50vh',
                 width: '60vw',
                 overflow: 'auto',

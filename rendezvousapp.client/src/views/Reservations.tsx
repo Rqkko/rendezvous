@@ -19,9 +19,7 @@ function Reservations(): JSX.Element {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [reservations, setReservations] = useState<EventReservation[]>([]);
-    const filteredReservations = reservations.filter(reservation =>
-        reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const [filteredReservations, setFilteredReservations] = useState<EventReservation[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -31,6 +29,12 @@ function Reservations(): JSX.Element {
     function handleSearchChange(): void {
         setSearchQuery(searchTerm);
     };
+
+    function filterReservations(): void {
+        setFilteredReservations(reservations.filter(reservation =>
+            reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+        ));
+    }
 
     function fetchReservations(): void {
         Promise.all([
@@ -54,6 +58,10 @@ function Reservations(): JSX.Element {
     useEffect(() => {
         fetchReservations();
     }, []);
+
+    useEffect(() => {
+        filterReservations();
+    }, [searchQuery])
 
     if (loading) {
         return (
