@@ -138,7 +138,7 @@ function Reservations(): JSX.Element {
                 alignItems: 'center'
         }}
     >
-        <Typography variant="h2" sx={{ mb: 4}}>My Reservations</Typography>
+        <Typography variant="h2" sx={{ mb: 4}}>Customer Reservations</Typography>
 
         <SearchBar
             value={searchTerm}
