@@ -58,7 +58,7 @@ function Reservations(): JSX.Element {
             new Promise(resolve => setTimeout(resolve, 1000))
         ])
         .then(([reservations]) => {
-            if (reservations) {
+            if (reservations && reservations.length > 0) {
                 setReservations(reservations);
             } else {
                 console.log("No reservations found");
