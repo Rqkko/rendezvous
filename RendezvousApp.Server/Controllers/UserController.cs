@@ -142,6 +142,11 @@ public class UserController : ControllerBase
     [HttpPost("Register")]
     public ActionResult Register([FromBody] User user)
     {
+        if (_encryptionKey == null)
+        {
+            return StatusCode(500, new { message = "Encryption key not found" });
+        }
+
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
@@ -153,6 +158,7 @@ public class UserController : ControllerBase
             cmd.Parameters.AddWithValue("@c_phone", user.Phone);
             cmd.Parameters.AddWithValue("@c_email", user.Email);
             cmd.Parameters.AddWithValue("@c_password", user.Password);
+            cmd.Parameters.AddWithValue("@c_encryptionKey", _encryptionKey);
             try
             {
                 cmd.ExecuteNonQuery();
