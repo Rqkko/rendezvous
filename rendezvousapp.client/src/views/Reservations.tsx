@@ -36,27 +36,38 @@ function Reservations(): JSX.Element {
         ));
     }
 
-    function fetchReservations(): void {
-        Promise.all([
-            fetch('/api/event/getUserReservations'),
-            new Promise(resolve => setTimeout(resolve, 1000))
-        ])
-        .then(([response]) => response.json())
+    async function fetchReservations(): Promise<EventReservation[] | null> {
+        return fetch('/api/event/getUserReservations')
+        .then(response => response.json())
         .then(data => {
             const reservations = data.map((reservation: EventReservation) => ({
                 ...reservation,
                 date: new Date(reservation.date) // Convert DateOnly to Date
             }));
-            setReservations(reservations);
-            setLoading(false);
+            return reservations;
         })
         .catch(error => {  
             console.log(error.message);
+            return null;
         });
     }
 
     useEffect(() => {
-        fetchReservations();
+        Promise.all([
+            fetchReservations(),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ])
+        .then(([reservations]) => {
+            if (reservations) {
+                setReservations(reservations);
+            } else {
+                console.log("No reservations found");
+            }
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error.message);
+            setLoading(false);
+        });
     }, []);
 
     useEffect(() => {
