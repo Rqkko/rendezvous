@@ -13,20 +13,21 @@ public class UserController : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private readonly string _connectionString;
+    private readonly string? _encryptionKey;
 
     public UserController(IConfiguration configuration, string connectionString)
     {
         _configuration = configuration;
         _connectionString = connectionString;
+        _encryptionKey = _configuration["EncryptionKey"];
     }
 
     [HttpPost("Login")] // contact is email/phoneNumber
     public ActionResult Login([FromBody] LoginCredential loginCredential)
     {
         User? user = null;
-        string? encryptionKey = _configuration["EncryptionKey"];
         
-        if (encryptionKey == null)
+        if (_encryptionKey == null)
         {
             return StatusCode(500, new { message = "Encryption key not found" });
         }
@@ -47,7 +48,7 @@ public class UserController : ControllerBase
 
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@contact", loginCredential.Contact);
-            cmd.Parameters.AddWithValue("@encryptionKey", encryptionKey);
+            cmd.Parameters.AddWithValue("@encryptionKey", _encryptionKey);
 
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
