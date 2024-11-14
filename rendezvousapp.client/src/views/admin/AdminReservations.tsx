@@ -98,7 +98,7 @@ function Reservations(): JSX.Element {
             throw new Error('Not Enough Permissions');
         })
         .then((reservations) => {
-            if (reservations && reservations.length > 0) {
+            if (reservations && reservations?.length > 0) {
                 setReservations(reservations);
             } else {
                 console.log("No reservations found");
