@@ -49,7 +49,7 @@ function CustomAppBar(): JSX.Element | null {
             navigate("/account")
         }
         else if (setting === "Logout") {
-            fetch('api/user/logout', {
+            fetch('/api/user/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
