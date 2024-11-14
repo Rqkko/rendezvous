@@ -50,6 +50,8 @@ function ReservationCard({ locationName, eventName, date, theme, guestCount, pro
 
                 <Typography variant="body1" align="left" sx={{ color: '#2e5d4b' }}><strong>Location:</strong> {locationName}</Typography>
 
+                <Typography variant="body1" align="left" sx={{ color: '#2e5d4b' }}><strong>Theme:</strong> {theme}</Typography>
+
                 <Typography variant="body2" sx={{ 
                     display: 'flex', 
                     alignItems: 'center', 
