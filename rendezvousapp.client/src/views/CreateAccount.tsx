@@ -94,8 +94,10 @@ function CreateAccount() {
         .then(response => {
             if (response.ok) {
                 alert("Account created successfully");
+            } else if (response.status == 409) { // Conflict
+                throw new Error("An account with this email or phone number already exists");
             } else {
-                throw("An error occurred. Please try again later.");
+                throw new Error("An error occurred. Please try again later.");
             }
         })
         .then(() => {
@@ -126,7 +128,7 @@ function CreateAccount() {
             });
         })
         .catch(error => {
-            console.log(error.message);
+            alert(error.message);
         });
     }
 

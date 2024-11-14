@@ -138,15 +138,24 @@ public class UserController : ControllerBase
         {
             connection.Open();
 
-            string query = "INSERT INTO Users (firstname, lastname, phone, email, password) VALUES (@firstname, @lastname, @phone, @email, @password)";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@firstname", user.Firstname);
-            cmd.Parameters.AddWithValue("@lastname", user.Lastname);
-            cmd.Parameters.AddWithValue("@phone", user.Phone);
-            cmd.Parameters.AddWithValue("@email", user.Email);
-            cmd.Parameters.AddWithValue("@password", user.Password);
-
-            cmd.ExecuteNonQuery();
+            MySqlCommand cmd = new MySqlCommand("AddUser", connection);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@c_firstname", user.Firstname);
+            cmd.Parameters.AddWithValue("@c_lastname", user.Lastname);
+            cmd.Parameters.AddWithValue("@c_phone", user.Phone);
+            cmd.Parameters.AddWithValue("@c_email", user.Email);
+            cmd.Parameters.AddWithValue("@c_password", user.Password);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                if (ex.Message.Contains("Duplicate"))
+                {
+                    return Conflict(new { message = "User already exists" });
+                }
+            }
         }
 
         return Ok(new { message = "User registered" });
