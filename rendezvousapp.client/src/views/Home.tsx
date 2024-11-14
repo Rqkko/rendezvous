@@ -127,6 +127,7 @@ function Home(): JSX.Element {
                                 province={location.province}
                                 image={location.locationImage}
                                 handleSeeMoreClick={() => handleSeeMoreClick(location.locationId)}
+                                disabled={user === null}
                             />
                         ))
                     )}

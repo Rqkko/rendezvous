@@ -7,9 +7,10 @@ interface LocationCardProps {
     province: string;
     image: string | null;
     handleSeeMoreClick: () => void;
+    disabled?: boolean;
 }
 
-function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCardProps): JSX.Element {
+function LocationCard({ name, province, image, handleSeeMoreClick, disabled }: LocationCardProps): JSX.Element {
     return (
         <Card sx={{ 
             display: 'flex', 
@@ -60,6 +61,7 @@ function LocationCard({ name, province, image, handleSeeMoreClick }: LocationCar
                             fontSize: '0.8rem'
                         }}
                         onClick={handleSeeMoreClick}
+                        disabled={disabled}
                     >
                         See more
                     </Button>
