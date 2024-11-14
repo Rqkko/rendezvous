@@ -12,6 +12,7 @@ interface EventReservation {
     locationName: string;
     locationImage: string;
     eventName: string;
+    theme: string;
     date: Date;
 }
 
@@ -169,13 +170,13 @@ function Reservations(): JSX.Element {
                 ) : (
                     filteredReservations.map((reservation) => (
                         <AdminReservationCard
-                            // TODO: Add other props (See more?)
                             firstname={reservation.firstname}
                             lastname={reservation.lastname}
                             locationName={reservation.locationName}
                             eventName={reservation.eventName}
                             date={reservation.date}
                             image={reservation.locationImage}
+                            theme={reservation.theme}
                         />
                     ))
                 )}

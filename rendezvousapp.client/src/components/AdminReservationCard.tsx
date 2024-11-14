@@ -9,9 +9,10 @@ interface AdminReservationCardProps {
     eventName: string;
     date: Date;
     image: string;
+    theme: string;
 }
 
-function AdminReservationCard({ firstname, lastname, locationName, eventName, date, image }: AdminReservationCardProps): JSX.Element {
+function AdminReservationCard({ firstname, lastname, locationName, eventName, date, image, theme }: AdminReservationCardProps): JSX.Element {
     const formattedDate = date instanceof Date ? date.toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
@@ -48,6 +49,8 @@ function AdminReservationCard({ firstname, lastname, locationName, eventName, da
                 <Typography variant="body2" align="left" sx={{ color: '#2e5d4b' }}><strong>Location:</strong> {locationName}</Typography>
 
                 <Typography variant="body2" align="left" sx={{ color: '#2e5d4b' }}><strong>Reserved By:</strong> {firstname} {lastname}</Typography>
+
+                <Typography variant="body2" align="left" sx={{ color: '#2e5d4b' }}><strong>Theme:</strong> {theme}</Typography>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Typography variant="body2" sx={{ 
