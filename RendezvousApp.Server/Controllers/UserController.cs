@@ -169,7 +169,7 @@ public class UserController : ControllerBase
             return Unauthorized(new { message = "User not logged in" });
         }
         
-        return Ok(new { 
+        return Ok(new {
             userId = HttpContext.Session.GetInt32("UserId"),
             firstname = HttpContext.Session.GetString("FirstName"),
             lastname = HttpContext.Session.GetString("LastName"),
