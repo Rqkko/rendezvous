@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import RoundedCornerTextfield from '../components/RoundedCornerTextfield';
 import CustomDatePicker from '../components/CustomDatePicker';
 import paymentQR from '../assets/paymentQR.png';
-import { set } from 'date-fns';
 
 interface LocationProps {
     locationId: string | undefined;
