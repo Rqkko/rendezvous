@@ -55,17 +55,19 @@ function CustomAppBar(): JSX.Element | null {
                     'Content-Type': 'application/json',
                 },
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Logout failed');
-                    }
-                    return response.json();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            setUser(null);
-            navigate('/login');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Logout failed');
+                }
+                return;
+            })
+            .then(() => {
+                setUser(null);
+                navigate('/login');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
         handleCloseUserMenu();
     };
