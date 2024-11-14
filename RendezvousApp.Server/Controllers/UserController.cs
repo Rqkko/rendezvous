@@ -13,17 +13,24 @@ public class UserController : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private readonly string _connectionString;
+    private readonly string? _encryptionKey;
 
     public UserController(IConfiguration configuration, string connectionString)
     {
         _configuration = configuration;
         _connectionString = connectionString;
+        _encryptionKey = _configuration["EncryptionKey"];
     }
 
     [HttpPost("Login")] // contact is email/phoneNumber
     public ActionResult Login([FromBody] LoginCredential loginCredential)
     {
         User? user = null;
+        
+        if (_encryptionKey == null)
+        {
+            return StatusCode(500, new { message = "Encryption key not found" });
+        }
 
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
@@ -32,15 +39,16 @@ public class UserController : ControllerBase
             string query;
             if (loginCredential.Contact.Contains("@"))
             {
-                query = "SELECT * FROM Users WHERE email = @contact";
+                query = "SELECT userId, firstname, lastname, phone, email, AES_DECRYPT(password, @encryptionKey) AS decryptedPassword FROM Users WHERE email = @contact";
             }
             else
             {
-                query = "SELECT * FROM Users WHERE phone = @contact";
+                query = "SELECT userId, firstname, lastname, phone, email, CAST(AES_DECRYPT(password, @encryptionKey) AS char) AS decryptedPassword FROM Users WHERE phone = @contact";
             }
 
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@contact", loginCredential.Contact);
+            cmd.Parameters.AddWithValue("@encryptionKey", _encryptionKey);
 
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
@@ -53,7 +61,7 @@ public class UserController : ControllerBase
                         Lastname = (string) reader["lastname"],
                         Phone = (string) reader["phone"],
                         Email = (string) reader["email"],
-                        Password = (string) reader["password"],
+                        Password = (string) reader["decryptedPassword"],
                     };
                 }
             }
@@ -134,6 +142,11 @@ public class UserController : ControllerBase
     [HttpPost("Register")]
     public ActionResult Register([FromBody] User user)
     {
+        if (_encryptionKey == null)
+        {
+            return StatusCode(500, new { message = "Encryption key not found" });
+        }
+
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
@@ -145,6 +158,7 @@ public class UserController : ControllerBase
             cmd.Parameters.AddWithValue("@c_phone", user.Phone);
             cmd.Parameters.AddWithValue("@c_email", user.Email);
             cmd.Parameters.AddWithValue("@c_password", user.Password);
+            cmd.Parameters.AddWithValue("@c_encryptionKey", _encryptionKey);
             try
             {
                 cmd.ExecuteNonQuery();
