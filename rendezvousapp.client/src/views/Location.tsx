@@ -102,7 +102,7 @@ function Location({ locationId }: LocationProps): JSX.Element {
         }
 
         // Handle past date
-        if (eventDate?.isBefore(new Date(), 'day')) {
+        if (eventDate?.isBefore(new Date(), 'day') || eventDate?.isSame(new Date(), 'day')) {
             alert('Please reserve a future date');
             return;
         }
