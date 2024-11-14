@@ -113,7 +113,7 @@ function Reservations(): JSX.Element {
 
     useEffect(() => {
         filterReservations();
-    }, [searchQuery]);
+    }, [searchQuery, reservations]);
 
     if (loading) {
         return (
