@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 14, 2024 at 04:02 PM
+-- Generation Time: Nov 15, 2024 at 02:16 AM
 -- Server version: 8.0.35
 -- PHP Version: 8.2.20
 
@@ -25,7 +25,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser` (IN `c_firstname` VARCHAR(50), IN `c_lastname` VARCHAR(50), IN `c_phone` VARCHAR(20), IN `c_email` VARCHAR(50), IN `c_password` VARCHAR(255))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser` (IN `c_firstname` VARCHAR(50), IN `c_lastname` VARCHAR(50), IN `c_phone` VARCHAR(20), IN `c_email` VARCHAR(50), IN `c_password` VARCHAR(255), IN `c_encryptionKey` VARCHAR(255))   BEGIN
     DECLARE duplicateCount INT;
 
     -- Check for duplicate phone or email
@@ -36,7 +36,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser` (IN `c_firstname` VARCHAR(
     -- If no duplicates are found, insert the new user
     IF duplicateCount = 0 THEN
         INSERT INTO Users (firstname, lastname, phone, email, password)
-        VALUES (c_firstname, c_lastname, c_phone, c_email, c_password);
+        VALUES (c_firstname, c_lastname, c_phone, c_email, AES_ENCRYPT(c_password, c_encryptionKey));
     ELSE
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Duplicate phone or email found. User not added.';
@@ -186,10 +186,10 @@ CREATE TABLE `Events` (
 --
 
 INSERT INTO `Events` (`eventId`, `locationId`, `eventName`, `eventDescription`, `date`, `theme`, `guestCount`) VALUES
-(3, 3, 'Admin Meetup', 'Meeting to have a discussion on the upcoming Database Project Presentation', '2024-11-20', 'Casual', 3),
-(4, 2, 'Alone Time with Myself', 'Treat myself by renting the entire cafe to myself', '2024-11-30', 'Moody', 1),
-(5, 1, 'John\'s Birthday Party', 'The best party in town!', '2024-12-30', 'Royal', 30),
-(6, 1, 'Graduation Party', 'SIIT Graduation Party', '2024-12-01', 'Disco', 25);
+(1, 3, 'Admin Meetup', 'Meeting to have a discussion on the upcoming Database Project Presentation', '2024-11-20', 'Casual', 3),
+(2, 2, 'Alone Time with Myself', 'Treat myself by renting the entire cafe to myself', '2024-11-30', 'Moody', 1),
+(3, 1, 'John\'s Birthday Party', 'The best party in town!', '2024-12-30', 'Royal', 30),
+(4, 1, 'Graduation Party', 'SIIT Graduation Party', '2024-12-01', 'Disco', 25);
 
 -- --------------------------------------------------------
 
@@ -236,10 +236,10 @@ CREATE TABLE `Payments` (
 --
 
 INSERT INTO `Payments` (`paymentId`, `paymentAmount`, `paymentDateTime`) VALUES
-(3, 4000, '2024-11-14 13:00:01'),
-(4, 6000, '2024-11-14 13:01:24'),
-(5, 5000, '2024-11-14 13:14:24'),
-(6, 5000, '2024-11-14 13:37:22');
+(1, 4000, '2024-11-14 13:00:01'),
+(2, 6000, '2024-11-14 13:01:24'),
+(3, 5000, '2024-11-14 13:14:24'),
+(4, 5000, '2024-11-14 13:37:22');
 
 -- --------------------------------------------------------
 
@@ -260,10 +260,10 @@ CREATE TABLE `Reservations` (
 --
 
 INSERT INTO `Reservations` (`reservationId`, `userId`, `eventId`, `reservationDateTime`, `paymentId`) VALUES
-(3, 1, 3, '2024-11-14 13:00:01', 3),
-(4, 4, 4, '2024-11-14 13:01:24', 4),
-(5, 5, 5, '2024-11-14 13:14:24', 5),
-(6, 7, 6, '2024-11-14 13:37:22', 6);
+(1, 1, 1, '2024-11-14 13:00:01', 1),
+(2, 4, 2, '2024-11-14 13:01:24', 2),
+(3, 5, 3, '2024-11-14 13:14:24', 3),
+(4, 7, 4, '2024-11-14 13:37:22', 4);
 
 --
 -- Triggers `Reservations`
@@ -296,7 +296,7 @@ CREATE TABLE `Users` (
   `userId` int NOT NULL,
   `phone` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'phone number',
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varbinary(127) NOT NULL,
   `firstname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `lastname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -306,12 +306,12 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`userId`, `phone`, `email`, `password`, `firstname`, `lastname`) VALUES
-(1, '0992929196', '6522780772@g.siit.tu.ac.th', '1234', 'Wongsathorn', 'Chengcharoen'),
-(2, '0999999999', '6522781051@g.siit.tu.ac.th', '1234', 'Acharawan', 'Muenpilomthong'),
-(3, '0888888888', '6522771268@g.siit.tu.ac.th', '1234', 'Siraprapha', 'Pongpan'),
-(4, '0777777777', 'reader@gmail.com', '1234', 'Reader', 'Guy'),
-(5, '0123456789', 'test@example.com', '1234', 'John', 'Doe'),
-(7, '0998887777', 'adam.smith@gmail.com', '1234', 'Adam', 'Smith');
+(1, '0992929196', '6522780772@g.siit.tu.ac.th', 0x3dcb9920f545be99d361c325c7c8a400, 'Wongsathorn', 'Chengcharoen'),
+(2, '0999999999', '6522781051@g.siit.tu.ac.th', 0x58bdb984c2d01ee87e506295ffc45ba9, 'Acharawan', 'Muenpilomthong'),
+(3, '0888888888', '6522771268@g.siit.tu.ac.th', 0xa2e198b502bbd159c05b6b414beb78cc, 'Siraprapha', 'Pongpan'),
+(4, '0777777777', 'reader@gmail.com', 0xcf0de456ba19f760cf3a68454328a017, 'Reader', 'Guy'),
+(5, '0123456789', 'test@example.com', 0xcf0de456ba19f760cf3a68454328a017, 'John', 'Doe'),
+(7, '0998887777', 'adam.smith@gmail.com', 0xcf0de456ba19f760cf3a68454328a017, 'Adam', 'Smith');
 
 --
 -- Indexes for dumped tables
@@ -386,7 +386,7 @@ ALTER TABLE `Admins`
 -- AUTO_INCREMENT for table `Events`
 --
 ALTER TABLE `Events`
-  MODIFY `eventId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `eventId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Locations`
@@ -398,19 +398,19 @@ ALTER TABLE `Locations`
 -- AUTO_INCREMENT for table `Payments`
 --
 ALTER TABLE `Payments`
-  MODIFY `paymentId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `paymentId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Reservations`
 --
 ALTER TABLE `Reservations`
-  MODIFY `reservationId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `reservationId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
