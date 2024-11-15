@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 15, 2024 at 02:16 AM
+-- Generation Time: Nov 15, 2024 at 02:26 AM
 -- Server version: 8.0.35
 -- PHP Version: 8.2.20
 
@@ -309,7 +309,7 @@ INSERT INTO `Users` (`userId`, `phone`, `email`, `password`, `firstname`, `lastn
 (1, '0992929196', '6522780772@g.siit.tu.ac.th', 0x3dcb9920f545be99d361c325c7c8a400, 'Wongsathorn', 'Chengcharoen'),
 (2, '0999999999', '6522781051@g.siit.tu.ac.th', 0x58bdb984c2d01ee87e506295ffc45ba9, 'Acharawan', 'Muenpilomthong'),
 (3, '0888888888', '6522771268@g.siit.tu.ac.th', 0xa2e198b502bbd159c05b6b414beb78cc, 'Siraprapha', 'Pongpan'),
-(4, '0777777777', 'reader@gmail.com', 0xcf0de456ba19f760cf3a68454328a017, 'Reader', 'Guy'),
+(4, '0777777777', 'reader@gmail.com', 0x937f1e4b42121ff807e42813511ecd63, 'Reader', 'Guy'),
 (5, '0123456789', 'test@example.com', 0xcf0de456ba19f760cf3a68454328a017, 'John', 'Doe'),
 (7, '0998887777', 'adam.smith@gmail.com', 0xcf0de456ba19f760cf3a68454328a017, 'Adam', 'Smith');
 
