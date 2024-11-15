@@ -39,7 +39,7 @@ public class UserController : ControllerBase
             string query;
             if (loginCredential.Contact.Contains("@"))
             {
-                query = "SELECT userId, firstname, lastname, phone, email, AES_DECRYPT(password, @encryptionKey) AS decryptedPassword FROM Users WHERE email = @contact";
+                query = "SELECT userId, firstname, lastname, phone, email, CAST(AES_DECRYPT(password, @encryptionKey) AS char) AS decryptedPassword FROM Users WHERE email = @contact";
             }
             else
             {
