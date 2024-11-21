@@ -53,9 +53,9 @@ export default defineConfig({
             }
         },
         port: 5173,
-        https: {
+        https: process.env.NODE_ENV === 'development' ? {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
-        }
+        } : undefined,
     }
 })
