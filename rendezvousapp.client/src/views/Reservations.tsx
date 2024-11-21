@@ -127,7 +127,7 @@ function Reservations(): JSX.Element {
                             eventName={reservation.eventName}
                             date={reservation.date}
                             theme={reservation.theme}
-                            guestCount={reservation.guestCount}
+                            // guestCount={reservation.guestCount}
                             province={reservation.province}
                             eventDescription={reservation.eventDescription}
                             image={reservation.locationImage}
