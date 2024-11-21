@@ -1,10 +1,8 @@
-import { Box, Button, Container, Dialog, DialogActions, DialogTitle, IconButton, InputBase, Paper, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import { Box, Button, Container, Dialog, DialogActions, DialogTitle, Paper, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 
-import { getUser, User } from '../../utils/apiUtils';
 import Unauthorized from '../../components/Unauthorized';
 import AdminLocationCard from '../../components/AdminLocationCard';
 import SearchBar from '../../components/SearchBar';
@@ -20,7 +18,6 @@ function Admin(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [user, setUser] = useState<User | null>(null);
     const location = useLocation(); // For path url
     const navigate = useNavigate();
     const [locations, setLocations] = useState<Location[]>([]);
@@ -37,11 +34,11 @@ function Admin(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
-    function filterLocations(): void {
+    const filterLocations = useCallback(() => {
         setFilteredLocations(locations.filter(location =>
             location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
         ));
-    }
+    }, [locations, searchQuery]);
 
     function fetchLocations(): void {
         Promise.all([
@@ -140,14 +137,13 @@ function Admin(): JSX.Element {
             }
         })
         .then(() => {
-            getUser().then((result) => setUser(result));
             fetchLocations();
         })
     }, [location.pathname]);
 
     useEffect(() => {
         filterLocations();
-    }, [searchQuery]);
+    }, [filterLocations]);
 
     if (loading) {
         return (
