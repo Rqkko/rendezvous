@@ -111,51 +111,52 @@ function EditLocation({ locationId }: EditLocationProps): JSX.Element {
 
     // FIXME: fix repeated fetch
     useEffect(() => {
-        Promise.all([
-            fetch('/api/user/checkAdmin'),
-            new Promise(resolve => setTimeout(resolve, 500))
-        ])
-        .then(([response]) => {
-            console.log(response)
-            if (!response.ok) {
-                setIsAdmin(false);
-                setLoading(false);
-                throw new Error('Not an admin'); // Exit early
-            } else {
-                setIsAdmin(true);
-                return
-            }
-        })
-        .then(() => {
-            checkUpdatePermission().then((canUpdate) => {
-                setCanUpdate(canUpdate);
-                // console.log("CanUpdate: " + canUpdate);
-                if (canUpdate && locationId !== undefined) {
-                    fetchLocationDetail(locationId).then((location) => {
-                        if (location === undefined) {
-                            throw new Error('Location not found');
-                        }
-                        
-                        setLocationFound(true);
+        const fetchData = async () => {
+            try {
+                const [response] = await Promise.all([
+                    fetch('/api/user/checkAdmin'),
+                    new Promise(resolve => setTimeout(resolve, 500))
+                ]);
 
-                        setLocationName(location.locationName);
-                        setLocationDescription(location.locationDescription);
-                        setLocationArea(location.area.toString());
-                        setLocationCapacity(location.capacity.toString());
-                        setLocationCost(location.cost.toString());
-                        setLocationImage(location.locationImage);
-                        setLocationProvince(location.province);
-                        setLocationPostalCode(location.postalCode);
-                        setLocationAdditional(location.additional);
-                        setLoading(false);
-                    });
-                } else {
+                if (!response.ok) {
+                    setIsAdmin(false);
                     setLoading(false);
+                    throw new Error('Not an admin');
+                } else {
+                    setIsAdmin(true);
+                }
+
+                const canUpdate = await checkUpdatePermission();
+                setCanUpdate(canUpdate);
+
+                if (canUpdate && locationId !== undefined) {
+                    const location = await fetchLocationDetail(locationId);
+                    if (location === undefined) {
+                        throw new Error('Location not found');
+                    }
+
+                    setLocationFound(true);
+                    setLocationName(location.locationName);
+                    setLocationDescription(location.locationDescription);
+                    setLocationArea(location.area.toString());
+                    setLocationCapacity(location.capacity.toString());
+                    setLocationCost(location.cost.toString());
+                    setLocationImage(location.locationImage);
+                    setLocationProvince(location.province);
+                    setLocationPostalCode(location.postalCode);
+                    setLocationAdditional(location.additional);
+                } else {
                     throw new Error('No update permission');
                 }
-            })
-        });
-    }, [])
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [locationId]);
 
     if (loading) {
         return (

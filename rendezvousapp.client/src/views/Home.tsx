@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Typography, Paper, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -31,11 +31,11 @@ function Home(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
-    function filterLocations(): void {
+    const filterLocations = useCallback(() => {
         setFilteredLocations(locations.filter(location =>
-            location.locationName.toLowerCase().includes(searchTerm.toLowerCase())
+            location.locationName.toLowerCase().includes(searchQuery.toLowerCase())
         ));
-    }
+    }, [locations, searchQuery]);
 
     function fetchLocations(): void {
         Promise.all([
@@ -72,7 +72,7 @@ function Home(): JSX.Element {
 
     useEffect(() => {
         filterLocations();
-    }, [searchQuery]);
+    }, [filterLocations]);
 
     if (loading) {
         return (

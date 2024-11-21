@@ -1,6 +1,5 @@
-import { Box, Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import SearchIcon from '@mui/icons-material/Search';
+import { Box, Container, Paper, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react'
 import ReservationCard from '../components/ReservationCard';
 import SearchBar from '../components/SearchBar';
 
@@ -30,11 +29,11 @@ function Reservations(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
-    function filterReservations(): void {
+    const filterReservations = useCallback(() => {
         setFilteredReservations(reservations.filter(reservation =>
-            reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+            reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase())
         ));
-    }
+    }, [reservations, searchQuery]);
 
     async function fetchReservations(): Promise<EventReservation[] | null> {
         return fetch('/api/event/getUserReservations')
@@ -72,7 +71,7 @@ function Reservations(): JSX.Element {
 
     useEffect(() => {
         filterReservations();
-    }, [searchQuery,reservations])
+    }, [filterReservations])
 
     if (loading) {
         return (
