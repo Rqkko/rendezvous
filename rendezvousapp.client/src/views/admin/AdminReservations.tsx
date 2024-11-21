@@ -1,9 +1,7 @@
-import { Box, Container, IconButton, InputBase, Paper, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import SearchIcon from '@mui/icons-material/Search';
+import { Box, Container, Paper, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react'
 import AdminReservationCard from '../../components/AdminReservationCard';
 import Unauthorized from '../../components/Unauthorized';
-import { set } from 'date-fns';
 import SearchBar from '../../components/SearchBar';
 
 interface EventReservation {
@@ -71,11 +69,11 @@ function Reservations(): JSX.Element {
         setSearchQuery(searchTerm);
     };
 
-    function filterReservations(): void {
+    const filterReservations = useCallback(() => {
         setFilteredReservations(reservations.filter(reservation =>
-            reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+            reservation.locationName.toLowerCase().includes(searchQuery.toLowerCase())
         ));
-    }
+    }, [reservations, searchQuery]);
 
     useEffect(() => {
         // FIXME: redundant useEffect called (called two times)
@@ -114,7 +112,7 @@ function Reservations(): JSX.Element {
 
     useEffect(() => {
         filterReservations();
-    }, [searchQuery, reservations]);
+    }, [filterReservations]);
 
     if (loading) {
         return (
