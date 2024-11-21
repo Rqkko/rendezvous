@@ -104,9 +104,8 @@ function CustomAppBar(): JSX.Element | null {
     return (
         <>
             <AppBar
-                color="main"
                 position="sticky"
-                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 1, boxSizing: 'border-box', bgcolor: 'background.default' }}
+                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 1, boxSizing: 'border-box', bgcolor: 'background.default', color: 'primary.main' }}
             >
                 <Toolbar>
                     <IconButton

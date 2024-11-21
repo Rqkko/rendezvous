@@ -1,5 +1,4 @@
-import { Card, CardContent, Typography, Button, Box } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 interface AdminReservationCardProps {

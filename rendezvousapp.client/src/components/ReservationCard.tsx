@@ -1,5 +1,4 @@
-import React from 'react';
-import { Card, CardContent, Typography, Button, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
@@ -8,13 +7,13 @@ interface ReservationCardProps {
     eventName: string;
     date: Date;
     theme: string;
-    guestCount: number;
+    // guestCount: number;
     province: string;
-    eventDescription: string;
+    // eventDescription: string;
     image: string;
 }
 
-function ReservationCard({ locationName, eventName, date, theme, guestCount, province, eventDescription, image }: ReservationCardProps): JSX.Element {
+function ReservationCard({ locationName, eventName, date, theme, province, image }: ReservationCardProps): JSX.Element {
     const formattedDate = date instanceof Date ? date.toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
