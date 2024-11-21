@@ -57,5 +57,16 @@ export default defineConfig({
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
         } : undefined,
-    }
+    },
+    build: {
+        outDir: 'dist', // Specify the output directory for the build
+        sourcemap: false, // Disable source maps for production
+        minify: 'terser', // Use Terser for minification
+        terserOptions: {
+            compress: {
+                drop_console: true, // Remove console logs in production
+                drop_debugger: true, // Remove debugger statements in production
+            },
+        },
+    },
 })
