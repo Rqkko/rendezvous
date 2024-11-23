@@ -6,7 +6,6 @@ import Home from './views/Home';
 import Login from './views/Login';
 import CustomAppBar from './components/CustomAppBar';
 import Reservations from './views/Reservations';
-import Account from './views/Account';
 import Location from './views/Location';
 import Admin from './views/admin/Admin';
 import NewLocation from './views/admin/NewLocation';
@@ -35,7 +34,6 @@ function App(): JSX.Element {
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<CreateAccount/>} />
                     <Route path="/reservations" element={<Reservations/>} />
-                    <Route path="account" element={<Account/>} />
                     <Route path="/location/:id?" element={<LocationWrapper />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/admin/location/new" element={<NewLocation />} />

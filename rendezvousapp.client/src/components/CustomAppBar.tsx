@@ -11,7 +11,7 @@ function CustomAppBar(): JSX.Element | null {
     const location = useLocation();
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
-    const settings = ['Home', 'Reservations', /* 'Account', */ 'Logout']; // For Menu
+    const settings = ['Home', 'Reservations', 'Logout']; // For Menu
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -44,9 +44,6 @@ function CustomAppBar(): JSX.Element | null {
             } else {
                 navigate('/reservations')
             }
-        }
-        else if (setting === "Account") {
-            navigate("/account")
         }
         else if (setting === "Logout") {
             fetch('/api/user/logout', {
@@ -104,9 +101,8 @@ function CustomAppBar(): JSX.Element | null {
     return (
         <>
             <AppBar
-                color="main"
                 position="sticky"
-                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 1, boxSizing: 'border-box', bgcolor: 'background.default' }}
+                sx={{ minWidth: '100vw', mb: 4, ml: 0, p: 1, boxSizing: 'border-box', bgcolor: 'background.default', color: 'primary.main' }}
             >
                 <Toolbar>
                     <IconButton
