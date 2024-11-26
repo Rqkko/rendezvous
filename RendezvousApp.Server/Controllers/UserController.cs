@@ -169,6 +169,7 @@ public class UserController : ControllerBase
                 {
                     return Conflict(new { message = "User already exists" });
                 }
+                return StatusCode(500, new { message = "Internal server error" });
             }
         }
 
