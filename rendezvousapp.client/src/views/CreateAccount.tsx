@@ -70,6 +70,12 @@ function CreateAccount() {
             alert("Please enter a valid email address");
             return;
         }
+
+        // Add validation for phone number
+        if (phone.length !== 12) {
+            alert("Please enter a valid phone number");
+            return;
+        }
     
         if (password !== confirmPassword) {
             alert("Passwords do not match");
