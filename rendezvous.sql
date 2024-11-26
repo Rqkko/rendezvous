@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 15, 2024 at 02:26 AM
+-- Generation Time: Nov 26, 2024 at 02:02 PM
 -- Server version: 8.0.35
 -- PHP Version: 8.2.20
 
@@ -126,7 +126,7 @@ CREATE TABLE `Addresses` (
   `addressId` int NOT NULL,
   `locationId` int NOT NULL,
   `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `postalCode` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postalCode` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `additional` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Road, Soi, etc.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -297,8 +297,8 @@ CREATE TABLE `Users` (
   `phone` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'phone number',
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varbinary(127) NOT NULL,
-  `firstname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lastname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+  `firstname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -309,7 +309,7 @@ INSERT INTO `Users` (`userId`, `phone`, `email`, `password`, `firstname`, `lastn
 (1, '0992929196', '6522780772@g.siit.tu.ac.th', 0x3dcb9920f545be99d361c325c7c8a400, 'Wongsathorn', 'Chengcharoen'),
 (2, '0999999999', '6522781051@g.siit.tu.ac.th', 0x58bdb984c2d01ee87e506295ffc45ba9, 'Acharawan', 'Muenpilomthong'),
 (3, '0888888888', '6522771268@g.siit.tu.ac.th', 0xa2e198b502bbd159c05b6b414beb78cc, 'Siraprapha', 'Pongpan'),
-(4, '0777777777', 'reader@gmail.com', 0x937f1e4b42121ff807e42813511ecd63, 'Reader', 'Guy'),
+(4, '0777777777', 'reader@gmail.com', 0x937f1e4b42121ff807e42813511ecd63, 'Krittinat', 'Kongchong'),
 (5, '0123456789', 'test@example.com', 0xcf0de456ba19f760cf3a68454328a017, 'John', 'Doe'),
 (7, '0998887777', 'adam.smith@gmail.com', 0xcf0de456ba19f760cf3a68454328a017, 'Adam', 'Smith');
 
